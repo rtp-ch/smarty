@@ -1,0 +1,45 @@
+
+// Default Smarty class variables
+// For details check http://smarty.php.net/manual/en/api.variables.php
+plugin.smarty {
+
+	// Boolean: enables/disables the debugging console
+	debugging = false
+
+	// php error_reporting level inside of display() and fetch()
+	error_reporting = E_ALL ^ E_NOTICE
+
+	// Alternate ways to enable debugging. NONE means no alternate methods are allowed.
+	// URL means when the keyword SMARTY_DEBUG is found in the QUERY_STRING
+	debugging_ctrl = NONE
+
+	// smarty debug template
+	debug_tpl = EXT:smarty/debug/smarty_debug.tpl
+
+	// Smarty tests to see if the current template has changed (different time stamp) since the last time it was compiled.
+	// Can be set to true for development and debugging purposes
+	compile_check = true
+
+	// Makes Smarty regenerate the template each time the script is called.
+	// Can be set to true for development and debugging purposes
+	force_compile = false
+
+	// Tells Smarty whether or not to cache the output of the templates.
+	// Disabling Smarty's caching mechanism is recommended.
+	caching = false
+
+	// Location of the Typo3 Smarty plugins, which provide FE functions such as translating
+	// textblocks using Typo3 methods inside of Smarty templates
+	plugins_dir = EXT:smarty/typo3_plugins
+
+	// Default location of the Smarty cache files
+	cache_dir = typo3temp/smarty_cache
+
+	// Default location of the compiled Smarty template files
+	compile_dir = typo3temp/smarty_compile
+
+	// Load default smarty prefilters
+	autoload_filters.pre.0 = conditions
+	autoload_filters.pre.1 = dots
+
+}

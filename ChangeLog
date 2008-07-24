@@ -1,0 +1,41 @@
+03-07-08 Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner
+
+	* BUGFIX: compile_dir was not declared as a directory
+	* NEW: Added XCLASS for smartyView (lib extension) which still uses obsolete rtp_smarty extension
+
+19-03-08 Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner
+
+	* CHANGED: Added backwards compatibility for t3lib_div method removeDotsFromTS
+		
+16-01-08 Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner
+
+	* BUGFIX: url and typolinkURL functions now pass correct param to typolink function (returnLast value had wrong case)
+	* INFO: Hopefully fixed documentation to render properly in the TER
+	* NEW: Added checks for valid cache and compile directories
+	* CHANGED: Updated documentation
+
+08-01-08 Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner
+
+	* BUGFIX: static typoscript directory missing from extension
+	* CHANGED: Moved static typoscript to ext_typoscript_setup.txt
+	* BUGFIX: Fixed debug library, tpl and function to avoid recursion
+	* BUGFIX: prefilter dots now recognizes literals
+	* BUGFIX: modifier format gets an instance of tslib_cobj
+	* NEW: Additional params forceType, collapse and description added to modifier debug
+	* NEW: plugins object, image, data, typoscript, typolink, LLL and format now use $smarty->trigger_error
+	* BUGFIX: Rewrite of function get_debug_info.
+	* BUGFIX: Modified output from dBug library to work within the context of TYPO3 and Smarty
+	* BUGFIX: block function typoscript now calls cObjGet instead of cObjGetSingle
+	* CHANGED: Moved default TypoScript settings to ext_typoscript files instead of using static templates
+	* CHANGED: Rewrite of TCA helper functions for plugins
+
+07-10-09 Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner
+
+	* Complete rewrite of the extension
+	* Added integration with the pi_base scenario as well as the lib/div scenario
+	* Cleaned up the custom plugins
+	* Added a debug console
+
+06-05-01 Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner
+
+	* Initial release

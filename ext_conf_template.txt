@@ -1,0 +1,8 @@
+  # cat=basic/enable/01; type=boolean; label=ATTENTION, Upgrade the Smarty path!: Please check the location of your Smarty library. If you are upgrading from a previous version of this extension you may have to change the 'Path to your Smarty installation' setting. The default location of the Smarty library is currently 'EXT:smarty/Smarty' (The default location in previous versions of the extension was either 'EXT:smarty/Smarty-2.6.18' or 'EXT:smarty/Smarty-2.6.19').
+IMPORTANT = 0
+
+  # cat=basic; type=string; label= Path to your Smarty installation: The default Smarty installation is located in EXT:smarty/Smarty. If your smarty installation is located elsewhere on the server or if you have upgraded your Smarty version change the path to the Smarty installation here.
+smarty_dir = EXT:smarty/Smarty
+
+  # cat=basic; type=string; label= Path to your Smarty templates: Default location of your Smarty templates. You can modify the path to your Smarty templates directory in your extension if required.
+template_dir = fileadmin/smarty
