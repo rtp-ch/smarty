@@ -41,7 +41,7 @@
  * Version: 1.0
  * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Formats a variable according to lib.parseFunc_RTE
- * Example: {$assignedPHPvariable|rte}
+ * Example: {$assignedPHPvariable|format}
  * Note:	For more details on lib.parseFunc_RTE & parseFunc in general see:
  *			http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/5/14/
  * Note:	To define an alternate parseFunc configuration set the paramater "parsefunc"
