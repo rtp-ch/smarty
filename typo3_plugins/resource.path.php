@@ -48,6 +48,13 @@
  **/
 
 	function smarty_resource_path_source($tpl_name, &$tpl_source, &$smarty) {
+			
+		// Check for a valid FE instance (this plugin cannot be run in the backend)
+		if(!tx_smarty_div::validateTypo3Instance('FE')) {
+			$smarty->trigger_error($smarty->fePluginError);
+			return false;
+		}
+				
 		// Make sure there is a valid instance of tslib_cObj
 		if (!method_exists($smarty->cObj,'getData')) {
 			$smarty->trigger_error('TYPO3 Method getData unavailable in smarty_resource_path_source');
@@ -62,6 +69,13 @@
 	}
 
 	function smarty_resource_path_timestamp($tpl_name, &$tpl_timestamp, &$smarty) {
+		
+		// Check for a valid FE instance (this plugin cannot be run in the backend)
+		if(!tx_smarty_div::validateTypo3Instance('FE')) {
+			$smarty->trigger_error($smarty->fePluginError);
+			return false;
+		}
+				
 		// Make sure there is a valid instance of tslib_cObj
 		if (!method_exists($smarty->cObj,'getData')) {
 			$smarty->trigger_error('TYPO3 Method getData unavailable in smarty_resource_path_source');

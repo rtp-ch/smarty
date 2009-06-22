@@ -33,51 +33,57 @@
 
 /**
  *
- * Smarty plugin "format"
+ * Smarty plugin "editIcon"
  * -------------------------------------------------------------
- * File:    block.format.php
- * Type:    block
- * Name:    Format
- * Version: 1.0
- * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
- * Purpose: Formats a block of text according to lib.parseFunc_RTE
- * Example: {format}
- *				These lines of text will
- *				will be formatted according to the
- *				rules defined in lib.parseFunc_RTE
- *				for example, individual lines will be wrapped in p tags.
- *			{/format}
- * Note:	For more details on lib.parseFunc_RTE & parseFunc in general see:
- *			http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/5/14/
- * Note:	To define an alternate parseFunc configuration set the paramater "parsefunc"
- *			in the tag e.g. {format parsefunc="lib.myParseFunc"}Hello World{/format}
+ * 
+ * THIS IS WORK IN PROGRESS...
+ * 
  * -------------------------------------------------------------
  *
  **/
 
 
-	function smarty_block_format($params, $content, &$smarty) {
-
+	function smarty_function_editIcons($params, &$smarty) {
+	
 		// Check for a valid FE instance (this plugin cannot be run in the backend)
 		if(!tx_smarty_div::validateTypo3Instance('FE')) {
 			$smarty->trigger_error($smarty->fePluginError);
 			return false;
 		}
+				
+		// Table/fields is required
+		if(!$params['fields']) {
+			$smarty->trigger_error('Table name not defined for edit icon');
+			return $content;
+		} else {
+			$recordDefinition = $params['fields'];
+			unset($params['fields']);
+		}
 
 		// Make sure there is a valid instance of tslib_cObj
-		if (!method_exists($smarty->cObj,'parseFunc')) {
-		    $smarty->trigger_error('TYPO3 Method parseFunc unavailable in smarty_block_rte');
-		    return $content;
+		if (!method_exists($smarty->cObj,'editIcons')) {
+		    $smarty->trigger_error('TYPO3 Method editIcons unavailable in smarty_function_editIcons');
+		    return;
 		}
-
-		// Set the parseFunc configuration
-		$setup = $params['setup'] ?$params['setup'] : false;
 		
-		if($funcName = $smarty->getAndLoadPlugin('modifier','format')) { // block format uses the modifier format
-			return $funcName($content, $setup);
-		} else {
-			return $content;
+		// Get the icon image
+		if($params['iconImg']) {
+			$style = $params['styleAttribute'] ? ' style="'.htmlspecialchars($conf['styleAttribute']).'"' : '';
+			$class = $params['iconImgClass'] ? ' class="'.$params['iconImgClass'].'"' : 'class="frontEndEditIcons"';
+			$iconConf = array(
+				'file' => $params['iconImg'],
+				'params' => trim($class.$style),
+				'titleText' => $params['iconTitle']
+			);
+			if (!$params['iconImg'] = $smarty->cObj->IMAGE($iconConf)) {
+				unset($params['iconImg']);
+			}
 		}
-	}
+		
+		// Get TypoScript from $params
+		$setup = tx_smarty_div::getTypoScriptFromParams($params);
 
+		// return the 
+		return $smarty->cObj->editIcons($content, $recordDefinition, $setup[1], $GLOBALS['TSFE']->currentRecord);
+	}
 ?>

@@ -50,6 +50,13 @@
 
 
 	function smarty_block_header($params, $content, &$smarty) {
+	
+		// Check for a valid FE instance (this plugin cannot be run in the backend)
+		if(!tx_smarty_div::validateTypo3Instance('FE')) {
+			$smarty->trigger_error($smarty->fePluginError);
+			return false;
+		}
+			
 		$GLOBALS["TSFE"]->additionalHeaderData[] = $content;
 		return;
 	}

@@ -33,51 +33,53 @@
 
 /**
  *
- * Smarty plugin "format"
+ * Smarty plugin "editPanel"
  * -------------------------------------------------------------
- * File:    block.format.php
- * Type:    block
- * Name:    Format
- * Version: 1.0
- * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
- * Purpose: Formats a block of text according to lib.parseFunc_RTE
- * Example: {format}
- *				These lines of text will
- *				will be formatted according to the
- *				rules defined in lib.parseFunc_RTE
- *				for example, individual lines will be wrapped in p tags.
- *			{/format}
- * Note:	For more details on lib.parseFunc_RTE & parseFunc in general see:
- *			http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/5/14/
- * Note:	To define an alternate parseFunc configuration set the paramater "parsefunc"
- *			in the tag e.g. {format parsefunc="lib.myParseFunc"}Hello World{/format}
+ * 
+ * THIS IS WORK IN PROGRESS...
+ * 
  * -------------------------------------------------------------
  *
  **/
 
 
-	function smarty_block_format($params, $content, &$smarty) {
-
+	function smarty_function_editPanel($params, &$smarty) {
+		
 		// Check for a valid FE instance (this plugin cannot be run in the backend)
 		if(!tx_smarty_div::validateTypo3Instance('FE')) {
 			$smarty->trigger_error($smarty->fePluginError);
 			return false;
 		}
-
-		// Make sure there is a valid instance of tslib_cObj
-		if (!method_exists($smarty->cObj,'parseFunc')) {
-		    $smarty->trigger_error('TYPO3 Method parseFunc unavailable in smarty_block_rte');
-		    return $content;
-		}
-
-		// Set the parseFunc configuration
-		$setup = $params['setup'] ?$params['setup'] : false;
 		
-		if($funcName = $smarty->getAndLoadPlugin('modifier','format')) { // block format uses the modifier format
-			return $funcName($content, $setup);
-		} else {
-			return $content;
+		// Make sure there is a valid instance of tslib_cObj
+		if (!method_exists($smarty->cObj,'editPanel')) {
+		    $smarty->trigger_error('TYPO3 Method editPanel unavailable in smarty_function_editPanel');
+		    return;
 		}
-	}
+		
+		$content = '';
+		if($params['content']) {
+			$content = $params['content'];
+			unset($params['content']);
+		}
+		
+		if($params['currentRecord']) {
+			$currentRecord = $params['currentRecord'];
+			unset($params['currentRecord']);
+		} else {
+			$currentRecord = $GLOBALS['TSFE']->currentRecord;
+		}
+		
+		$data = '';
+		if($params['data']) {
+			$data = $params['data'];
+			unset($params['data']);
+		}
+		
+		// Get TypoScript from $params
+		$setup = tx_smarty_div::getTypoScriptFromParams($params);
 
+		// return the 
+		return $smarty->cObj->editPanel($content, $setup[1], $GLOBALS['TSFE']->currentRecord, $currentRecord, $data);
+	}
 ?>

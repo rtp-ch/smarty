@@ -46,6 +46,9 @@ class tx_smarty_wrapper extends Smarty {
 	var $t3_extVars; // Extension settings, e.g. extension key, extension path
 	var $t3_languageFile; // Name & location of the TYPO3 language file
 	var $_debug_resource; // Name and location of current template (used for debugging)
+	
+	var $fePluginError = 'The smarty plugin you are using is only available in the frontend';
+	var $bePluginError = 'The smarty plugin you are using is only available in the backend';
 
 	// Array of Smarty class variables
 	// For details check http://smarty.php.net/manual/en/api.variables.php
@@ -93,8 +96,10 @@ class tx_smarty_wrapper extends Smarty {
 		$this->Smarty();
 		// Register reference to the calling class
 		$this->pObj = $pObj;
-		// Register reference to tslib_cobj
-		$this->cObj = &$GLOBALS['TSFE']->cObj;
+		// Register reference to tslib_cobj, if currently in the frontend
+		if(TYPO3_MODE=='FE') {
+			$this->cObj = &$GLOBALS['TSFE']->cObj;	
+		}
 	}
 
 	// Generic function to set Smarty class vars

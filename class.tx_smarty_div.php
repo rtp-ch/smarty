@@ -60,6 +60,15 @@ class tx_smarty_div {
         }
         return $value;
 	}
+	
+	// Checks against valid TYPO3 instance
+	function validateTypo3Instance($instances = null) {
+		
+		if(empty($instances) || !defined('TYPO3_MODE')) return false;
+		$instances = t3lib_div::trimExplode(',', strtoupper($instances), 1);
+		if(in_array(TYPO3_MODE, $instances)) return true;
+		return false;
+	}
 
 	// Retrieves a TypoScript object from the global setup scope ($GLOBALS['TSFE']->tmpl->setup)
 	function getTypoScriptFromTMPL($key) {

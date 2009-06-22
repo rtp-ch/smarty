@@ -53,6 +53,12 @@
 
 
 	function smarty_block_LLL($params, $content, &$smarty) {
+		
+		// Check for a valid FE instance (this plugin cannot be run in the backend)
+		if(!tx_smarty_div::validateTypo3Instance('FE')) {
+			$smarty->trigger_error($smarty->fePluginError);
+			return false;
+		}	
 
 		// Make sure params are lowercase
 		$params = array_change_key_case($params,CASE_LOWER);
@@ -67,19 +73,23 @@
 		if(!strcmp(strtoupper(substr($key, 0, 4)),'LLL:')) {
 		    $key = substr($key, 4);
 		}
+	
 		if($parts = t3lib_div::trimExplode(':', $key, 1)) {
 			$key = array_pop($parts);
 			$language_file = implode(':',$parts);
 		}
 		$language_file = ($language_file)?$language_file:$smarty->t3_languageFile;
-
+		// FIXED: For windows - only use relative path for readLLfile
+		$language_file = str_replace(PATH_site, '', $language_file);
 		// Call the sL method from tslib_fe to translate the label
 		$translation = $GLOBALS['TSFE']->sL('LLL:'.$language_file.':'.$key);
 
 		// Exit if no translation was found
 		if(!$translation) {
+			if(!empty($params['alt'])) return $params['alt'];
+			// Trigger an error if no alternate was available
 			$smarty->trigger_error('Translation unavailable for key "'.$key.'" in language "'.$GLOBALS['TSFE']->lang.'"');
-			return ($params['alt'])?$params['alt']:$content;
+			return $content;
 		}
 
 		// If the result contains Smarty template vars run it through Smarty again

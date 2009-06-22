@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A viewer class that is based on the extension 'rtp_smarty'.
+ * A viewer class that is based on the extension 'smarty'.
  *
  * PHP versions 4 and 5
  *
@@ -37,20 +37,10 @@ require_once(t3lib_extMgm::extPath('lib') . 'class.tx_lib_phpTemplateEngine.php'
 tx_div::load('tx_lib_object');
 
 /**
- * A viewer class that is based on the extension 'rtp_smarty'.
+ * A viewer class that is based on the extension 'smarty'.
  *
- * For initialisation call function init()
  *
- * To assign any variables for the template they are all stored in one masterArray.
- * If you want add a variable for the template add the variable to the masterArray
- * calling the function assignValue(pointer to the array, name of variable, value of variable, type of variable)
- *
- * Default extension of templates is 'tmpl', you can change it by function setTemplateExtension(), for example
- * tx_lib_smartyView::setTemplateExtension('html');
- *
- * To render the template just call the function render(templatename)
- *
- * @author     Elmar Hinz <elmar.hinz@team-red.net>
+ * @author     Simon Tuck <stu@rtpartner.ch>
  * @package    TYPO3
  * @subpackage lib
  */
@@ -72,8 +62,8 @@ class ux_tx_lib_smartyView extends tx_lib_smartyView {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/rtp_delicious/lib/class.ux_tx_lib_smartyView.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/rtp_delicious/lib/class.ux_tx_lib_smartyView.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/smarty/lib/class.ux_tx_lib_smartyView.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/smarty/lib/class.ux_tx_lib_smartyView.php']);
 }
 
 ?>

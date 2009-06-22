@@ -5,4 +5,4 @@ IMPORTANT = 0
 smarty_dir = EXT:smarty/Smarty
 
   # cat=basic; type=string; label= Path to your Smarty templates: Default location of your Smarty templates. You can modify the path to your Smarty templates directory in your extension if required.
-template_dir = fileadmin/smarty
+template_dir = fileadmin/admin/smarty

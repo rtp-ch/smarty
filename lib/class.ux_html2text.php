@@ -88,7 +88,7 @@ class ux_html2text extends html2text {
      *  @return string
      */
     function _build_link_list( $link, $display )
-    {
+    {   	
         if ( substr($link, 0, 7) == 'http://' || substr($link, 0, 8) == 'https://' ||
              substr($link, 0, 7) == 'mailto:' ) {
             $this->_link_count++;
@@ -107,13 +107,13 @@ class ux_html2text extends html2text {
             }
             $this->_link_list .= "$link\n";
 // XXX: Changed definition of $additional
-			$additional = $this->_build_additional($this->url);
+			$additional = $this->_build_additional($this->url.'/'.$link);
         }
 
         return $display . $additional;
     }
 
-    function _build_additional($link) {
+    function _build_additional($link) {   	
         if($this->stripLinks) {
         	return '';
         } elseif($this->appendLinks) {

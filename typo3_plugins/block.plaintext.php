@@ -60,6 +60,13 @@
  	require_once(t3lib_extMgm::extPath('smarty').'lib/class.ux_html2text.php');
 
 	function smarty_block_plaintext($params, $content, &$smarty) {
+		
+		// Check for a valid FE instance (this plugin cannot be run in the backend)
+		if(!tx_smarty_div::validateTypo3Instance('FE')) {
+			$smarty->trigger_error($smarty->fePluginError);
+			return false;
+		}
+				
 		$params = array_change_key_case($params);
 		$textConversion = new ux_html2text($content); // New instance of html2text
 

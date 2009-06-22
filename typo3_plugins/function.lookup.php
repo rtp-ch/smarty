@@ -41,7 +41,7 @@
  * Version: 1.0
  * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Returns DB result for a given table and value, usually from a get or post var
- * Example: {lookup GPvar="email"  field="email" table="fe_users" alias="name"} Returns the name corresponding to
+ * Example: {lookup GPvar="email" field="email" table="fe_users" alias="name"} Returns the name corresponding to
  * 			the email address supplied in Post/Get
  * Example: {lookup data="GPvar:tx_myext|uid" field="uid" table="ty_mext" alias="title"} Returns the title corresponding to
  * 			the uid supplied in Post/Get. For details on the "data" function check "getText" at:
@@ -52,6 +52,12 @@
 
 
 	function smarty_function_lookup($params, &$smarty) {
+			
+		// Check for a valid FE instance (this plugin cannot be run in the backend)
+		if(!tx_smarty_div::validateTypo3Instance('FE')) {
+			$smarty->trigger_error($smarty->fePluginError);
+			return false;
+		}		
 
 		// Make sure there is a valid instance of tslib_cObj
 		if (!method_exists($smarty->cObj,'getData') || !method_exists($GLOBALS['TSFE']->sys_page, 'getRecordsByField')) {
