@@ -46,18 +46,20 @@
  * Example: {lookup data="GPvar:tx_myext|uid" field="uid" table="ty_mext" alias="title"} Returns the title corresponding to
  * 			the uid supplied in Post/Get. For details on the "data" function check "getText" at:
  * 			http://typo3.org/documentation/document-library/references/doc_core_tsref/current/view/2/2/
+ * Example: {lookup data="GPvar:tx_myext|uid" field="uid" table="ty_mext" list="field1, field2, field3" delim=","} Returns the result
+ *          as a list of fields seperated by delim
  * -------------------------------------------------------------
  *
  **/
 
 
 	function smarty_function_lookup($params, &$smarty) {
-			
+
 		// Check for a valid FE instance (this plugin cannot be run in the backend)
 		if(!tx_smarty_div::validateTypo3Instance('FE')) {
 			$smarty->trigger_error($smarty->fePluginError);
 			return false;
-		}		
+		}
 
 		// Make sure there is a valid instance of tslib_cObj
 		if (!method_exists($smarty->cObj,'getData') || !method_exists($GLOBALS['TSFE']->sys_page, 'getRecordsByField')) {
@@ -67,51 +69,51 @@
 
 		// Make sure params are lowercase
 		$params = array_change_key_case($params,CASE_LOWER);
-		
-		// Get the table, exit if unknown table
-		if(!$params['table']) {
-			$params['table'] = 'pages';
-		} elseif(!in_array($params['table'], $GLOBALS['TYPO3_DB']->admin_get_tables())) {
-		    $smarty->trigger_error('Unknown table "'.$params['table'].'" in smarty_function_lookup');
-		    return;	// Exit if unknown table		
-		}
-		
-		// Get the lookup field, exit if unknown field		
+
+		// Default table is pages
+		if(!$params['table']) $params['table'] = 'pages';
+
+		// Get the lookup field, exit if unknown field
 		if(!$params['field']) {
-			$params['field'] = 'uid'; 
+			$params['field'] = 'uid';
 		} elseif (!array_key_exists($params['field'], $GLOBALS['TYPO3_DB']->admin_get_fields($params['table']))) {
 		    $smarty->trigger_error('Unknown field "'.$params['field'].'" in table "'.$params['table'].'" in smarty_function_lookup');
-		    return;	// Exit if unknown field				
+		    return;	// Exit if unknown field
 		}
-	
-		// Get the field value to return, exit if unknown field		
-		if(!$params['alias']) {
+
+		// Get the field value to return, exit if unknown field
+		if(!$params['alias'] && !$params['list']) {
 			t3lib_div::loadTCA($params['table']);
 			$params['alias'] = $GLOBALS['TCA'][$params['table']]['ctrl']['label']; // Default alias is the record label
-		} elseif (!array_key_exists($params['alias'], $GLOBALS['TYPO3_DB']->admin_get_fields($params['table']))) {
+		} elseif ($params['alias'] && !array_key_exists($params['alias'], $GLOBALS['TYPO3_DB']->admin_get_fields($params['table']))) {
 			$smarty->trigger_error('Unknown alias "'.$params['alias'].'" in table "'.$params['table'].'" in smarty_function_lookup');
-		    return;	// Exit if unknown field				
-		}	
-		
+		    return;	// Exit if unknown field
+		}
+
 		// Get the value to lookup
 		if($params['gpvar']) {
 			$lookupValue = $smarty->cObj->getData('GPVar:'.$params['gpvar']);
 		} elseif($params['data']) {
 			$lookupValue = $smarty->cObj->getData($params['data']);
 		}
-		
+
 		// Find and return the matching value
 		if(is_scalar($lookupValue)) {
-			$result = $GLOBALS['TSFE']->sys_page->getRecordsByField(
-				$params['table'], 
-				$params['field'], 
-				$lookupValue, // NOTE: getRecordsByField cleans the lookup value
-				$GLOBALS['TSFE']->sys_page->enableFields($params['table']),
-				'', 
-				'', 
-				1
-			);
-			if($result[0][$params['alias']]) return $result[0][$params['alias']];
+
+		    $where  = mysql_real_escape_string($params['field']) . ' = ' . mysql_real_escape_string($lookupValue);
+            $where .= (t3lib_div::loadTCA($params['table'])) ? $GLOBALS['TSFE']->sys_page->enableFields($params['table']) : '';
+			$result = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $params['table'], $where);
+
+			if(count($result) === 1) {
+			    if($params['alias'] && $result[0][$params['alias']]) {
+			        return $result[0][$params['alias']];
+			    } else {
+			        $list = array_unique(t3lib_div::trimExplode(',', $params['list'], 1));
+			        $list = array_intersect_key($result[0], array_flip($list));
+			        $delim = $params['delim'] ? $params['delim'] : ',';
+			        return !empty($list) ? implode($delim, array_filter($list)) : false;
+			    }
+			}
 		}
 	}
 
