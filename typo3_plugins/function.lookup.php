@@ -108,10 +108,10 @@
 			    if($params['alias'] && $result[0][$params['alias']]) {
 			        return $result[0][$params['alias']];
 			    } else {
-			        $list = array_unique(t3lib_div::trimExplode(',', $params['list'], 1));
-			        $list = array_intersect_key($result[0], array_flip($list));
+			        $items = array_unique(t3lib_div::trimExplode(',', $params['list'], 1));
+			        foreach($items as $item) if(trim($result[0][$item])) $list[$item] = trim($result[0][$item]);
 			        $delim = $params['delim'] ? $params['delim'] : ',';
-			        return !empty($list) ? implode($delim, array_filter($list)) : false;
+			        return !empty($list) ? implode($delim, $list) : false;
 			    }
 			}
 		}
