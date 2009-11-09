@@ -98,7 +98,7 @@
 		}
 
 		// Find and return the matching value
-		if(is_scalar($lookupValue)) {
+		if(is_scalar($lookupValue) && strlen(trim($lookupValue))) {
 
 		    $where  = mysql_real_escape_string($params['field']) . ' = ' . mysql_real_escape_string($lookupValue);
             $where .= (t3lib_div::loadTCA($params['table'])) ? $GLOBALS['TSFE']->sys_page->enableFields($params['table']) : '';
