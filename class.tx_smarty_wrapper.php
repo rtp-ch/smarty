@@ -46,7 +46,7 @@ class tx_smarty_wrapper extends Smarty {
 	var $t3_extVars; // Extension settings, e.g. extension key, extension path
 	var $t3_languageFile; // Name & location of the TYPO3 language file
 	var $_debug_resource; // Name and location of current template (used for debugging)
-	
+
 	var $fePluginError = 'The smarty plugin you are using is only available in the frontend';
 	var $bePluginError = 'The smarty plugin you are using is only available in the backend';
 
@@ -98,7 +98,7 @@ class tx_smarty_wrapper extends Smarty {
 		$this->pObj = $pObj;
 		// Register reference to tslib_cobj, if currently in the frontend
 		if(TYPO3_MODE=='FE') {
-			$this->cObj = &$GLOBALS['TSFE']->cObj;	
+			$this->cObj = &$GLOBALS['TSFE']->cObj;
 		}
 	}
 
@@ -126,7 +126,10 @@ class tx_smarty_wrapper extends Smarty {
 	// and to attach the debug console in fetch
 	function display($resource_name, $cache_id = null, $compile_id = null) {
 		$this->_getResourceInfo($resource_name); // Saves resource info to a Smarty class var for debugging
-		$_t3_fetch_result = $this->fetch($resource_name, tx_smarty_div::getCacheID($cache_id), $compile_id);
+		if(!is_null($cache_id)) {
+		    $cache_id = !$GLOBALS['TSFE']->no_cache ? $GLOBALS['TSFE']->id . '-' . $cache_id : null;
+		}
+		$_t3_fetch_result = $this->fetch($resource_name, $cache_id, $compile_id);
         if ($this->debugging) { // Debugging will have been evaluated in fetch
             require_once(SMARTY_CORE_DIR . 'core.display_debug_console.php');
             $_t3_fetch_result .= smarty_core_display_debug_console(array(), $this);
@@ -154,9 +157,9 @@ class tx_smarty_wrapper extends Smarty {
 			}
 		} elseif($langFile = t3lib_div::getFileAbsFileName($param)) {
 			if(@is_file($langFile))	{
-				$this->t3_languageFile = $langFile;	
+				$this->t3_languageFile = $langFile;
 			}
-		}		
+		}
 	}
 
 	// Check for availability of a plugin function and load
