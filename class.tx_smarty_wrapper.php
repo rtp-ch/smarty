@@ -125,7 +125,7 @@ class tx_smarty_wrapper extends Smarty {
 	// Modifies smarty display function to always use fetch (display=false)
 	// and to attach the debug console in fetch
 	function display($resource_name, $cache_id = null, $compile_id = null) {
-		$this->_getResourceInfo($resource_name); // Saves resource info to a Smarty class var for debugging
+		if ($this->debugging) $this->_getResourceInfo($resource_name); // Saves resource info to a Smarty class var for debugging
 		if(!is_null($cache_id)) {
 		    $cache_id = !$GLOBALS['TSFE']->no_cache ? $GLOBALS['TSFE']->id . '-' . $cache_id : null;
 		}

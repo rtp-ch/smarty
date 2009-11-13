@@ -35,6 +35,16 @@ require_once(PATH_t3lib.'class.t3lib_tsparser.php');
 
 class tx_smarty_div {
 
+    private static $_tsParser        = null;
+
+    private function _getTsParser()
+    {
+        if(is_null(self::$_tsParser)) {
+            self::$_tsParser = t3lib_div::makeInstance('t3lib_tsparser');
+        }
+        return self::$_tsParser;
+    }
+
 	// Set appropriate caching for cHash and no_cache
 	function getCacheID($cache_id = null) {
 		// If caching is disabled in TYPO3 make sure it's disabled in Smarty as well
@@ -60,10 +70,10 @@ class tx_smarty_div {
         }
         return $value;
 	}
-	
+
 	// Checks against valid TYPO3 instance
-	function validateTypo3Instance($instances = null) {
-		
+	function validateTypo3Instance($instances = null)
+	{
 		if(empty($instances) || !defined('TYPO3_MODE')) return false;
 		$instances = t3lib_div::trimExplode(',', strtoupper($instances), 1);
 		if(in_array(TYPO3_MODE, $instances)) return true;
@@ -71,18 +81,20 @@ class tx_smarty_div {
 	}
 
 	// Retrieves a TypoScript object from the global setup scope ($GLOBALS['TSFE']->tmpl->setup)
-	function getTypoScriptFromTMPL($key) {
+	function getTypoScriptFromTMPL($key)
+	{
 		if(!$key) return false;
-		$ts_parser = t3lib_div::makeInstance('t3lib_tsparser');
-		if ($setup = $ts_parser->getVal($key,$GLOBALS['TSFE']->tmpl->setup)) return $setup;
+		if ($setup = self::_getTsParser()->getVal($key, $GLOBALS['TSFE']->tmpl->setup)) return $setup;
 		return false;
 	}
 
 	// Turns an array (assumed to be TypoScript Parameters) into
 	// text. Any occurences of _DOT_ (see prefilter dots) are replaced with a dot (.)
-	function makeTypoScriptFromArray($params) {
+	function makeTypoScriptFromArray($params)
+	{
+	    $return = null;
 		foreach($params as $param => $value) {
-			$return .= str_replace('_DOT_','.',$param).' = '.$value.chr(10);
+			$return .= str_replace('_DOT_','.',$param) . ' = ' . $value . chr(10);
 		}
 		return $return;
 	}
@@ -91,31 +103,35 @@ class tx_smarty_div {
 	// returns an array:
 	// $setup[0]	The TypoScript object, e.g. IMAGE or TEXT etc.
 	// $setup[1]	The configuration array of the object
-	function parseTypoScript($typoscript) {
+	function parseTypoScript($typoscript)
+	{
 		if(!$typoscript) return false;
 		if (is_array($typoscript)) $typoscript = tx_smarty_div::makeTypoScriptFromArray($typoscript);
-		$ts_parser = t3lib_div::makeInstance('t3lib_tsparser');
-		$ts_parser->parse($typoscript);
-		return ($ts_parser->setup)?$ts_parser->setup:false;
+		if(!is_null($typoscript)) {
+    		self::_getTsParser()->parse($typoscript);
+    		if($setup = self::_getTsParser()->setup) return $setup;
+		}
+		return false;
 	}
 
 	// General function to return TypoScript from plugin params
 	// The special param 'setup' is assumed to reference a TypoScript object from the global scope
 	function getTypoScriptFromParams($params) {
+	    unset(self::_getTsParser()->setup); // Unset previous TS
 		if($params['setup']) {
 			$setup = tx_smarty_div::getTypoScriptFromTMPL($params['setup']);
 			unset($params['setup']);
 		}
 		if($params) $params = tx_smarty_div::parseTypoScript($params); // Create a TypoScript array from $params
-		if($params && $setup) $setup[1] = t3lib_div::array_merge_recursive_overrule($setup[1],$params,false,true); // Merge $setup & $params
-		return ($setup)?$setup:array(1 => $params);
+		if($params && $setup) $setup[1] = t3lib_div::array_merge_recursive_overrule($setup[1], $params, false, true); // Merge $setup & $params
+		return $setup ? $setup : array(1 => $params);
 	}
 
 	// Get an absolute file/dir reference (trailing slashes are stripped)
 	function getFileAbsName($filename) {
 		return ($location = t3lib_div::getFileAbsFileName($filename,0))?preg_replace('%([\\\\|/]*$)%', '', $location):$filename;
 	}
-	
+
 	/**
 	 * Note: This function is required but not available in earlier TYPO3 versions
 	 * Removes dots "." from end of a key identifier of TypoScript styled array.
