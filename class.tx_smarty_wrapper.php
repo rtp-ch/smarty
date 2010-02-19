@@ -124,10 +124,15 @@ class tx_smarty_wrapper extends Smarty {
 
 	// Modifies smarty display function to always use fetch (display=false)
 	// and to attach the debug console in fetch
-	function display($resource_name, $cache_id = null, $compile_id = null) {
+	function display($resource_name, $cache_id = null, $compile_id = null, $respectNoCache = false) {
 		if ($this->debugging) $this->_getResourceInfo($resource_name); // Saves resource info to a Smarty class var for debugging
 		if(!is_null($cache_id)) {
-		    $cache_id = !$GLOBALS['TSFE']->no_cache ? $GLOBALS['TSFE']->id . '-' . $cache_id : null;
+			if($respectNoCache && $GLOBALS['TSFE']->no_cache && !$GLOBALS['TYPO3_CONF_VARS']['FE']['disableNoCacheParameter']) {
+				$this->caching = false;
+				$cache_id = null;
+			} else {
+				$cache_id = $GLOBALS['TSFE']->id . '-' . $cache_id;	
+			} 
 		}
 		$_t3_fetch_result = $this->fetch($resource_name, $cache_id, $compile_id);
         if ($this->debugging) { // Debugging will have been evaluated in fetch
