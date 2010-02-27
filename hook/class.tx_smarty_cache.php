@@ -21,5 +21,21 @@ class tx_smarty_cache {
 				}
 			}
 		}
+		$compileFiles = t3lib_div::getFilesInDir(PATH_site . 'typo3temp/smarty_compile/');
+		if(!empty($compileFiles)) {
+			if($deletePid || $params['cacheCmd'] == 'all' || $params['cacheCmd'] == 'pages') {
+		    	foreach($compileFiles as $compileFile) {				
+					if($deletePid) {
+						if(strpos($compileFile, $deletePid . '-') === 0) {
+							@unlink(PATH_site . 'typo3temp/smarty_compile/' . $compileFile);
+						}
+					} else {
+						if(strpos(strtolower($compileFile), 'index') !== 0) {
+							@unlink(PATH_site . 'typo3temp/smarty_compile/' . $compileFile);
+						}
+					}			
+				}
+			}
+		}		
 	}
 }

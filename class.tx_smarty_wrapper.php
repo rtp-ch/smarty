@@ -60,6 +60,7 @@ class tx_smarty_wrapper extends Smarty {
 		'cache_lifetime' => 0,					// Int: This is the length of time in seconds that a template cache is valid (default 3600)
 		'cache_modified_check' => 0,			// Boolean: If set to true, Smarty will respect the If-Modified-Since header sent from the client.
 		'caching' => 0,							// Boolean: This tells Smarty whether or not to cache the output of the templates to the $cache_dir. (FALSE, default)
+		'respect_no_cache' => 0,				// Boolean: If enabled Smarty wil respect the TYPO3 no_cache parameter and disable caching (if enabled) whenever no_cache is invoked. 
 		'compile_check' => 0,					// Boolean: Upon each invocation of the PHP application, Smarty tests to see if the current template has changed
 		'compile_dir' => 1,						// String: Name of the directory where compiled templates are located (must be either a relative or absolute path)
 		'compile_id' => 0,						// String: Persistant compile identifier.
@@ -124,16 +125,17 @@ class tx_smarty_wrapper extends Smarty {
 
 	// Modifies smarty display function to always use fetch (display=false)
 	// and to attach the debug console in fetch
-	function display($resource_name, $cache_id = null, $compile_id = null, $respectNoCache = false) {
+	function display($resource_name, $cache_id = null, $compile_id = null) {
 		if ($this->debugging) $this->_getResourceInfo($resource_name); // Saves resource info to a Smarty class var for debugging
 		if(!is_null($cache_id)) {
-			if($respectNoCache && $GLOBALS['TSFE']->no_cache && !$GLOBALS['TYPO3_CONF_VARS']['FE']['disableNoCacheParameter']) {
+			if($this->respect_no_cache && $GLOBALS['TSFE']->no_cache && !$GLOBALS['TYPO3_CONF_VARS']['FE']['disableNoCacheParameter']) {
 				$this->caching = false;
 				$cache_id = null;
 			} else {
-				$cache_id = $GLOBALS['TSFE']->id . '-' . $cache_id;	
+				//$cache_id = $GLOBALS['TSFE']->id . '-' . $cache_id;	
 			} 
 		}
+		//if(!is_null($compile_id)) $compile_id = $GLOBALS['TSFE']->id . '-' . $compile_id;
 		$_t3_fetch_result = $this->fetch($resource_name, $cache_id, $compile_id);
         if ($this->debugging) { // Debugging will have been evaluated in fetch
             require_once(SMARTY_CORE_DIR . 'core.display_debug_console.php');
@@ -226,10 +228,34 @@ class tx_smarty_wrapper extends Smarty {
             // with $params['auto_id'] names
             $_crc32 = substr($_crc32, 0, 2) . $_compile_dir_sep .
                       substr($_crc32, 0, 3) . $_compile_dir_sep . $_crc32;
-// XXX: Changed from $_filename to md5($_filename)
-            $_return .= '%%' . $_crc32 . '%%' . md5($_filename);
+// XXX: Changed from $_filename to md5($_filename) to enable string resources
+// XXX: Prepended current page id to filename to enable clearing cache for current page
+            $_return .= self::_prependPageId() . '%%' . $_crc32 . '%%' . md5($_filename);
         }
         return $_return;
+    }
+    
+    /**
+     * returns an auto_id for auto-file-functions
+     *
+     * @param string $cache_id
+     * @param string $compile_id
+     * @return string|null
+     */
+    function _get_auto_id($cache_id=null, $compile_id=null) {
+    if (isset($cache_id))
+// XXX: Prepended current page id to filename to enable clearing cache for current page    
+        return (isset($compile_id)) ? self::_prependPageId() . $cache_id . '|' . $compile_id  : self::_prependPageId() . $cache_id;
+    elseif(isset($compile_id))
+// XXX: Prepended current page id to filename to enable clearing cache for current page    
+        return self::_prependPageId() . $compile_id;
+    else
+        return null;
+    } 
+
+    private static function _prependPageId()
+    {
+    	return tx_smarty_div::validateTypo3Instance('FE') && intval($GLOBALS['TSFE']->id) ? $GLOBALS['TSFE']->id . '-' : '';
     }
 }
 

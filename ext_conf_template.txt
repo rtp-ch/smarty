@@ -6,3 +6,15 @@ smarty_dir = EXT:smarty/Smarty
 
   # cat=basic; type=string; label= Path to your Smarty templates: Default location of your Smarty templates. You can modify the path to your Smarty templates directory in your extension if required.
 template_dir = fileadmin/admin/smarty
+
+  # cat=basic/enable/01; type=boolean; label=Enable Smarty caching: Tells Smarty whether or not to cache the output of the templates. This setting may improve performance with non-cached FE plugins (i.e. USER_INT). Use with care!
+caching = 
+
+# cat=basic/enable/01; type=boolean; label=Respect the no_cache parameter: If enabled Smarty wil respect the TYPO3 no_cache parameter and disable caching (if enabled) whenever no_cache is invoked or set in TSFE.
+respect_no_cache = 
+
+  # cat=basic/enable/01; type=boolean; label=Enable compile checks: Smarty tests to see if the current template has changed (different time stamp) since the last time it was compiled. Can be enabled for development and debugging purposes, but should be disabled in productive environments.
+compile_check = 
+
+  # cat=basic/enable/01; type=boolean; label=Enable the Smarty debugging console: Globally invokes the Smarty debugging console for included smarty templates. On a per template basis the debugging console can be invoked by including {debug} in the template.
+debugging = 

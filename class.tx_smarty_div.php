@@ -45,24 +45,9 @@ class tx_smarty_div {
         return self::$_tsParser;
     }
 
-	// Set appropriate caching for cHash and no_cache
-	function getCacheID($cache_id = null) {
-		// If caching is disabled in TYPO3 make sure it's disabled in Smarty as well
-		if($GLOBALS['TSFE']->no_cache || t3lib_div::_GP('no_cache')) {
-			$this->caching = false;
-			return; // Exit here
-		}
-		// If cHash is set, use it for the cache_id
-		if(t3lib_div::_GP('cHash')) {
-			return t3lib_div::_GP('cHash');
-		}
-		// Otherwise create a unique cache_id from POST/GET vars
-		// TODO: Observe how well Smarty caching works in the context of TYPO3. Disabling caching is generally recommended...
-		return ($cache_id)?$cache_id:t3lib_div::shortMD5(serialize(array_merge(t3lib_div::_GET(),t3lib_div::_POST())));
-	}
-
 	// Turns yes/no, true/false, on/off into booleans. !IMPORANT
-	function booleanize($value)  {
+	function booleanize($value)  
+	{
         if (preg_match("/^(on|true|yes)$/i", trim($value))) {
             $value = true;
         } elseif (preg_match("/^(off|false|no)$/i", trim($value))) {
@@ -129,7 +114,11 @@ class tx_smarty_div {
 
 	// Get an absolute file/dir reference (trailing slashes are stripped)
 	function getFileAbsName($filename) {
-		return ($location = t3lib_div::getFileAbsFileName($filename,0))?preg_replace('%([\\\\|/]*$)%', '', $location):$filename;
+		$location = t3lib_div::getFileAbsFileName($filename,0);
+		if(@is_readable($location)) {
+			return substr($location, -1) == DIRECTORY_SEPARATOR ? substr($location, 0, -1) : $location;
+		}
+		return $filename;
 	}
 
 	/**
