@@ -131,11 +131,8 @@ class tx_smarty_wrapper extends Smarty {
 			if($this->respect_no_cache && $GLOBALS['TSFE']->no_cache && !$GLOBALS['TYPO3_CONF_VARS']['FE']['disableNoCacheParameter']) {
 				$this->caching = false;
 				$cache_id = null;
-			} else {
-				//$cache_id = $GLOBALS['TSFE']->id . '-' . $cache_id;	
 			} 
 		}
-		//if(!is_null($compile_id)) $compile_id = $GLOBALS['TSFE']->id . '-' . $compile_id;
 		$_t3_fetch_result = $this->fetch($resource_name, $cache_id, $compile_id);
         if ($this->debugging) { // Debugging will have been evaluated in fetch
             require_once(SMARTY_CORE_DIR . 'core.display_debug_console.php');
@@ -229,8 +226,7 @@ class tx_smarty_wrapper extends Smarty {
             $_crc32 = substr($_crc32, 0, 2) . $_compile_dir_sep .
                       substr($_crc32, 0, 3) . $_compile_dir_sep . $_crc32;
 // XXX: Changed from $_filename to md5($_filename) to enable string resources
-// XXX: Prepended current page id to filename to enable clearing cache for current page
-            $_return .= self::_prependPageId() . '%%' . $_crc32 . '%%' . md5($_filename);
+            $_return .= '%%' . $_crc32 . '%%' . md5($_filename);
         }
         return $_return;
     }
