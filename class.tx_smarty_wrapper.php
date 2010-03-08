@@ -219,7 +219,8 @@ class tx_smarty_wrapper extends Smarty {
 
         if(isset($auto_source)) {
             // make source name safe for filename
-            $_filename = urlencode(basename($auto_source));
+// FIXED: Different template_dirs with same templates ignored            
+            $_filename = $this->template_dir . '/' . basename($auto_source);
             $_crc32 = sprintf('%08X', crc32($auto_source));
             // prepend %% to avoid name conflicts with
             // with $params['auto_id'] names
