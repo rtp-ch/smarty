@@ -219,8 +219,9 @@ class tx_smarty_wrapper extends Smarty {
 
         if(isset($auto_source)) {
             // make source name safe for filename
-// FIXED: Different template_dirs with same templates ignored            
-            $_filename = $this->template_dir . '/' . basename($auto_source);
+// XXX: Workaround for the limitation that you cannot use the same $compile_dir for different $template_dirs  
+// See http://www.smarty.net/manual/en/variable.compile.id.php          
+            $_filename = $this->template_dir . basename($auto_source);
             $_crc32 = sprintf('%08X', crc32($auto_source));
             // prepend %% to avoid name conflicts with
             // with $params['auto_id'] names
