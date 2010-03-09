@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Smarty Templating Engine',
-	'description' => 'A library for extension developers who want to use the Smarty templating engine for extension templates. Includes Smarty (2.6.19) and some custom Smarty tags for common TYPO3 functions, for example, {translate} (a Smarty tag for localization), {link} (a Smarty tag to create typolinks), etc.',
+	'description' => 'A library for developers who want to use the Smarty templating engine for frontend extension templating. Includes Smarty and some custom Smarty tags for common TYPO3 functions.',
 	'category' => 'misc',
 	'shy' => 0,
 	'version' => '1.8.3',
@@ -34,6 +34,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'CGLcompliance_note' => '',
 	'constraints' => array(
 		'depends' => array(
+			'php' => '5.0.0-0.0.0',
 		),
 		'conflicts' => array(
 		),
