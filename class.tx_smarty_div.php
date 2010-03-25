@@ -48,11 +48,13 @@ class tx_smarty_div {
 	// Turns yes/no, true/false, on/off into booleans. !IMPORANT
 	function booleanize($value)  
 	{
-        if (preg_match("/^(on|true|yes)$/i", trim($value))) {
-            $value = true;
-        } elseif (preg_match("/^(off|false|no)$/i", trim($value))) {
-            $value = false;
-        }
+		if(is_scalar($value)) {
+		    if (preg_match("/^(on|true|yes)$/i", trim($value))) {
+	            $value = true;
+	        } elseif (preg_match("/^(off|false|no)$/i", trim($value))) {
+	            $value = false;
+	        }			
+		}
         return $value;
 	}
 
