@@ -95,15 +95,16 @@
 			$lookupValue = $smarty->cObj->getData('GPVar:'.$params['gpvar']);
 		} elseif($params['data']) {
 			$lookupValue = $smarty->cObj->getData($params['data']);
+		} elseif($params['value']) {
+			$lookupValue = $params['value'];
 		}
 
 		// Find and return the matching value
 		if(is_scalar($lookupValue) && strlen(trim($lookupValue))) {
-
-		    $where  = mysql_real_escape_string($params['field']) . ' = ' . mysql_real_escape_string($lookupValue);
+			$lookupValue = (!is_numeric($lookupValue)) ? '\'' . mysql_real_escape_string($lookupValue) . '\'' :  mysql_real_escape_string($lookupValue);
+		    $where  = mysql_real_escape_string($params['field']) . ' = ' . $lookupValue;
             $where .= (t3lib_div::loadTCA($params['table'])) ? $GLOBALS['TSFE']->sys_page->enableFields($params['table']) : '';
 			$result = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $params['table'], $where);
-
 			if(count($result) === 1) {
 			    if($params['alias'] && $result[0][$params['alias']]) {
 			        return $result[0][$params['alias']];
