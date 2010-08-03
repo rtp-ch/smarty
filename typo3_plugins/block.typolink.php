@@ -46,6 +46,9 @@
  *			For example, parameter="1" or useCacheHash="1" or addQueryString.exclude="id,L" etc.
  *			For details of available parameters check the typolink documentation at:
  * 			http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/5/8/
+ * Note:	In addition to the normal typolink parameters you can use parameter="_self" to link to the current
+ * 			page. And you can define absRefPrefix="1" to prefix the link with the current base url or 
+ * 			absRefPrefix="http://www.mysite.com/" to prefix the link with a different url.
  * Note:	The parameter "setup" will reference the global template scope, so you can pass a typoscript
  *			object which defines your link configuratiopn.
  *			For example, if your TypoScript setup contains an element lib.myLink, adding
@@ -79,9 +82,23 @@
 
 		// Get TypoScript from $params
 		$setup = tx_smarty_div::getTypoScriptFromParams($params);
+		
+		// Prefix the url with the base url or a defined path
+		// @TODO: Better/proper way to retrieve site url/ base url?
+		if($params['absRefPrefix']) {
+			$prefix = parse_url($params['absRefPrefix'], PHP_URL_SCHEME) ? trim($params['absRefPrefix']) : trim($GLOBALS['TSFE']->baseUrl);
+			if(substr($prefix, -1, 1) !== '/')  $prefix .= '/';
+			$tempAbsRefPrefix = $GLOBALS['TSFE']->absRefPrefix; // Save a copy of the current $GLOBALS['TSFE']->absRefPrefix setting
+			$GLOBALS['TSFE']->absRefPrefix = $prefix;
+		}		
 
 		// Get the typolink
 		$link = $smarty->cObj->typolink($content,$setup[1]);
+		
+		// Copy the original absRefPrefix back into $GLOBALS['TSFE']->absRefPrefix
+		if($params['absRefPrefix']) {
+			$GLOBALS['TSFE']->absRefPrefix = $tempAbsRefPrefix;
+		}
 
 		// Automatically set the "title" attribute from the content of the tag if undefined
 		if (!preg_match('%<a[^>]*title=[^>]*>[^<]*</a>%i', $link)) {
