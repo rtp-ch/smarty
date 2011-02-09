@@ -30,7 +30,10 @@
  *	@package 	Smarty (smarty)
  *
  ***************************************************************/
-
+/**
+ * Include the {@link shared.make_timestamp.php} plugin
+ */
+require_once $smarty->_get_plugin_filepath('shared', 'make_timestamp');
 /**
  *
  * Smarty plugin "gmdate_format"
@@ -49,7 +52,6 @@
 
 function smarty_modifier_gmdate_format($string, $format = '%b %e, %Y', $default_date = '')
 {
-
     if ($string != '') {
         $timestamp = smarty_make_timestamp($string);
     } elseif ($default_date != '') {
@@ -72,5 +74,3 @@ function smarty_modifier_gmdate_format($string, $format = '%b %e, %Y', $default_
     }
     return gmstrftime($format, $timestamp);
 }
-
-?>
