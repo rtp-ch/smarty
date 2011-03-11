@@ -89,10 +89,11 @@ class tx_smarty {
 		 * Check for valid compile and cache dir
 		 ****/
 		 if (!tx_smarty::_checkDir($smarty->compile_dir)) {
-		     die('Sorry, but I can\'t find the Smarty compile directory in: <br /><span style="color:red;">'.$smarty->compile_dir.'</span><br />. Please check your configuration and try again.');
+			 t3lib_div::mkdir(t3lib_div::getFileAbsFileName($smarty->compile_dir,0));
 		 }
+		
 		 if (!tx_smarty::_checkDir($smarty->cache_dir)) {
-		     die('Sorry, but I can\'t find the Smarty cache directory in: <br /><span style="color:red;">'.$smarty->cache_dir.'</span><br />. Please check your configuration and try again.');
+			 t3lib_div::mkdir(t3lib_div::getFileAbsFileName($smarty->cache_dir,0));
 		 }
 
 		/****
@@ -164,7 +165,8 @@ class tx_smarty {
 	}
 
 	function _checkDir($dir) {
-	    return t3lib_div::getFileAbsFileName($dir,0);
+		$dir = t3lib_div::getFileAbsFileName($dir,0);
+	    return  $dir && file_exists($dir);
 	}
 
 }

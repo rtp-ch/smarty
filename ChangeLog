@@ -1,3 +1,8 @@
+11-03-11 Manuel Stofer <mstrtpartner.ch>, Rueegg Tuck Partner
+
+	* BUGFIX: check if compile_dir and cache_dir exists failed
+	* NEW: compile_dir and cache_dir are now created when missing
+
 03-07-08 Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner
 
 	* BUGFIX: compile_dir was not declared as a directory
