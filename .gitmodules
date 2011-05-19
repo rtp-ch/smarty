@@ -1,0 +1,3 @@
+[submodule "contrib/krumo"]
+	path = contrib/krumo
+	url = https://github.com/justmoon/krumo.git
