@@ -57,7 +57,7 @@
 			$smarty->assign('_assigned_vars', $assigned_vars);
 		}
 		// Config file variables
-		if (@count($smarty->_config[0]['vars']) > 0 || @count($smarty->_config[0]['files']) > 0) {
+		if (count($smarty->_config[0]['vars']) > 0 || count($smarty->_config[0]['files']) > 0) {
 		    $config_vars = $smarty->_config[0];
 		    ksort($config_vars);
 		    $smarty->assign('_debug_config_vars', $config_vars);
@@ -72,5 +72,3 @@
 		$smarty->assign('_debug_tpls', $smarty->_smarty_debug_info);
 
 	}
-
-?>

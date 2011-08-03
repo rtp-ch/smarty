@@ -582,6 +582,20 @@ This is a list of all the values from the <code><b><?php echo realpath($ini_file
 <div class="krumo-root">
 	<ul class="krumo-node krumo-first">
 		<?php echo krumo::_dump($data);?>
+		<li class="krumo-footnote">
+			<div class="krumo-version" style="white-space:nowrap;">
+				<h6>Krumo version <?php echo krumo::version();?></h6> | <a
+					href="http://krumo.sourceforge.net"
+					target="_blank">http://krumo.sourceforge.net</a>
+			</div>
+		
+		<?php if (@$d['file']) { ?>
+		<span class="krumo-call" style="white-space:nowrap;">
+			Called from <code><?php echo $d['file']?></code>,
+				line <code><?php echo $d['line']?></code></span>
+		<?php } ?>
+		&nbsp;
+		</li>
 	</ul>
 </div>
 <?php
@@ -608,11 +622,6 @@ This is a list of all the values from the <code><b><?php echo realpath($ini_file
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
 	/**
-	 * Configuration array.
-	 */
-	Private Static $_config = array();
-
-	/**
 	* Returns values from Krumo's configuration
 	*
 	* @param string $group
@@ -624,64 +633,22 @@ This is a list of all the values from the <code><b><?php echo realpath($ini_file
 	* @static
 	*/
 	Private Static Function _config($group, $name, $fallback=null) {
+		
+		static $_config = array();
+		
 		// not loaded ?
 		//
-		if (empty(self::$_config)) {
-			self::$_config = (array) @parse_ini_file(
+		if (empty($_config)) {
+			$_config = (array) @parse_ini_file(
 				KRUMO_DIR . 'krumo.ini',
 				true);
 			}
 		
 		// exists ?
 		//
-		return (isset(self::$_config[$group][$name]))
-			? self::$_config[$group][$name]
+		return (isset($_config[$group][$name]))
+			? $_config[$group][$name]
 			: $fallback;
-		}
-	
-	Public Static Function setConfig($config) {
-		self::$_config = $config;
-		}
-
-	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-
-	/**
-	* Cascade configuration array
-	*
-	* By default, all nodes are collapsed.
-	*/
-	Private Static $_cascade = array(0);
-	
-	/**
-	* Set a cascade configuration array.
-	*
-	* Each value in the array is the maximum number of entries that node can
-	* have before it is being collapsed. The last value is repeated for all
-	* further levels.
-	*
-	* Example:
-	* array(10,5,0) - Nodes from the first level are expanded if they have less
-	*                 than 10 child nodes. Nodes from the second level are ex-
-	*                 panded if they have less then 5 nodes and all lower levels
-	*                 are collapsed.
-	*
-	* @param array $cascade Cascading information
-	* @access public
-	* @static
-	*/
-	Public Static Function cascade($cascade) {
-		self::$_cascade = $cascade;
-		}
-
-	/**
-	* Determines if a given node will be collapsed or not.
-	*/
-	Private Static Function _isCollapsed($level, $childCount) {
-		if (isset(self::$_cascade[$level])) {
-			return $childCount > self::$_cascade[$level];
-		} else {
-			return $childCount > end(self::$_cascade);
-		}
 		}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
@@ -965,11 +932,6 @@ This is a list of all the values from the <code><b><?php echo realpath($ini_file
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
 	/**
-	* Level of recursion.
-	*/
-	Private Static $_level = 0;
-
-	/**
 	* Render a dump for the properties of an array or objeect
 	*
 	* @param mixed &$data
@@ -1001,47 +963,40 @@ This is a list of all the values from the <code><b><?php echo realpath($ini_file
 
 		// render it
 		//
-		$collapsed = krumo::_isCollapsed(self::$_level, count($data)-1);
 		?>
-<div class="krumo-nest"<?php if ($collapsed): ?> style="display:none;"<?php endif;?>>
+<div class="krumo-nest" style="display:none;">
 	<ul class="krumo-node">
-		<?php
+	<?php
 
-		// keys ?
-		//
-		$keys = ($_is_object)
-			? array_keys(get_object_vars($data))
-			: array_keys($data);
+	// keys ?
+	//
+	$keys = ($_is_object)
+		? array_keys(get_object_vars($data))
+		: array_keys($data);
 	
-		// we're decending one level deeper
-		self::$_level++;
-	
-		// itterate 
-		//
-		foreach($keys as $k) {
+	// itterate 
+	//
+	foreach($keys as $k) {
 
-			// skip marker
-			//
-			if ($k === $_recursion_marker) {
-				continue;
-				}
+		// skip marker
+		//
+		if ($k === $_recursion_marker) {
+			continue;
+			}
 		
-			// get real value
-			//
-			if ($_is_object) {
-				$v =& $data->$k;
-				} else {
-				$v =& $data[$k];
-				}
+		// get real value
+		//
+		if ($_is_object) {
+			$v =& $data->$k;
+			} else {
+			$v =& $data[$k];
+			}
 
-			krumo::_dump($v,$k);
-			} ?>
+		krumo::_dump($v,$k);
+		} ?>
 	</ul>
 </div>
 <?php
-	
-		// back up one level
-		self::$_level--;
 		}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
@@ -1081,15 +1036,11 @@ This is a list of all the values from the <code><b><?php echo realpath($ini_file
 	* @static
 	*/
 	Private Static Function _array(&$data, $name) {
-		$childCount = count($data);
-		$collapsed = krumo::_isCollapsed(self::$_level, count($data));
-		$elementClasses = ($childCount > 0) ? (
-				($collapsed) ? ' krumo-expand' : ' krumo-expand krumo-opened'
-			) : '';
 ?>
 <li class="krumo-child">
-	<div class="krumo-element<?php echo $elementClasses; ?>"
-		<?php if ($childCount > 0) {?> onClick="krumo.toggle(this);"<?php } ?>
+	
+	<div class="krumo-element<?php echo count($data) > 0 ? ' krumo-expand' : '';?>"
+		<?php if (count($data) > 0) {?> onClick="krumo.toggle(this);"<?php } ?>
 		onMouseOver="krumo.over(this);"
 		onMouseOut="krumo.out(this);">
 		
@@ -1136,15 +1087,11 @@ This is a list of all the values from the <code><b><?php echo realpath($ini_file
 	* @static
 	*/
 	Private Static Function _object(&$data, $name) {
-		$childCount = count($data);
-		$collapsed = krumo::_isCollapsed(self::$_level, count($data));
-		$elementClasses = ($childCount > 0) ? (
-				($collapsed) ? ' krumo-expand' : ' krumo-expand krumo-opened'
-			) : '';
 ?>
 <li class="krumo-child">
-	<div class="krumo-element<?php echo $elementClasses; ?>"
-		<?php if ($childCount > 0) {?> onClick="krumo.toggle(this);"<?php } ?>
+
+	<div class="krumo-element<?php echo count($data) > 0 ? ' krumo-expand' : '';?>"
+		<?php if (count($data) > 0) {?> onClick="krumo.toggle(this);"<?php } ?>
 		onMouseOver="krumo.over(this);"
 		onMouseOut="krumo.out(this);">
 

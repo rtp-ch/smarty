@@ -41,18 +41,21 @@
  * Version: 1.2
  * Author:	Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Uses the class dBug to dump a variable to a popup window
- * Example:	{$assignedPHPvariable|@debug_var:forceType:collapse:description}
+ * Example:	{$assignedPHPvariable|@debug_var}
  * -------------------------------------------------------------
  *
  **/
 
+	// Include debug class
+    if(!class_exists('krumo')) {
+	    require_once(t3lib_extMgm::extPath('smarty') . 'lib/krumo/class.krumo.php');
+    }
 
-	 // Include debug class
-	 require_once(t3lib_extMgm::extPath('smarty').'lib/dBug.php');
-
-	 function smarty_modifier_debug_var($var, $forceType='', $bCollapsed=false, $description='') {
-		$debug_var = new dBug($var, $forceType, $bCollapsed);
-	 	return $debug_var->getDBug();
-	 }
-
-?>
+	function smarty_modifier_debug_var($var)
+    {
+        ob_start();
+		krumo($var);
+		$output = ob_get_contents();
+		ob_end_clean();
+		return $output;
+    }

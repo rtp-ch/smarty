@@ -34,18 +34,23 @@
  * -------------------------------------------------------------
  *
  **/
-	require_once(t3lib_extMgm::extPath('smarty').'contrib/krumo/class.krumo.php');
 
-	function smarty_function_krumo($params, &$smarty) {
 
+    if(!class_exists('krumo')) {
+	    require_once(t3lib_extMgm::extPath('smarty') . 'lib/krumo/class.krumo.php');
+    }
+
+	function smarty_function_krumo($params, &$smarty)
+    {
 		if(!isset($params['var'])){
 			$var = $smarty->_tpl_vars;
 		} else{
 			$var = $params['var'];
 		}
+
 		ob_start();
 		krumo($var);
-		return  ob_get_clean();
+		$output = ob_get_contents();
+		ob_end_clean();
+		return $output;
 	}
-
-?>
