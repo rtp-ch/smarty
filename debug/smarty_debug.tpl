@@ -21,8 +21,6 @@
 	}
 </style>
 {/literal}
+{krumo}
 
-<div style="position: absolute; width: auto; z-index: 1000; display: block;">
-    {krumo}
-</div>
 
