@@ -32,13 +32,15 @@
 // Include html2text class
 require_once(t3lib_extMgm::extPath('smarty').'lib/class.html2text.php');
 
-class ux_html2text extends html2text {
+class ux_html2text extends html2text
+{
 
     var $appendLinks = false;
     var $stripLinks = false;
     var $stripLines = false;
 
-    function _convert() {
+    function _convert()
+    {
         // Variables used for building the link list
         $this->_link_count = 0;
         $this->_link_list = '';
@@ -88,7 +90,7 @@ class ux_html2text extends html2text {
      *  @return string
      */
     function _build_link_list( $link, $display )
-    {   	
+    {
         if ( substr($link, 0, 7) == 'http://' || substr($link, 0, 8) == 'https://' ||
              substr($link, 0, 7) == 'mailto:' ) {
             $this->_link_count++;
@@ -113,7 +115,8 @@ class ux_html2text extends html2text {
         return $display . $additional;
     }
 
-    function _build_additional($link) {   	
+    function _build_additional($link)
+    {
         if($this->stripLinks) {
         	return '';
         } elseif($this->appendLinks) {
@@ -121,11 +124,4 @@ class ux_html2text extends html2text {
         }
         return ' [' . $link . ']';
     }
-
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/smarty/lib/class.ux_html2text.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/smarty/lib/class.ux_html2text.php']);
-}
-
-?>

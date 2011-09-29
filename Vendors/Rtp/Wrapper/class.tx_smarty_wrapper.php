@@ -36,7 +36,8 @@ require_once(SMARTY_DIR.'Smarty.class.php');
 require_once(t3lib_extMgm::extPath('smarty').'/class.tx_smarty_div.php');
 
 // Create a wrapper class extending Smarty
-class tx_smarty_wrapper extends Smarty {
+class tx_smarty_wrapper extends Smarty
+{
 
 	var $cObj; // Instance of tslib_cobj
 	var $pObj; // Instance of parent class
@@ -256,9 +257,3 @@ class tx_smarty_wrapper extends Smarty {
     	return tx_smarty_div::validateTypo3Instance('FE') && intval($GLOBALS['TSFE']->id) ? $GLOBALS['TSFE']->id . '-' : '';
     }
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/smarty/class.tx_smarty_wrapper.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/smarty/class.tx_smarty_wrapper.php']);
-}
-
-?>

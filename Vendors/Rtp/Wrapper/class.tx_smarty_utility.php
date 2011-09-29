@@ -33,7 +33,8 @@
 // Include TypoScript parser class
 require_once(PATH_t3lib.'class.t3lib_tsparser.php');
 
-class tx_smarty_div {
+class tx_smarty_utility
+{
 
     private static $_tsParser        = null;
 
@@ -46,16 +47,24 @@ class tx_smarty_div {
     }
 
 	// Turns yes/no, true/false, on/off into booleans. !IMPORANT
-	function booleanize($value)  
+    /**
+     *
+     * Converts strings like "off" or "yes" to equivalent boolean values
+     *
+     * @param $string 
+     * @return bool
+     */
+	public function booleanize($string)
 	{
-		if(is_scalar($value)) {
-		    if (preg_match("/^(on|true|yes)$/i", trim($value))) {
-	            $value = true;
-	        } elseif (preg_match("/^(off|false|no)$/i", trim($value))) {
-	            $value = false;
-	        }			
+        $bool = $string;
+		if(is_scalar($string)) {
+		    if (preg_match("/^(on|true|yes)$/i", trim($string))) {
+	            $bool = true;
+	        } elseif (preg_match("/^(off|false|no)$/i", trim($string))) {
+	            $bool = false;
+	        }
 		}
-        return $value;
+        return $bool;
 	}
 
 	// Checks against valid TYPO3 instance

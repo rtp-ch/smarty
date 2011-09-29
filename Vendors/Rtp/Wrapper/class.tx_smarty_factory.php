@@ -30,9 +30,11 @@
  **/
 
 
-class tx_smarty {
+class tx_smarty
+{
 
-	function &smarty($localConf=array()) {
+	function &smarty($localConf=array())
+    {
 
 		/****
 		 * Get and load Smarty
@@ -170,9 +172,3 @@ class tx_smarty {
 	}
 
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/smarty/class.tx_smarty.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/smarty/class.tx_smarty.php']);
-}
-
-?>
