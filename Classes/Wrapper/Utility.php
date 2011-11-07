@@ -33,7 +33,7 @@
 // Include TypoScript parser class
 require_once(PATH_t3lib.'class.t3lib_tsparser.php');
 
-class tx_smarty_utility
+class Tx_Smarty_Wrapper_Utility
 {
 
     private static $_tsParser        = null;
