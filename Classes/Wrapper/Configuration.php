@@ -57,20 +57,31 @@ class Tx_Smarty_Wrapper_Configuration
      */
     public final function __call($method, $args)
     {
-        //
-        $action     = $this->getActionFromMethod($method);
-        $smarty     = $this->getSmartyFromArguments($args);
-        $property   = $this->getPropertyFromMethod($method);
-        $property   = $this->getPropertyName($property);
+        // Gets the action from the method call an throws
+        // an exception for any unrecognized action.
+        $action     = self::getActionFromMethod($method);
+        if(!$this->hasAction($action)) {
+            throw new BadMethodCallException('Unknown action "' . $action . '" in method "' . $method .'"!', 1320595094);
+        }
+
+        // Gets the current smarty instance from the arguments
+        // and throws an exception if no smarty instance can be retrieved
+        $smarty     = self::getSmartyFromArguments($args); // TODO: Static or not?
         $reflection = $this->getReflection($smarty);
+
+        // Gets the property from the method call and formats
+        // it correctly, i.e. templateDir --> template_dir
+        $property   = self::getPropertyFromMethod($method);
+        $property   = self::getPropertyName($property);
+
 
         if(self::isSetter($action)) {
 
             // Gets the value that will be set, if it's
             // a directory resolve the path
-            $value = $this->getValueFromArguments($args);
-            if(!empty($value) && $this->isPath($value)) {
-                $value = $this->getPath($value);
+            $value = self::getValueFromArguments($args);
+            if(!empty($value) && self::isPath($value)) {
+                $value = self::getPath($value);
             }
 
             // Use smarty's setter if available
@@ -80,7 +91,7 @@ class Tx_Smarty_Wrapper_Configuration
             // Set the smarty property directly
             } elseif($reflection->hasProperty($property)) {
                 $smarty->{$property} = $value;
-                
+
             // Throws an exception when trying to set an unknown property
             } else {
                 throw new InvalidArgumentException('Setter called for unknown property "' . $property . '"!', 1320600186);
@@ -104,37 +115,61 @@ class Tx_Smarty_Wrapper_Configuration
     }
 
     /**
+     * @static
+     * @param $method
+     * @return string
+     */
+    private static function getActionFromMethod($method)
+    {
+        return strtolower(substr($method, 0, 3));
+    }
+
+    /**
+     * @static
      * @param $action
      * @return bool
      */
-    private function isGetter($action)
+    private static function hasAction($action)
+    {
+        return (boolean) (self::isSetter($action) || self::isGetter($action));
+    }
+
+    /**
+     * @static
+     * @param $action
+     * @return bool
+     */
+    private static function isGetter($action)
     {
         return (boolean) (in_array($action, self::$getters));
     }
 
     /**
+     * @static
      * @param $action
      * @return bool
      */
-    private function isSetter($action)
+    private static function isSetter($action)
     {
         return (boolean) (in_array($action, self::$setters));
     }
 
     /**
+     * @static
      * @param $setting
      * @return bool
      */
-    private function isPath($setting)
+    private static function isPath($setting)
     {
         return (boolean) (strtolower(substr($setting, -3)) === 'dir');
     }
 
     /**
+     * @static
      * @param $setting
      * @return string
      */
-    private function getPath($setting)
+    private static function getPath($setting)
     {
         $path = t3lib_div::getFileAbsFileName($setting);
         if(is_dir($path) && substr($path, -1) !== DIRECTORY_SEPARATOR) {
@@ -144,11 +179,12 @@ class Tx_Smarty_Wrapper_Configuration
     }
 
     /**
+     * @static
      * @throws InvalidArgumentException
      * @param $args
      * @return Tx_Smarty_Wrapper_Wrapper
      */
-    private function getSmartyFromArguments($args)
+    private static function getSmartyFromArguments($args)
     {
         $smarty = array_shift($args);
         if($smarty instanceof Tx_Smarty_Wrapper_Wrapper) {
@@ -159,20 +195,22 @@ class Tx_Smarty_Wrapper_Configuration
     }
 
     /**
+     * @static
      * @param $args
      * @return array
      */
-    private function getValueFromArguments($args)
+    private static function getValueFromArguments($args)
     {
         return array_slice($args, 2, 1);
     }
 
     /**
+     * @static
      * @throws BadMethodCallException
      * @param $method
      * @return string
      */
-    private function getPropertyFromMethod($method)
+    private static function getPropertyFromMethod($method)
     {
         $property = substr($method, 4, strlen($method) - 3);
         if($property) {
@@ -183,25 +221,11 @@ class Tx_Smarty_Wrapper_Configuration
     }
 
     /**
-     * @throws BadMethodCallException
-     * @param $method
-     * @return string
-     */
-    private function getActionFromMethod($method)
-    {
-        $action = strtolower(substr($method, 0, 3));
-        if(self::isSetter($action) || self::isGetter($action)) {
-            return $action;
-        } else {
-            throw new BadMethodCallException('Unknown action "' . $action . '" in method "' . $method .'"!', 1320595094);
-        }
-    }
-
-    /**
+     * @static
      * @param $property
      * @return string
      */
-    private function getPropertyName($property)
+    private static function getPropertyName($property)
     {
         return strtolower(preg_replace('/([A-Z])/', '_\1', $property));
     }
