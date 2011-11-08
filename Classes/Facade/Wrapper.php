@@ -31,7 +31,7 @@
 
 
 // Create a wrapper class extending Smarty
-class Tx_Smarty_Wrapper_Wrapper
+class Tx_Smarty_Facade_Wrapper
     extends Smarty
 {
 
@@ -43,14 +43,25 @@ class Tx_Smarty_Wrapper_Wrapper
     }
 
     /**
+     *
+     * Reroutes all undefined method calls to the configuration manager
+     *
      * @param $method
      * @param $args
      * @return mixed
      */
     public final function __call($method, $args)
     {
-        t3lib_div::makeInstance('Tx_Smarty_Wrapper_Configuration', $this);
-    	// Reroutes all unknown methods to the configuration class
-    	return call_user_func_array(array($this, $method), $args);
+        t3lib_div::makeInstance('Tx_Smarty_Facade_Configuration');
+
+    	return call_user_func_array(array($this, $this->getConfiguration()), $args);
+    }
+
+    private function getConfiguration()
+    {
+        if(is_null($this->configuration)) {
+            $this->configuration = t3lib_div::makeInstance('Tx_Smarty_Facade_Configuration', $this);
+        }
+        return $this->configuration;
     }
 }
