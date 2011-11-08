@@ -30,7 +30,7 @@
  **/
 
 
-class Tx_Smarty_Wrapper
+class Tx_Smarty_Facade_Factory
 {
 
 	function &smarty($localConf=array())

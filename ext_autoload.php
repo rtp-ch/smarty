@@ -12,13 +12,17 @@
     $vendorPath  = $extPath . 'Vendor' . DS;
     $smartyPath  = $vendorPath . 'Smarty' . DS;
 
-    // Sets SMARTY_DIR to absolute path to Smarty library files.
+    // Sets SMARTY_DIR to absolute path of smarty library files.
     if (!defined('SMARTY_DIR')) define('SMARTY_DIR', $smartyPath);
 
     // List of autoload classes
     return array(
-        'smarty' => $vendorPath . 'Smarty.class.php',
-        'tx_smarty_wrapper_configuration' => $classPath . 'Wrapper' . DS . 'Configuration.php',
+        'smarty'                            => $vendorPath . 'Smarty.class.php',
+        'smartybc'                          => $vendorPath . 'SmartyBC.class.php',
+        'tx_smarty_facade_configuration'    => $classPath  . 'Facade'  . DS . 'Configuration.php',
+        'tx_smarty_facade_wrapper'          => $classPath  . 'Facade'  . DS . 'Wrapper.php',
+        'tx_smarty_facade_Factory'          => $classPath  . 'Facade'  . DS . 'Factory.php',
+        'tx_smarty_utility_typoscript'      => $classPath  . 'Utility' . DS . 'Factory.php',
     );
 
 
