@@ -34,24 +34,29 @@ class Tx_Smarty_Facade_Configuration
 {
 
     /**
-     * @var null
+     * @var null|ReflectionClass
      */
     private $smartyClass            = null;
 
     /**
-     * @var null
+     * @var null|Tx_Smarty_Facade_Wrapper
      */
-    private $smartyInstance        = null;
+    private $smartyInstance         = null;
 
     /**
-     * @var array
+     * @var string
      */
-    private static $getters         = array('get');
+    const GETTER_ACTION             = 'get';
 
     /**
-     * @var array
+     * @var string
      */
-    private static $setters         = array('set', 'add');
+    const SETTER_ACTION             = 'set';
+
+    /**
+     * @var string
+     */
+    const ADDER_ACTION              = 'add';
 
     /**
      * @param Tx_Smarty_Facade_Wrapper $smartyInstance
@@ -62,12 +67,13 @@ class Tx_Smarty_Facade_Configuration
             $this->smartyInstance = $smartyInstance;
             $this->smartyClass = new ReflectionClass($smartyInstance);
         } else {
-            throw new InvalidArgumentException('Configuration manager requires a valid instance of smarty!', 1320597938);
+            throw new InvalidArgumentException('Configuration manager requires a valid instance of smarty!', 1320785449);
         }
-
     }
 
     /**
+     *
+     * @api
      * @throws BadMethodCallException|InvalidArgumentException
      * @param string $method
      * @param array $args
@@ -78,8 +84,8 @@ class Tx_Smarty_Facade_Configuration
         // Gets the action from the method call and throws
         // an exception for any unrecognized actions.
         $action = self::getActionFromMethod($method);
-        if(!$this->hasAction($action)) {
-            throw new BadMethodCallException('Unknown action "' . $action . '" in method "' . $method .'"!', 1320595094);
+        if(!self::hasAction($action)) {
+            throw new BadMethodCallException('Unknown action "' . $action . '" in method "' . $method .'"!', 1320785456);
         }
 
         // Gets the property from the method call and formats
@@ -87,29 +93,39 @@ class Tx_Smarty_Facade_Configuration
         // Throws an exception if the smarty class doesn't have
         // a corresponding property.
         $property = self::formatPropertyName(self::getPropertyFromMethod($method));
-        if(!$this->smartyClass->hasMethod($method) && $this->smartyClass->hasProperty($property)) {
-            throw new InvalidArgumentException('Unknown property "' . $property . '" in method "' . $method .'"!', 1320600186);
+
+        // Catches accessors for unknown properties
+        if(!$this->smartyClass->hasProperty($property)) {
+            throw new InvalidArgumentException('Unknown property "' . $property . '" in method "' . $method .'"!', 1320785462);
         }
 
-        if(self::isSetter($action)) {
+        // Catches adders without a corresponding method in smarty
+        if(self::isAdder($action) && !$this->smartyClass->hasMethod($method)) {
+            throw new BadMethodCallException('Cannot use  method "' . $action . '" to access "' . $property .'"!', 1320785472);
+        }
+
+        // Sets or appends smarty configuration settings
+        if(self::isSetter($action) || self::isAdder($action)) {
 
             // Resolves directories or files to absolute paths
             if(!empty($args) && self::isPath($args[0])) {
                 $args[0] = self::getPath($args[0]);
             }
-            
-            // Use smarty's setter if available
+
+            // Use smarty's setter or adder if available
             if($this->smartyClass->hasMethod($method)) {
                 call_user_func(array($this->smartyInstance, $method), $args);
 
             // Set the smarty property directly
-            } else {
+            } elseif($this->smartyClass->hasProperty($property)) {
                 $this->smartyInstance->{$property} = $args[0];
-                
+
             }
+
+        // Gets smarty configuration settings
         } else {
 
-            // Use smarty's getter if available
+            // Use smarty's adder if available
             if($this->smartyClass->hasMethod($method)) {
                 return call_user_func(array($this->smartyInstance, $method));
 
@@ -138,7 +154,7 @@ class Tx_Smarty_Facade_Configuration
      */
     private static function hasAction($action)
     {
-        return (boolean) (self::isSetter($action) || self::isGetter($action));
+        return (boolean) (self::isSetter($action) || self::isGetter($action) || self::isAdder($action));
     }
 
     /**
@@ -148,7 +164,7 @@ class Tx_Smarty_Facade_Configuration
      */
     private static function isGetter($action)
     {
-        return (boolean) (in_array($action, self::$getters));
+        return (boolean) ((string) $action === self::GETTER_ACTION);
     }
 
     /**
@@ -158,7 +174,17 @@ class Tx_Smarty_Facade_Configuration
      */
     private static function isSetter($action)
     {
-        return (boolean) (in_array($action, self::$setters));
+        return (boolean) ((string) $action === self::SETTER_ACTION);
+    }
+
+    /**
+     * @static
+     * @param $action
+     * @return bool
+     */
+    private static function isAdder($action)
+    {
+        return (boolean) ((string) $action === self::ADDER_ACTION);
     }
 
     /**
@@ -193,13 +219,12 @@ class Tx_Smarty_Facade_Configuration
 
     /**
      * @static
-     * @throws BadMethodCallException
      * @param $method
      * @return string
      */
     private static function getPropertyFromMethod($method)
     {
-        return substr($method, 4, strlen($method) - 3);
+        return substr($method, 3, strlen($method) - 3);
     }
 
     /**
@@ -209,6 +234,6 @@ class Tx_Smarty_Facade_Configuration
      */
     private static function formatPropertyName($property)
     {
-        return strtolower(preg_replace('/([A-Z])/', '_\1', $property));
+        return substr(strtolower(preg_replace('/([A-Z])/', '_\1', $property)), 1);
     }
 }

@@ -30,16 +30,22 @@
  **/
 
 
-// Create a wrapper class extending Smarty
+// Wrapper extends the smarty backport class
 class Tx_Smarty_Facade_Wrapper
-    extends Smarty
+    extends SmartyBC
 {
+    
+    /**
+     * @var null|Tx_Smarty_Facade_Configuration
+     */
+    private $configuration      = null;
 
-    private $configuration;
-
-    public function __construct()
+    /**
+     * @param array $options
+     */
+    public function __construct(array $options = array())
     {
-        //$this->configuration = t3lib_div::makeInstance('Tx_Smarty_Wrapper_Configuration');
+        parent::__construct($options);
     }
 
     /**
@@ -52,11 +58,15 @@ class Tx_Smarty_Facade_Wrapper
      */
     public final function __call($method, $args)
     {
-        t3lib_div::makeInstance('Tx_Smarty_Facade_Configuration');
-
-    	return call_user_func_array(array($this, $this->getConfiguration()), $args);
+    	return call_user_func_array(array($this->getConfiguration(), $method), $args);
     }
 
+    /**
+     *
+     * Gets the instance of the configuration manager
+     *
+     * @return null|Tx_Smarty_Facade_Configuration
+     */
     private function getConfiguration()
     {
         if(is_null($this->configuration)) {

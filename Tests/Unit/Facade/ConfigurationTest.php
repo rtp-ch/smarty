@@ -1,6 +1,6 @@
 <?php
 
-require_once t3lib_extMgm::extPath('smarty') . 'Vendor/Smarty/Smarty.class.php';
+//require_once t3lib_extMgm::extPath('smarty') . 'Vendor/Smarty/Smarty.class.php';
 //require_once t3lib_extMgm::extPath('smarty') . 'Vendor/Smarty/SmartyBC.class.php';
 
 class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
@@ -8,34 +8,22 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
 {
 
     /**
-     * @var null
+     * @var Tx_Smarty_Facade_Configuration
      */
-    protected $configuration;
+    protected $configuration        = null;
+
+    /**
+     * @var string
+     */
+    const TEST_SETTING              = 'someTestSetting';
 
     /**
      * @return void
      */
     public function setUp()
     {
-        /*$methods = array(
-            'setTemplateDir',
-            'addTemplateDir',
-            'getTemplateDir',
-            'getPluginsDir',
-            'addPluginsDir',
-            'setPluginsDir'
-        );
-        $properties = array(
-            'template_dir',
-            'plugins_dir',
-            'cache_id',
-            'compile_id',
-            'left_delimiter',
-            'right_delimiter'
-        );
-		$smartyInstance = $this->getMock('Tx_Smarty_Facade_Wrapper', array('dummy'), array(), '', FALSE);*/
         $this->smarty = t3lib_div::makeInstance('Tx_Smarty_Facade_Wrapper');
-        $this->configuration = t3lib_div::makeInstance('Tx_Smarty_Facade_Configuration', $this->smarty);
+        //$this->smarty = t3lib_div::makeInstance('Tx_Smarty_Facade_Configuration', $this->smarty);
     }
 
     /**
@@ -52,7 +40,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      */
     public function throwsExceptionWhenNoActionCanBeFound()
     {
-        $this->configuration->unsetTemplateDir();
+        $this->smarty->unsetTemplateDir();
     }
 
     /**
@@ -61,7 +49,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      */
     public function throwsExceptionWhenNoPropertyIsGiven()
     {
-        $this->configuration->set();
+        $this->smarty->set();
     }
 
     /**
@@ -70,16 +58,65 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      */
     public function throwsExceptionWhenPropertyDoesNotExist()
     {
-        $this->configuration->setNotAValidProperty();
+        $this->smarty->setNotAValidProperty();
     }
 
     /**
      * @test
      */
-    public function templateDirCanBeSet()
+    public function setPropertyMethodCanBeAccessed()
     {
-        $value = 'testSetting';
-        $this->configuration->setTemlateDir($value);
-        $this->assertEquals($this->smarty->template_dir, $value);
+        $this->smarty->setTemplateDir(self::TEST_SETTING);
+        $this->assertEquals($this->smarty->template_dir, array(self::TEST_SETTING . DS));
+    }
+
+    /**
+     * @test
+     * @depends setPropertyMethodCanBeAccessed
+     */
+    public function getPropertyMethodCanBeAccessed()
+    {
+        $this->smarty->setTemplateDir(self::TEST_SETTING);
+        $this->assertEquals($this->smarty->getTemplateDir(), array(self::TEST_SETTING . DS));
+    }
+
+    /**
+     * @test
+     * @depends setPropertyMethodCanBeAccessed
+     */
+    public function addPropertyMethodCanBeAccessed()
+    {
+        $this->smarty->setTemplateDir(self::TEST_SETTING);
+        $this->smarty->addTemplateDir(self::TEST_SETTING);
+        $this->assertEquals($this->smarty->template_dir, array(self::TEST_SETTING . DS, self::TEST_SETTING . DS));
+    }
+
+    /**
+     * @test
+     */
+    public function canSetPropertyDirectly()
+    {
+        $this->smarty->setLeftDelimiter(self::TEST_SETTING);
+        $this->assertEquals($this->smarty->left_delimiter, self::TEST_SETTING);
+    }
+
+    /**
+     * @test
+     * @depends canSetPropertyDirectly
+     */
+    public function canGetPropertyDirectly()
+    {
+        $this->smarty->setLeftDelimiter(self::TEST_SETTING);
+        $this->assertEquals($this->smarty->left_delimiter, self::TEST_SETTING);
+    }
+
+    /**
+     * @test
+     * @depends canSetPropertyDirectly
+     * @expectedException BadMethodCallException
+     */
+    public function cannotAddPropertyDirectly()
+    {
+        $this->smarty->addLeftDelimiter(self::TEST_SETTING);
     }
 }
