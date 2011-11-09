@@ -145,7 +145,8 @@ class tx_smarty_wrapper extends Smarty {
 	// NOTE: If param is an object, function will try to get the language file from the extension class (pi_base or lib/div)
 	function setPathToLanguageFile($param) {
 		if(is_object($param)) {
-			if($langFile = t3lib_div::getFileAbsFileName($this->t3_conf['pathToLanguageFile']) && @is_file($langFile)) {
+            $langFile = t3lib_div::getFileAbsFileName($this->t3_conf['pathToLanguageFile']);
+			if($langFile && @is_file($langFile)) {
 				// Explicit language file definition in Smarty TypoScript has 1st priority
 				$this->t3_languageFile = $langFile;
 			} elseif(is_subclass_of($param,'tslib_pibase')) { // Else check for pi_base scenario...
@@ -240,20 +241,30 @@ class tx_smarty_wrapper extends Smarty {
      * @param string $compile_id
      * @return string|null
      */
-    function _get_auto_id($cache_id=null, $compile_id=null) {
-    if (isset($cache_id))
-// XXX: Prepended current page id to filename to enable clearing cache for current page    
-        return (isset($compile_id)) ? self::_prependPageId() . $cache_id . '|' . $compile_id  : self::_prependPageId() . $cache_id;
-    elseif(isset($compile_id))
-// XXX: Prepended current page id to filename to enable clearing cache for current page    
-        return self::_prependPageId() . $compile_id;
-    else
-        return null;
-    } 
+    function _get_auto_id($cache_id=null, $compile_id=null)
+    {
+        // XXX: Prepended current page id to filename to enable clearing cache for current page
+        if (isset($cache_id)) {
+            return (isset($compile_id)) ? self::_prependPageId() . '|' . $cache_id . '|' . $compile_id  : self::_prependPageId() . $cache_id;
+
+        // XXX: Prepended current page id to filename to enable clearing cache for current page
+        } elseif(isset($compile_id)) {
+            return self::_prependPageId() . '|' . $compile_id;
+            
+        } else {
+
+            // 
+            return null;
+        }
+    }
+
+
+        
+
 
     private static function _prependPageId()
     {
-    	return tx_smarty_div::validateTypo3Instance('FE') && intval($GLOBALS['TSFE']->id) ? $GLOBALS['TSFE']->id . '-' : '';
+    	return tx_smarty_div::validateTypo3Instance('FE') && intval($GLOBALS['TSFE']->id) ? $GLOBALS['TSFE']->id . '|' : '';
     }
 }
 

@@ -10,7 +10,7 @@ class tx_smarty_cache {
 			if($deletePid || $params['cacheCmd'] == 'all' || $params['cacheCmd'] == 'pages') {
 		    	foreach($cacheFiles as $cacheFile) {				
 					if($deletePid) {
-						if(strpos($cacheFile, $deletePid . '-') === 0) {
+						if(strpos($cacheFile, $deletePid . '|') === 0) {
 							@unlink(PATH_site . 'typo3temp/smarty_cache/' . $cacheFile);
 						}
 					} else {
