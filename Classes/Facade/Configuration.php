@@ -88,23 +88,22 @@ class Tx_Smarty_Facade_Configuration
             throw new BadMethodCallException('Unknown action "' . $action . '" in method "' . $method .'"!', 1320785456);
         }
 
-        // Gets the property from the method call and formats
-        // it correctly, i.e. templateDir --> template_dir
-        // Throws an exception if the smarty class doesn't have
-        // a corresponding property.
-        $property = self::formatPropertyName(self::getPropertyFromMethod($method));
+        // Catches adders without a corresponding method in smarty
+        if(self::isAdder($action) && !$this->smartyClass->hasMethod($method)) {
+            throw new BadMethodCallException('Method "' . $method . '" is not a valid smarty setter!', 1320785472);
+        }
 
-        // Catches accessors for unknown properties
+        // Gets the property from the method call (the first three characters of the
+        // method are the action, the remaining characters the property) and formats
+        // it correctly, i.e. "template_dir" is extracted from "getTemplateDir"
+        $property = t3lib_div::camelCaseToLowerCaseUnderscored(substr($method, 3));
+
+        // Catches unknown smarty properties
         if(!$this->smartyClass->hasProperty($property)) {
             throw new InvalidArgumentException('Unknown property "' . $property . '" in method "' . $method .'"!', 1320785462);
         }
 
-        // Catches adders without a corresponding method in smarty
-        if(self::isAdder($action) && !$this->smartyClass->hasMethod($method)) {
-            throw new BadMethodCallException('Cannot use  method "' . $action . '" to access "' . $property .'"!', 1320785472);
-        }
-
-        // Sets or appends smarty configuration settings
+        // Sets or adds smarty configuration setting
         if(self::isSetter($action) || self::isAdder($action)) {
 
             // Resolves directories or files to absolute paths
@@ -122,7 +121,7 @@ class Tx_Smarty_Facade_Configuration
 
             }
 
-        // Gets smarty configuration settings
+        // Gets smarty configuration setting
         } else {
 
             // Use smarty's adder if available
@@ -215,25 +214,5 @@ class Tx_Smarty_Facade_Configuration
             $paths .= (is_dir($paths) && substr($paths, -1) !== DS) ? DS : '';
         }
         return $paths;
-    }
-
-    /**
-     * @static
-     * @param $method
-     * @return string
-     */
-    private static function getPropertyFromMethod($method)
-    {
-        return substr($method, 3, strlen($method) - 3);
-    }
-
-    /**
-     * @static
-     * @param $property
-     * @return string
-     */
-    private static function formatPropertyName($property)
-    {
-        return substr(strtolower(preg_replace('/([A-Z])/', '_\1', $property)), 1);
     }
 }
