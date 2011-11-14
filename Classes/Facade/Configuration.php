@@ -57,7 +57,7 @@ class Tx_Smarty_Facade_Configuration
      * @var string
      */
     const ADDER_ACTION              = 'add';
-
+    
     /**
      * @param Tx_Smarty_Facade_Wrapper $smartyInstance
      */
@@ -135,6 +135,95 @@ class Tx_Smarty_Facade_Configuration
             }
         }
     }
+
+    /**
+     * @param $path_to_template_directory
+     * @return void
+     * @deprecated Use setTemplateDir() instead
+     */
+    public function setPathToTemplateDirectory($path_to_template_directory)
+    {
+        $this->setTemplateDir($path_to_template_directory);
+    }
+
+   /**
+    *
+    * Adds language file(s)
+    *
+    * @param mixed $language_file
+    * @param string $key of the array element to assign
+    * @return Tx_Smarty_Facade_Wrapper current Smarty instance for chaining
+    */
+    public function addLanguageFile($language_file, $key = null)
+    {
+        // make sure we're dealing with an array
+        $this->language_file = (array) $this->language_file;
+
+        if (is_array($language_file)) {
+            foreach ($language_file as $k => $v) {
+                if (is_int($k)) {
+                    // indexes are not merged but appended
+                    $this->language_file[] = rtrim($v, '/\\') . DS;
+                } else {
+                    // string indexes are overridden
+                    $this->language_file[$k] = rtrim($v, '/\\') . DS;
+                }
+            }
+        } else {
+            // append new directory
+            $this->language_file[] = rtrim($language_file, '/\\') . DS;
+        }
+
+        $this->language_file = array_unique($this->language_file);
+        return $this;
+    }
+    
+   /**
+    *
+    * Set language file(s)
+    *
+    * @param string|array $language_file language file(s)
+    * @return Smarty current Smarty instance for chaining
+    */
+    public function setLanguageFile($language_file)
+    {
+        $this->language_file = array();
+        foreach ((array) $language_file as $k => $v) {
+            $this->language_file[$k] = rtrim($v, '/\\') . DS;
+        }
+        return $this;
+    }
+
+    /**
+     * @param $path_to_language_file
+     * @return void
+     * @deprecated use setLanguageFile() instead
+     */
+    public function setPathToLanguageFile($path_to_language_file)
+    {
+        $this->setLanguageFile($path_to_language_file);
+    }
+
+   /**
+    *
+    * Get language file(s)
+    *
+    * @param mixed $index of language file to get, null to get all
+    * @return array|null language file
+    */
+    public function getLanguageFile($index = null)
+    {
+        if ($index !== null) {
+            return isset($this->language_file[$index]) ? $this->language_file[$index] : null;
+        }
+        return (array) $this->language_file;
+    }
+
+
+	public function setSmartyVar($smartyVar, $smartyValue)
+    {
+        $method = t3lib_div::underscoredToLowerCamelCase($smartyVar);
+	}
 
     /**
      * @static
