@@ -1,21 +1,14 @@
 <?php
 
-//require_once t3lib_extMgm::extPath('smarty') . 'Vendor/Smarty/Smarty.class.php';
-//require_once t3lib_extMgm::extPath('smarty') . 'Vendor/Smarty/SmartyBC.class.php';
 
 class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
     extends tx_phpunit_testcase
 {
 
     /**
-     * @var Tx_Smarty_Facade_Configuration
+     * @var Tx_Smarty_Facade_Wrapper
      */
-    protected $configuration        = null;
-
-    /**
-     * @var string
-     */
-    const TEST_SETTING              = 'someTestSetting';
+    protected $smarty                   = null;
 
     /**
      * @return void
@@ -23,7 +16,6 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
     public function setUp()
     {
         $this->smarty = t3lib_div::makeInstance('Tx_Smarty_Facade_Wrapper');
-        //$this->smarty = t3lib_div::makeInstance('Tx_Smarty_Facade_Configuration', $this->smarty);
     }
 
     /**
@@ -35,88 +27,191 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
 	}
 
     /**
+     *
+     * Tests that an exception is thrown when the method doesn't have
+     * a valid action (e.g. set, add or get).
+     *
      * @test
      * @expectedException BadMethodCallException
      */
-    public function throwsExceptionWhenNoActionCanBeFound()
+    public function methodWithoutValidAccessorActionThrowsException()
     {
         $this->smarty->unsetTemplateDir();
     }
 
     /**
+     *
+     * Return a unique id
+     *
+     * @static
+     * @return string
+     */
+    public static function getTestValue()
+    {
+        return uniqid('smarty_', true);
+    }
+
+    /**
+     *
+     * Tests that an exception is thrown when the method doesn't
+     * contain any property.
+     *
      * @test
      * @expectedException InvalidArgumentException
      */
-    public function throwsExceptionWhenNoPropertyIsGiven()
+    public function accessorWithoutPropertyThrowsException()
     {
         $this->smarty->set();
     }
 
     /**
+     *
+     * Tests that a setter for a non-existent smarty property throws
+     * an exception.
+     *
      * @test
      * @expectedException InvalidArgumentException
      */
-    public function throwsExceptionWhenPropertyDoesNotExist()
+    public function accessorWithoutValidPropertyThrowsException()
     {
         $this->smarty->setNotAValidProperty();
     }
 
     /**
+     *
+     * Tests the setting TYPO3 path resolves the setting to a valid path.
+     *
      * @test
+     * @return void
      */
-    public function setPropertyMethodCanBeAccessed()
+    public function dirSettingResolvesToDirectory()
     {
-        $this->smarty->setTemplateDir(self::TEST_SETTING);
-        $this->assertEquals($this->smarty->template_dir, array(self::TEST_SETTING . DS));
+        $pathToDir = $this->smarty->getConfiguration()->getPaths('EXT:smarty/Tests/');
+        $this->assertTrue(is_dir($pathToDir));
     }
 
     /**
+     *
+     * Tests the setting TYPO3 path resolves the setting to a valid path.
+     *
      * @test
-     * @depends setPropertyMethodCanBeAccessed
+     * @return void
      */
-    public function getPropertyMethodCanBeAccessed()
+    public function fileSettingResolvesToFile()
     {
-        $this->smarty->setTemplateDir(self::TEST_SETTING);
-        $this->assertEquals($this->smarty->getTemplateDir(), array(self::TEST_SETTING . DS));
+        $pathToFile = $this->smarty->getConfiguration()->getPaths('EXT:smarty/ext_emconf.php');
+        $this->assertTrue(is_file($pathToFile));
     }
 
     /**
+     *
+     * Tests that setter method sets smarty property
+     *
      * @test
-     * @depends setPropertyMethodCanBeAccessed
+     * @depends dirSettingResolvesToDirectory
+     * @depends fileSettingResolvesToFile
      */
-    public function addPropertyMethodCanBeAccessed()
+    public function setterMethodSetsSmartyProperty()
     {
-        $this->smarty->setTemplateDir(self::TEST_SETTING);
-        $this->smarty->addTemplateDir(self::TEST_SETTING);
-        $this->assertEquals($this->smarty->template_dir, array(self::TEST_SETTING . DS, self::TEST_SETTING . DS));
+        $value = self::getTestValue();
+        $this->smarty->setLeftDelimiter($value);
+        $this->assertEquals($this->smarty->left_delimiter, $value);
     }
 
     /**
+     *
+     * Tests that getter method returns smarty property value
+     *
      * @test
+     * @depends dirSettingResolvesToDirectory
+     * @depends fileSettingResolvesToFile
      */
-    public function canSetPropertyDirectly()
+    public function getterMethodReturnsSmartyPropertyValue()
     {
-        $this->smarty->setLeftDelimiter(self::TEST_SETTING);
-        $this->assertEquals($this->smarty->left_delimiter, self::TEST_SETTING);
+        $value = self::getTestValue();
+        $this->smarty->left_delimiter = $value;
+        $this->assertEquals($this->smarty->getLeftDelimiter(), $value);
     }
 
     /**
+     *
+     * Tests that accessors call smarty getter/setters
+     *
      * @test
-     * @depends canSetPropertyDirectly
+     * @depends dirSettingResolvesToDirectory
+     * @depends fileSettingResolvesToFile
      */
-    public function canGetPropertyDirectly()
+    public function accessorsCallSmartyGetterSetters()
     {
-        $this->smarty->setLeftDelimiter(self::TEST_SETTING);
-        $this->assertEquals($this->smarty->left_delimiter, self::TEST_SETTING);
+        $value = $this->smarty->getConfiguration()->getPaths(self::getTestValue());
+        $this->smarty->setTemplateDir($value);
+        $this->assertEquals($this->smarty->getTemplateDir(), array($value . DS));
     }
 
     /**
+     *
+     * Tests that smarty adder method adds values to a smarty property
+     *
      * @test
-     * @depends canSetPropertyDirectly
+     * @depends accessorsCallSmartyGetterSetters
+     * @depends dirSettingResolvesToDirectory
+     * @depends fileSettingResolvesToFile
+     */
+    public function adderMethodAddsToSmartyProperty()
+    {
+        $firstValue  = $this->smarty->getConfiguration()->getPaths(self::getTestValue());
+        $secondValue = $this->smarty->getConfiguration()->getPaths(self::getTestValue());
+        $this->smarty->setTemplateDir($firstValue);
+        $this->smarty->addTemplateDir($secondValue);
+        $this->assertEquals($this->smarty->getTemplateDir(), array($firstValue . DS, $secondValue . DS));
+    }
+
+    /**
+     *
+     * Tests that the adder method can only add using a
+     * corresponding smarty adder method
+     *
+     * @test
+     * @depends adderMethodAddsToSmartyProperty
      * @expectedException BadMethodCallException
      */
-    public function cannotAddPropertyDirectly()
+    public function adderCannotAddToPropertyWithoutCorrespondingSmartyAdder()
     {
-        $this->smarty->addLeftDelimiter(self::TEST_SETTING);
+        $value = self::getTestValue();
+        $this->smarty->addLeftDelimiter($value);
+    }
+
+    /**
+     *
+     * Tests that deprecated template directory setter is rerouted
+     * to the normal template directory.
+     *
+     * @test
+     * @depends setterMethodSetsSmartyProperty
+     * @depends dirSettingResolvesToDirectory
+     * @depends fileSettingResolvesToFile
+     */
+    public function deprecatedTemplateDirectorySetter()
+    {
+        $value = $this->smarty->getConfiguration()->getPaths(self::getTestValue());
+        $this->smarty->setPathToTemplateDirectory($value);
+        $this->assertEquals($this->smarty->getTemplateDir(), array($value . DS));
+    }
+
+    /**
+     *
+     * Tests that deprecated language file setter is rerouted to the
+     * normal language file setter.
+     *
+     * @test
+     * @depends setterMethodSetsSmartyProperty
+     * @depends dirSettingResolvesToDirectory
+     * @depends fileSettingResolvesToFile
+     */
+    public function deprecatedLanguageFileSetter()
+    {
+        $value = $this->smarty->getConfiguration()->getPaths(self::getTestValue());
+        $this->smarty->setPathToLanguageFile($value);
+        $this->assertEquals($this->smarty->getLanguageFile(), array($value . DS));
     }
 }
