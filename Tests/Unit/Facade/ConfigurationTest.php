@@ -8,7 +8,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
     /**
      * @var Tx_Smarty_Facade_Wrapper
      */
-    protected $smarty                   = null;
+    protected $smarty;
 
     /**
      * @return void
@@ -28,19 +28,6 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
 
     /**
      *
-     * Tests that an exception is thrown when the method doesn't have
-     * a valid action (e.g. set, add or get).
-     *
-     * @test
-     * @expectedException BadMethodCallException
-     */
-    public function methodWithoutValidAccessorActionThrowsException()
-    {
-        $this->smarty->unsetTemplateDir();
-    }
-
-    /**
-     *
      * Return a unique id
      *
      * @static
@@ -53,10 +40,36 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
 
     /**
      *
+     * Tests that smarty has an instance of the configuration class
+     *
+     * @test
+     */
+    public function smartyHasConfigurationInstance()
+    {
+        $this->assertInstanceOf('Tx_Smarty_Facade_Configuration', $this->smarty->getConfiguration());
+    }
+    
+    /**
+     *
+     * Tests that an exception is thrown when the method doesn't have
+     * a valid action (e.g. set, add or get).
+     *
+     * @test
+     * @depends smartyHasConfigurationInstance
+     * @expectedException BadMethodCallException
+     */
+    public function methodWithoutValidAccessorActionThrowsException()
+    {
+        $this->smarty->unsetTemplateDir();
+    }
+
+    /**
+     *
      * Tests that an exception is thrown when the method doesn't
      * contain any property.
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @expectedException InvalidArgumentException
      */
     public function accessorWithoutPropertyThrowsException()
@@ -70,6 +83,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * an exception.
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @expectedException InvalidArgumentException
      */
     public function accessorWithoutValidPropertyThrowsException()
@@ -82,6 +96,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * Tests the setting TYPO3 path resolves the setting to a valid path.
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @return void
      */
     public function dirSettingResolvesToDirectory()
@@ -95,6 +110,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * Tests the setting TYPO3 path resolves the setting to a valid path.
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @return void
      */
     public function fileSettingResolvesToFile()
@@ -108,6 +124,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * Tests that setter method sets smarty property
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @depends dirSettingResolvesToDirectory
      * @depends fileSettingResolvesToFile
      */
@@ -123,6 +140,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * Tests that getter method returns smarty property value
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @depends dirSettingResolvesToDirectory
      * @depends fileSettingResolvesToFile
      */
@@ -138,6 +156,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * Tests that accessors call smarty getter/setters
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @depends dirSettingResolvesToDirectory
      * @depends fileSettingResolvesToFile
      */
@@ -153,6 +172,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * Tests that smarty adder method adds values to a smarty property
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @depends accessorsCallSmartyGetterSetters
      * @depends dirSettingResolvesToDirectory
      * @depends fileSettingResolvesToFile
@@ -172,6 +192,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * corresponding smarty adder method
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @depends adderMethodAddsToSmartyProperty
      * @expectedException BadMethodCallException
      */
@@ -187,6 +208,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * to the normal template directory.
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @depends setterMethodSetsSmartyProperty
      * @depends dirSettingResolvesToDirectory
      * @depends fileSettingResolvesToFile
@@ -195,6 +217,8 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
     {
         $value = $this->smarty->getConfiguration()->getPaths(self::getTestValue());
         $this->smarty->setPathToTemplateDirectory($value);
+        //$this->assertAttributeInternalType()
+
         $this->assertEquals($this->smarty->getTemplateDir(), array($value . DS));
     }
 
@@ -204,6 +228,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * normal language file setter.
      *
      * @test
+     * @depends smartyHasConfigurationInstance
      * @depends setterMethodSetsSmartyProperty
      * @depends dirSettingResolvesToDirectory
      * @depends fileSettingResolvesToFile

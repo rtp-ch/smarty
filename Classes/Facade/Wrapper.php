@@ -53,6 +53,8 @@ class Tx_Smarty_Facade_Wrapper
      */
     public function __construct(array $options = array())
     {
+
+
         parent::__construct($options);
     }
 

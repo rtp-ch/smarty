@@ -140,6 +140,27 @@ class Tx_Smarty_Facade_Configuration
     }
 
     /**
+     * @api
+     * @static
+     * @param $dirs
+     * @return array
+     */
+    public function getPaths($dirs)
+    {
+        $paths = $dirs;
+        if(is_array($dirs)) {
+            while($dir = array_shift($dirs)) {
+                $path = t3lib_div::getFileAbsFileName($dir);
+                $paths[] = (is_dir($path) && substr($path, -1) !== DS) ? $path . DS : $path;
+            }
+        } elseif(is_scalar($dirs)) {
+            $paths  = t3lib_div::getFileAbsFileName($dirs);
+            $paths .= (is_dir($paths) && substr($paths, -1) !== DS) ? DS : '';
+        }
+        return $paths;
+    }
+
+    /**
      * @static
      * @param $method
      * @return string
@@ -207,25 +228,5 @@ class Tx_Smarty_Facade_Configuration
     private static function isFile($setting)
     {
         return (boolean) (strtolower(substr($setting, -4)) === 'file');
-    }
-
-    /**
-     * @static
-     * @param $dirs
-     * @return array
-     */
-    public function getPaths($dirs)
-    {
-        $paths = $dirs;
-        if(is_array($dirs)) {
-            while($dir = array_shift($dirs)) {
-                $path = t3lib_div::getFileAbsFileName($dir);
-                $paths[] = (is_dir($path) && substr($path, -1) !== DS) ? $path . DS : $path;
-            }
-        } elseif(is_scalar($dirs)) {
-            $paths  = t3lib_div::getFileAbsFileName($dirs);
-            $paths .= (is_dir($paths) && substr($paths, -1) !== DS) ? DS : '';
-        }
-        return $paths;
     }
 }
