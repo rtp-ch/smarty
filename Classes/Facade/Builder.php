@@ -30,10 +30,45 @@
  **/
 
 
-class Tx_Smarty_Facade_Factory
+class Tx_Smarty_Facade_Builder
 {
 
-	function &smarty($localConf=array())
+
+
+    public function &Build(array $options = array())
+    {
+t3lib_div::debug(array(
+    '$options' => $options
+));
+t3lib_div::debug(array(
+    '$this' => get_object_vars($this)
+));
+
+        // Creates an instance of smarty
+        $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Facade_Wrapper');
+
+        // Register a reference to the calling class. Apparently "$this" is
+        // accessible when referenced statically in a non-static context...
+        $smartyInstance->pObj = is_object($this) ? $this : new stdClass();
+
+        // Gets a reference to the instance of tslib_cObj which starts the
+        // rendering of the TypoScript template structure. Frontend only!
+        if(Tx_Smarty_Utility_Typo3::isFeInstance()) {
+            $smartyInstance->cObj = $GLOBALS['TSFE']->cObj;
+        }
+
+        //$smarty->setTemplateDir();
+        //$smarty->setTemplateDir();
+        //$smarty->
+        return $smartyInstance;
+    }
+
+
+    /**
+     * @param array $options
+     * @return mixed
+     */
+	function &smarty(array $options = array())
     {
 
 		/****
@@ -93,7 +128,7 @@ class Tx_Smarty_Facade_Factory
 		 if (!tx_smarty::_checkDir($smarty->compile_dir)) {
 			 t3lib_div::mkdir(t3lib_div::getFileAbsFileName($smarty->compile_dir,0));
 		 }
-		
+
 		 if (!tx_smarty::_checkDir($smarty->cache_dir)) {
 			 t3lib_div::mkdir(t3lib_div::getFileAbsFileName($smarty->cache_dir,0));
 		 }
