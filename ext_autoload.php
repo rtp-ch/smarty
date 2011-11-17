@@ -15,16 +15,15 @@
     // Sets SMARTY_DIR to absolute path of smarty library files.
     if (!defined('SMARTY_DIR')) define('SMARTY_DIR', $smartyPath);
 
-    //require_once $smartyPath . 'SmartyBC.class.php';
-
     // List of autoload classes
     return array(
-        //'smarty'                            => $smartyPath . 'Smarty.class.php',
         'smartybc'                          => $smartyPath . 'SmartyBC.class.php',
         'tx_smarty_facade_configuration'    => $classPath  . 'Facade'  . DS . 'Configuration.php',
         'tx_smarty_facade_wrapper'          => $classPath  . 'Facade'  . DS . 'Wrapper.php',
-        'tx_smarty_facade_Factory'          => $classPath  . 'Facade'  . DS . 'Factory.php',
+        'tx_smarty_facade_factory'          => $classPath  . 'Facade'  . DS . 'Factory.php',
         'tx_smarty_utility_typoscript'      => $classPath  . 'Utility' . DS . 'Factory.php',
+        'tx_smarty_utility_typo3'           => $classPath  . 'Utility' . DS . 'Typo3.php',
+        't3lib_tsparser'                    => PATH_t3lib  . 'class.t3lib_tsparser.php',
     );
 
 

@@ -30,7 +30,6 @@
  **/
 
 
-// Wrapper extends the smarty backport class
 class Tx_Smarty_Facade_Wrapper
     extends SmartyBC
 {
@@ -44,17 +43,31 @@ class Tx_Smarty_Facade_Wrapper
      *
      * Language file(s) for the translate view helper
      *
-     * @var string
+     * @var string|array
      */
     public $language_file               = null;
+
+    /**
+     *
+     * Instance of the calling class
+     *
+     * @var null
+     */
+    public $pObj                        = null;
+
+    /**
+     *
+     * Instance of cObj (FE only)
+     *
+     * @var tslib_cObj
+     */
+    public $cObj                        = null;
 
     /**
      * @param array $options
      */
     public function __construct(array $options = array())
     {
-
-
         parent::__construct($options);
     }
 
@@ -75,7 +88,7 @@ class Tx_Smarty_Facade_Wrapper
      *
      * Gets the instance of the configuration manager
      *
-     * @return null|Tx_Smarty_Facade_Configuration
+     * @return Tx_Smarty_Facade_Configuration
      */
     public function getConfiguration()
     {
