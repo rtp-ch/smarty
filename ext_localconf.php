@@ -5,6 +5,13 @@
 	// Get default vars from extension configuration
 	$_EXTCONF = unserialize($_EXTCONF);
 
+
+    if (!defined('SMARTY_RESOURCE_CHAR_SET')) {
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'];
+        // UTF-8 can only be done properly when mbstring is available!
+        define('SMARTY_RESOURCE_CHAR_SET', SMARTY_MBSTRING ? 'UTF-8' : 'ISO-8859-1');
+    }
+
 	// Set global extension configuration vars
 	$TYPO3_CONF_VARS['EXTCONF'][$_EXTKEY]['smarty_dir'] =
             substr($_EXTCONF['smarty_dir'], -1) === DIRECTORY_SEPARATOR

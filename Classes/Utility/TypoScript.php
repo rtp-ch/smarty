@@ -46,26 +46,7 @@ class Tx_Smarty_Utility_TypoScript
         return self::$_tsParser;
     }
 
-	// Turns yes/no, true/false, on/off into booleans. !IMPORANT
-    /**
-     *
-     * Converts strings like "off" or "yes" to equivalent boolean values
-     *
-     * @param $string 
-     * @return bool
-     */
-	public function booleanize($string)
-	{
-        $bool = $string;
-		if(is_scalar($string)) {
-		    if (preg_match("/^(on|true|yes)$/i", trim($string))) {
-	            $bool = true;
-	        } elseif (preg_match("/^(off|false|no)$/i", trim($string))) {
-	            $bool = false;
-	        }
-		}
-        return $bool;
-	}
+
 
 	// Checks against valid TYPO3 instance
 	function validateTypo3Instance($instances = null)
@@ -155,5 +136,3 @@ class Tx_Smarty_Utility_TypoScript
 		return $out;
 	}
 }
-
-?>

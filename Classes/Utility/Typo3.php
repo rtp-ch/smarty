@@ -50,4 +50,30 @@ class Tx_Smarty_Utility_Typo3
     {
         return (boolean) (TYPO3_MODE === 'BE' && $GLOBALS['BE_USER'] instanceof t3lib_tsfeBeUserAuth);
     }
+
+	/**
+	 * Sets the $TSFE->cObjectDepthCounter in Backend mode
+	 * This somewhat hacky work around is currently needed because the cObjGetSingle() function of tslib_cObj relies on this setting
+	 *
+	 * @return void
+	 * @author Bastian Waidelich <bastian@typo3.org>
+	 */
+	public function simulateFrontendEnvironment()
+    {
+		$this->tsfeBackup = isset($GLOBALS['TSFE']) ? $GLOBALS['TSFE'] : NULL;
+		$GLOBALS['TSFE'] = new stdClass();
+		$GLOBALS['TSFE']->cObjectDepthCounter = 100;
+	}
+
+	/**
+	 * Resets $GLOBALS['TSFE'] if it was previously changed by simulateFrontendEnvironment()
+	 *
+	 * @return void
+	 * @author Bastian Waidelich <bastian@typo3.org>
+	 * @see simulateFrontendEnvironment()
+	 */
+	protected function resetFrontendEnvironment()
+    {
+		$GLOBALS['TSFE'] = $this->tsfeBackup;
+	}
 }

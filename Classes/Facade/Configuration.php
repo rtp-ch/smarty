@@ -67,7 +67,8 @@ class Tx_Smarty_Facade_Configuration
             $this->smartyInstance = $smartyInstance;
             $this->smartyClass = new ReflectionClass($smartyInstance);
         } else {
-            throw new InvalidArgumentException('Configuration manager requires a valid instance of smarty!', 1320785449);
+            $message = 'Configuration manager requires a valid instance of smarty!';
+            throw new Tx_Smarty_Exception_InvalidArgumentException($message, 1320785449);
         }
     }
 
@@ -85,12 +86,14 @@ class Tx_Smarty_Facade_Configuration
         // an exception for any unrecognized actions.
         $action = self::getActionFromMethod($method);
         if(!self::hasAction($action)) {
-            throw new BadMethodCallException('Unknown action "' . $action . '" in method "' . $method .'"!', 1320785456);
+            $message = 'Unknown action "' . $action . '" in method "' . $method .'"!';
+            throw new Tx_Smarty_Exception_BadMethodCallException($message, 1320785456);
         }
 
         // Catches adders without a corresponding method in smarty
         if(self::isAdder($action) && !$this->smartyClass->hasMethod($method)) {
-            throw new BadMethodCallException('Method "' . $method . '" is not a valid smarty setter!', 1320785472);
+            $message = 'Method "' . $method . '" is not a valid smarty setter!';
+            throw new Tx_Smarty_Exception_BadMethodCallException($message, 1320785472);
         }
 
         // Gets the property from the method call (the first three characters of the
