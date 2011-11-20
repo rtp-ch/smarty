@@ -22,14 +22,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+
 /**
  * @copyright 	(c) 2011 Simon Tuck
  * @author 		Simon Tuck <stu@rtp.ch>
  * @link 		http://www.rtp.ch/
  * @package 	Smarty (smarty)
  **/
-
-
 class Tx_Smarty_Facade_Wrapper
     extends SmartyBC
 {

@@ -35,14 +35,14 @@ class Tx_Smarty_Facade_Builder
 
 
 
-    public function &Build(array $options = array())
+    public function &Get(array $options = array())
     {
-t3lib_div::debug(array(
+/*t3lib_div::debug(array(
     '$options' => $options
 ));
 t3lib_div::debug(array(
     '$this' => get_object_vars($this)
-));
+));*/
 
         // Creates an instance of smarty
         $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Facade_Wrapper');
@@ -56,6 +56,8 @@ t3lib_div::debug(array(
         if(Tx_Smarty_Utility_Typo3::isFeInstance()) {
             $smartyInstance->cObj = $GLOBALS['TSFE']->cObj;
         }
+
+        //$smartyInstance->setPluginsDir(array())
 
         //$smarty->setTemplateDir();
         //$smarty->setTemplateDir();

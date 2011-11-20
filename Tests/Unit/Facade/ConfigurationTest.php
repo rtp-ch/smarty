@@ -56,7 +56,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      *
      * @test
      * @depends smartyHasConfigurationInstance
-     * @expectedException BadMethodCallException
+     * @expectedException Tx_Smarty_Exception_BadMethodCallException
      */
     public function methodWithoutValidAccessorActionThrowsException()
     {
@@ -70,7 +70,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      *
      * @test
      * @depends smartyHasConfigurationInstance
-     * @expectedException InvalidArgumentException
+     * @expectedException Tx_Smarty_Exception_InvalidArgumentException
      */
     public function accessorWithoutPropertyThrowsException()
     {
@@ -84,7 +84,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      *
      * @test
      * @depends smartyHasConfigurationInstance
-     * @expectedException InvalidArgumentException
+     * @expectedException Tx_Smarty_Exception_InvalidArgumentException
      */
     public function accessorWithoutValidPropertyThrowsException()
     {
@@ -194,7 +194,7 @@ class Tx_Smarty_Tests_Unit_Facade_ConfigurationTest
      * @test
      * @depends smartyHasConfigurationInstance
      * @depends adderMethodAddsToSmartyProperty
-     * @expectedException BadMethodCallException
+     * @expectedException Tx_Smarty_Exception_BadMethodCallException
      */
     public function adderCannotAddToPropertyWithoutCorrespondingSmartyAdder()
     {
