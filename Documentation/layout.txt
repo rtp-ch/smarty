@@ -38,10 +38,15 @@
 $smarty->setExtensionConfiguration()->setTypoScriptConfiguration()->setOptions()
 $smarty->setExtensionConfiguration()->setTypoScriptConfiguration()->setOptions()
 
+$cObj = new CobjectProxy;
+$cObj->getSingle();
+unset($cObj);
 
 Configuration
     ManagerInterface
     AbstractManager
+    Manager
+
     TypoScriptManager
     ExtensionSettingsManager
     PageTsConfigManager
