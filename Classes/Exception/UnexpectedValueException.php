@@ -15,8 +15,8 @@
 /**
  * 
  */
-class Tx_Smarty_Exception_Exception
-    extends Exception
+class Tx_Smarty_Exception_UnexpectedValueException
+    extends UnexpectedValueException
 {
 
 }

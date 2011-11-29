@@ -15,8 +15,8 @@
 /**
  * 
  */
-class Tx_Smarty_Exception_ViewHelperException
-    extends Tx_Smarty_Exception_Exception
+class Tx_Smarty_Exception_DomainException
+    extends DomainException
 {
 
 }

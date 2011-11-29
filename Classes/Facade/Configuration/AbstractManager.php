@@ -30,7 +30,7 @@
  **/
 
 
-class Tx_Smarty_Facade_Configuration
+abstract class Tx_Smarty_Facade_Configuration_AbstractManager
 {
     /**
      * @var null|ReflectionClass
@@ -80,7 +80,7 @@ class Tx_Smarty_Facade_Configuration
      * @param array $args
      * @return mixed
      */
-    public final function __call($method, array $args = array())
+    public final function __call($method, array $args)
     {
         // Gets the action from the method call and throws
         // an exception for any unrecognized actions.
@@ -180,67 +180,5 @@ class Tx_Smarty_Facade_Configuration
     private static function isSetter($action)
     {
         return (boolean) ((string) $action === self::SETTER_ACTION);
-    }
-
-
-
-
-
-
-
-
-
-    
-
-    /**
-     * @static
-     * @param $dirs
-     * @return array
-     */
-    public function getPaths($dirs)
-    {
-        $paths = null;
-        if (is_array($dirs)) {
-            while($dir = array_shift($dirs)) {
-                $path = t3lib_div::getFileAbsFileName($dir);
-                $paths[] = (is_dir($path) && substr($path, -1) !== DS) ? $path . DS : $path;
-            }
-        } elseif (is_scalar($dirs)) {
-            $paths  = t3lib_div::getFileAbsFileName($dirs);
-            $paths .= (is_dir($paths) && substr($paths, -1) !== DS) ? DS : '';
-        }
-
-        // NOTE: No attempt is made to validate file path(s)
-        return $paths;
-    }
-
-    /**
-     * @static
-     * @param $action
-     * @return bool
-     */
-    private static function isAdder($action)
-    {
-        return (boolean) ((string) $action === self::ADDER_ACTION);
-    }
-
-    /**
-     * @static
-     * @param $setting
-     * @return bool
-     */
-    private static function isDir($setting)
-    {
-        return (boolean) (strtolower(substr($setting, -3)) === 'dir');
-    }
-
-    /**
-     * @static
-     * @param $setting
-     * @return bool
-     */
-    private static function isFile($setting)
-    {
-        return (boolean) (strtolower(substr($setting, -4)) === 'file');
     }
 }

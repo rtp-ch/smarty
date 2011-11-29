@@ -1,5 +1,6 @@
 <?php
 
+
     /***************************************************************
      *  Copyright notice
      *
@@ -35,37 +36,27 @@
      *
      * Smarty plugin "format"
      * -------------------------------------------------------------
-     * File:    block.format.php
-     * Type:    block
+     * File:    modifier.format.php
+     * Type:    modifier
      * Name:    Format
-     * Version: 1.0
-     * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
-     * Purpose: Formats a block of text according to lib.parseFunc_RTE
-     * Example: {format}
-     *				These lines of text will
-     *				will be formatted according to the
-     *				rules defined in lib.parseFunc_RTE
-     *				for example, individual lines will be wrapped in p tags.
-     *			{/format}
+     * Version: 2.0
+     * Author:  Simon Tuck <stu@rtp.ch>
+     * Purpose: Formats a variable according to lib.parseFunc_RTE
+     * Example: {$assignedPHPvariable|format}
      * Note:	For more details on lib.parseFunc_RTE & parseFunc in general see:
      *			http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/5/14/
      * Note:	To define an alternate parseFunc configuration set the paramater "parsefunc"
-     *			in the tag e.g. {format parsefunc="lib.myParseFunc"}Hello World{/format}
+     *			in the tag e.g. {$assignedPHPvariable|format:"lib.myParseFunc"}
      * -------------------------------------------------------------
      *
-     * @param $params
-     * @param $content 
-     * @param $template Instance of smarty template
+     * @param $content
+     * @param bool $setup
      * @return string
      **/
-	function smarty_block_format($params, $content, $template)
+    function smarty_modifier_format($content, $setup = false)
     {
-		// Set the parseFunc configuration
-		$setup = $params['setup'] ? $params['setup'] : false;
-
-        // Load the "smarty_modifier_format" plugin
-        Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_modifier_format');
-
-        // Uses the method of the smarty_modifier_format plugin
-        return smarty_modifier_format($content, $setup);
-	}
+        list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($setup);
+        $typo3 = t3lib_div::makeInstance('Tx_Smarty_Utility_Typo3');
+        $formatedContent = $typo3->cObj->parseFunc($content, $setup);
+        return $formatedContent;
+    }

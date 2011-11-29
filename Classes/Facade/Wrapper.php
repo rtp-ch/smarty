@@ -1,38 +1,38 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2011 Simon Tuck <stu@rtp.ch>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2011 Simon Tuck <stu@rtp.ch>
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 
 /**
- * @copyright 	(c) 2011 Simon Tuck
- * @author 		Simon Tuck <stu@rtp.ch>
- * @link 		http://www.rtp.ch/
- * @package 	Smarty (smarty)
+ * @copyright (c) 2011 Simon Tuck
+ * @author Simon Tuck <stu@rtp.ch>
+ * @link http://www.rtp.ch/
+ * @package Smarty (smarty)
  **/
 class Tx_Smarty_Facade_Wrapper
     extends SmartyBC
 {
-    
+
     /**
      * @var Tx_Smarty_Facade_Configuration
      */
@@ -52,7 +52,7 @@ class Tx_Smarty_Facade_Wrapper
      *
      * @var null
      */
-    public $pObj                        = null;
+    public $parent_object               = null;
 
     /**
      *
@@ -60,7 +60,7 @@ class Tx_Smarty_Facade_Wrapper
      *
      * @var tslib_cObj
      */
-    public $cObj                        = null;
+    public $content_object              = null;
 
     /**
      * @param array $options
@@ -80,7 +80,7 @@ class Tx_Smarty_Facade_Wrapper
      */
     public final function __call($method, $args)
     {
-    	return call_user_func_array(array($this->getConfiguration(), $method), $args);
+        return call_user_func_array(array($this->getConfiguration(), $method), $args);
     }
 
     /**
@@ -294,26 +294,82 @@ class Tx_Smarty_Facade_Wrapper
         return parent::setDebugTemplate($tpl_name);
     }
 
-    
+    /**
+     * @throws Tx_Smarty_Exception_BadMethodCallException
+     * @param $pluginName
+     * @return void
+     */
+    public function loadPlugin($pluginName)
+    {
+// TODO:!!!!
+        return parent::loadPlugin($pluginName);
+        // Modified to throw an exception of the plugin can'be found
+        if (!function_exists($pluginName)) {
+            if (!parent::loadPlugin($pluginName)) {
+                $message = 'Couldn\'t find smarty plugin "' . $pluginName . '"!';
+                throw new Tx_Smarty_Exception_BadMethodCallException($message, 1322296921);
+            }
+        }
+    }
+
+
     /************************************************************************
      * Deprecated methods
      ************************************************************************/
+    
+    /**
+     * @throws InvalidArgumentException
+     * @param $property
+     * @return mixed
+     */
+    public function __get($property)
+    {
+        // Log deprecated properties
+        if ($property === 'pObj') {
+            return $this->getParentObject();
+
+        } elseif ($property === 'cObj') {
+            return $this->getContentObject();
+
+        } elseif ($property === 'path_to_template_directory') {
+            return $this->getTemplateDir();
+
+        } elseif ($property === 'path_to_language_file') {
+            return $this->getLanguageFile();
+
+        } else {
+            throw new InvalidArgumentException('Attempted to get unknown smarty property "' . $property . '"!', 1322384939);
+        }
+    }
 
     /**
-     * @var null
-     * @deprecated Use $language_file instead
+     * @throws InvalidArgumentException
+     * @param $property
+     * @param $value
+     * @return void
      */
-    private $path_to_language_file      = null;
+    public function __set($property, $value)
+    {
+        // Log deprecated properties
+        if ($property === 'pObj') {
+            $this->setParentObject($value);
 
-    /**
-     * @var null
-     * @deprecated Use $template_dir instead
-     */
-    private $path_to_template_directory = null;
+        } elseif ($property === 'cObj') {
+            $this->setContentObject($value);
+
+        } elseif ($property === 'path_to_template_directory') {
+            $this->setTemplateDir($value);
+
+        } elseif ($property === 'path_to_language_file') {
+            $this->setLanguageFile($value);
+
+        } else {
+            throw new InvalidArgumentException('Attempted to set unknown smarty property "' . $property . '"!', 1322384939);
+        }
+    }
 
     /**
      *
-     * @api
      * @param $path_to_template_directory
      * @return void
      * @deprecated Use setTemplateDir() instead
@@ -322,12 +378,11 @@ class Tx_Smarty_Facade_Wrapper
     {
         $this->setTemplateDir($path_to_template_directory);
     }
-    
+
     /**
      *
      * Set the language file
      *
-     * @api
      * @param $path_to_language_file
      * @return void
      * @deprecated use setLanguageFile() instead
@@ -336,20 +391,19 @@ class Tx_Smarty_Facade_Wrapper
     {
         $this->setLanguageFile($path_to_language_file);
     }
-    
+
     /**
      *
      * Set smarty configuration variable
      *
-     * @api
      * @param $smartyVar
      * @param $smartyValue
      * @return void
-     * @deprecated use accessors instead
+     * @deprecated use accessors instead, e.g. setSmartyVar(smartyValue)
      */
-	public function setSmartyVar($smartyVar, $smartyValue)
+    public function setSmartyVar($smartyVar, $smartyValue)
     {
         $method = 'set' . t3lib_div::underscoredToUpperCamelCase($smartyVar);
         $this->{$method}($smartyValue);
-	}
+    }
 }
