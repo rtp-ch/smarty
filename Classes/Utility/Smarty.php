@@ -45,18 +45,55 @@ class Tx_Smarty_Utility_Smarty
         // Requires a valid instance of Smarty_Internal_Template
         if(!($template instanceof Smarty_Internal_Template)) {
             $message = 'Method "loadPlugin" requires a valid instance of Smarty_Internal_Template!';
-            throw new Tx_Smarty_Exception_InvalidArgumentException($message);
+            throw new Tx_Smarty_Exception_InvalidArgumentException($message, 1322296914);
         }
 
-        // Load the plugin
-        if(!function_exists($pluginName)) {
-            $pluginPath = $template->loadPlugin('smarty_modifier_format');
-            if($pluginPath) {
-                include_once($pluginPath);
-            } else {
-                $message = 'Unable to load view helper "' . $pluginName . '"!';
-                throw new Tx_Smarty_Exception_ViewHelperException($message);
+        // Uses Smarty::loadPlugin to load plugin, throws an exception if the plugin can't be found.
+        if (!function_exists($pluginName)) {
+            if (!$template->loadPlugin($pluginName)) {
+                $message = 'Couldn\'t find and load smarty plugin "' . $pluginName . '"!';
+                throw new Tx_Smarty_Exception_BadMethodCallException($message, 1322296921);
             }
         }
+    }
+
+    /**
+     * @static
+     * @param $setting
+     * @return bool
+     */
+    public static function isPathSetting($setting)
+    {
+        return (self::isDirSetting($setting) || self::isFileSetting($setting) || self::isTemplateSetting($setting));
+    }
+
+    /**
+     * @static
+     * @param $setting
+     * @return bool
+     */
+    public static function isDirSetting($setting)
+    {
+        return (boolean) (strtolower(substr($setting, -3)) === 'dir');
+    }
+
+    /**
+     * @static
+     * @param $setting
+     * @return bool
+     */
+    public static function isFileSetting($setting)
+    {
+        return (boolean) (strtolower(substr($setting, -4)) === 'file');
+    }
+
+    /**
+     * @static
+     * @param $setting
+     * @return bool
+     */
+    public static function isTemplateSetting($setting)
+    {
+        return (boolean) (strtolower(substr($setting, -8)) === 'template');
     }
 }

@@ -24,115 +24,134 @@
 ***************************************************************/
 
 /**
- * @copyright 	2007 Rueegg Tuck Partner GmbH
- * @author 		Simon Tuck <stu@rtpartner.ch>
- * @link 		http://www.rtpartner.ch/
- * @package 	Smarty (smarty)
+ * @copyright 2007 Rueegg Tuck Partner GmbH
+ * @author Simon Tuck <stu@rtpartner.ch>
+ * @link http://www.rtpartner.ch/
+ * @package Smarty (smarty)
  **/
-
-// Include TypoScript parser class
-require_once(PATH_t3lib.'class.t3lib_tsparser.php');
-
 class Tx_Smarty_Utility_TypoScript
 {
 
-    private static $_tsParser        = null;
-
-    private function _getTsParser()
+    /**
+     * @param array $parameters
+     * @return array
+     */
+    public function getSetupFromParameters(array $parameters = array())
     {
-        if(is_null(self::$_tsParser)) {
-            self::$_tsParser = t3lib_div::makeInstance('t3lib_tsparser');
+        // Setup is the array of parameters passed to the smarty plugin
+        $setup = array();
+
+        // "setup" is a special parameter which can point to a value in the
+        // current global TypoScript scope. Retrieves the matching value from
+        // the current global TypoScript scope if "setup" is defined.
+        if (isset($parameters['setup'])) {
+            list($setup, $type) = self::getSetupFromTypo3($parameters['setup']);
+            unset($parameters['setup']);
         }
-        return self::$_tsParser;
+
+        // Converts the remaining parameters to a TypoScript array.
+        if(!empty($parameters)) {
+
+            // Parameters will recursively override any setup from the "setup" parameter.
+            if (!empty($setup)) {
+                $tmpSetup = Tx_Smarty_Utility_TypoScript::getTypoScriptFromParameters($parameters);
+                $setup = t3lib_div::array_merge_recursive_overrule($setup, $tmpSetup);
+
+            } else {
+                $setup = Tx_Smarty_Utility_TypoScript::getTypoScriptFromParameters($parameters);;
+            }
+        }
+        
+        return array($setup, $type);
     }
 
+    /**
+     *
+     * Gets TypoScript from the current global TypoScript setup array
+     *
+     * @static
+     * @see t3lib_TSparser::getVal($string, $setup)
+     * @param string $string Object path for which to get the value
+     * @return array
+     */
+    private static function getSetupFromTypo3($string)
+    {
 
+        // Cast the object path to a string
+        $objPath = trim((string) $string);
 
-	// Checks against valid TYPO3 instance
-	function validateTypo3Instance($instances = null)
-	{
-		if(empty($instances) || !defined('TYPO3_MODE')) return false;
-		$instances = t3lib_div::trimExplode(',', strtoupper($instances), 1);
-		if(in_array(TYPO3_MODE, $instances)) return true;
-		return false;
-	}
+        // Break the object path down by periods (.) excluding the last part
+        // which could also point to the object type. So that, for example, if
+        // the typoscript path is "lib.foo.bar" both the OBJECT_TYPE and it's
+        // configuration are picked up:
+        // lib.foo.bar = OBJECT_TYPE
+        // lib.foo.bar.file = /path/to/file
+        $objPathParts = Tx_Smarty_Utility_Array::trimExplode('.', $objPath);
+        $lastObjPathPart = array_pop($objPathParts);
 
-	// Retrieves a TypoScript object from the global setup scope ($GLOBALS['TSFE']->tmpl->setup)
-	function getTypoScriptFromTMPL($key)
-	{
-		if(!$key) return false;
-		if ($setup = self::_getTsParser()->getVal($key, $GLOBALS['TSFE']->tmpl->setup)) return $setup;
-		return false;
-	}
+        // The current global TypoScript setup array
+        $setup = $GLOBALS['TSFE']->tmpl->setup;
 
-	// Turns an array (assumed to be TypoScript Parameters) into
-	// text. Any occurences of _DOT_ (see prefilter dots) are replaced with a dot (.)
-	function makeTypoScriptFromArray($params)
-	{
-	    $return = null;
-		foreach($params as $param => $value) {
-			$return .= str_replace('_DOT_','.',$param) . ' = ' . $value . chr(10);
-		}
-		return $return;
-	}
+        // Iterate through the global TypoScript scope, throw an exception
+        // if any part of the object path can't be found.
+        while($objPathPart = array_shift($objPathParts)) {
+            if (isset($setup[$objPathPart . '.'])) {
+                $setup = $setup[$objPathPart . '.'];
+            } else {
+                throw new Exception('Stop');
+            }
+        }
 
-	// Parses a block of text (assumed to be TypoScript) and, if successful,
-	// returns an array:
-	// $setup[0]	The TypoScript object, e.g. IMAGE or TEXT etc.
-	// $setup[1]	The configuration array of the object
-	function parseTypoScript($typoscript)
-	{
-		if(!$typoscript) return false;
-		if (is_array($typoscript)) $typoscript = tx_smarty_div::makeTypoScriptFromArray($typoscript);
-		if(!is_null($typoscript)) {
-    		self::_getTsParser()->parse($typoscript);
-    		if($setup = self::_getTsParser()->setup) return $setup;
-		}
-		return false;
-	}
+        // The last part of the object path should get the configuration, otherwise
+        // throw an exception.
+        if (isset($setup[$lastObjPathPart . '.'])) {
+            $setup = $setup[$lastObjPathPart . '.'];
+        } else {
+            throw new Exception('No Way!');
+        }
 
-	// General function to return TypoScript from plugin params
-	// The special param 'setup' is assumed to reference a TypoScript object from the global scope
-	function getTypoScriptFromParams($params) {
-	    unset(self::_getTsParser()->setup); // Unset previous TS
-		if($params['setup']) {
-			$setup = tx_smarty_div::getTypoScriptFromTMPL($params['setup']);
-			unset($params['setup']);
-		}
-		if($params) $params = tx_smarty_div::parseTypoScript($params); // Create a TypoScript array from $params
-		if($params && $setup) $setup[1] = t3lib_div::array_merge_recursive_overrule($setup[1], $params, false, true); // Merge $setup & $params
-		return $setup ? $setup : array(1 => $params);
-	}
+        // The last part of the object path might also point to the object type.
+        if (isset($setup[$lastObjPathPart])) {
+            $type = $setup[$lastObjPathPart];
+        } else {
+            $type = null;
+        }
 
-	// Get an absolute file/dir reference (trailing slashes are stripped)
-	function getFileAbsName($filename) {
-		$location = t3lib_div::getFileAbsFileName($filename,0);
-		if(@is_readable($location)) {
-			return substr($location, -1) == DIRECTORY_SEPARATOR ? substr($location, 0, -1) : $location;
-		}
-		return $filename;
-	}
+        // Return the object configuration and type
+        return array($setup, $type);
+    }
 
-	/**
-	 * Note: This function is required but not available in earlier TYPO3 versions
-	 * Removes dots "." from end of a key identifier of TypoScript styled array.
-	 * array('key.' => array('property.' => 'value')) --> array('key' => array('property' => 'value'))
-	 *
-	 * @param	array	$ts: TypoScript configuration array
-	 * @return	array	TypoScript configuration array without dots at the end of all keys
-	 */
-	function removeDotsFromTS($ts) {
-		$out = array();
-		if (is_array($ts)) {
-			foreach ($ts as $key => $value) {
-				if (is_array($value)) {
-					$key = rtrim($key, '.');
-					$out[$key] = tx_smarty_div::removeDotsFromTS($value);
-				} else {
-					$out[$key] = $value;
-				}
-			}
-		}
-		return $out;
-	}
+    /**
+     * @static
+     * @param array $parameters
+     * @return array
+     */
+    private static function getTypoScriptFromParameters(array $parameters = array())
+    {
+        $typoscript = array();
+        foreach($parameters as $parameter => $value) {
+            $properties = Tx_Smarty_Utility_Array::trimExplode('.', $parameter);
+            $setting = self::convertParameterToTypoScript($value, $properties);
+            $typoscript = t3lib_div::array_merge_recursive_overrule($typoscript, $setting);
+        }
+        return $typoscript;
+    }
+
+    /**
+     * @static
+     * @param $value
+     * @param array $settings
+     * @param array $setting
+     * @return array
+     */
+    private static function convertParameterToTypoScript($value, array $settings = array(), array $setting = array())
+    {
+        $property = array_shift($settings);
+        if(count($settings) > 0) {
+            $setting[$property . '.'] = self::convertParameterToTypoScript($value, $settings, $setting);
+        } else {
+            $setting[$property] = $value;
+        }
+        return $setting;
+    }
 }

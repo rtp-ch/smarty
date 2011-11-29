@@ -24,15 +24,37 @@
 ***************************************************************/
 
 /**
- * @copyright 	2007 Rueegg Tuck Partner GmbH
- * @author 		Simon Tuck <stu@rtpartner.ch>
- * @link 		http://www.rtpartner.ch/
- * @package 	Smarty (smarty)
+ * @copyright     2007 Rueegg Tuck Partner GmbH
+ * @author         Simon Tuck <stu@rtpartner.ch>
+ * @link         http://www.rtpartner.ch/
+ * @package     Smarty (smarty)
  **/
 
 
-class Tx_Smarty_Utility_Typo3
+class Tx_Smarty_Utility_Typo3   
 {
+
+    public function getContentObject($type, $setup)
+    {
+        // Gets the content object from the current frontend instance
+        if (self::isFeInstance()) {
+            $contentObject =  $GLOBALS['TSFE']->cObj->cObjGetSingle($type, $setup);
+
+        // Throws an exception when attempting to access tdlib_cObj from the backend
+        // TODO: Simulate a frontend environment (see extBase/Fluid)
+        } elseif(self::isBeInstance()) {
+            throw new Exception('Not here!');
+
+        // Something went seriously wrong: there's neither a valid backend
+        // nor frontend environment available!
+        } else {
+            throw new Exception('WTF');
+        }
+
+        //
+        return $contentObject;
+    }
+
     /**
      * @static
      * @return bool
@@ -50,30 +72,4 @@ class Tx_Smarty_Utility_Typo3
     {
         return (boolean) (TYPO3_MODE === 'BE' && $GLOBALS['BE_USER'] instanceof t3lib_tsfeBeUserAuth);
     }
-
-	/**
-	 * Sets the $TSFE->cObjectDepthCounter in Backend mode
-	 * This somewhat hacky work around is currently needed because the cObjGetSingle() function of tslib_cObj relies on this setting
-	 *
-	 * @return void
-	 * @author Bastian Waidelich <bastian@typo3.org>
-	 */
-	public function simulateFrontendEnvironment()
-    {
-		$this->tsfeBackup = isset($GLOBALS['TSFE']) ? $GLOBALS['TSFE'] : NULL;
-		$GLOBALS['TSFE'] = new stdClass();
-		$GLOBALS['TSFE']->cObjectDepthCounter = 100;
-	}
-
-	/**
-	 * Resets $GLOBALS['TSFE'] if it was previously changed by simulateFrontendEnvironment()
-	 *
-	 * @return void
-	 * @author Bastian Waidelich <bastian@typo3.org>
-	 * @see simulateFrontendEnvironment()
-	 */
-	protected function resetFrontendEnvironment()
-    {
-		$GLOBALS['TSFE'] = $this->tsfeBackup;
-	}
 }
