@@ -29,7 +29,7 @@
      * Type:    function
      * Name:    Image
      * Version: 2.0
-     * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
+     * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
      * Purpose: Gets a TYPO3 content object type "IMAGE"
      * Example: {image file="fileadmin/pic.jpg" file.width="150" }
      * Example: {image setup="lib.myImage" file.width="150c" file.height="180c"}
@@ -55,6 +55,6 @@
     function smarty_function_image($params, Smarty_Internal_Template $template)
     {
         list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
-        $typo3 = t3lib_div::makeInstance('Tx_Smarty_Utility_Typo3');
-        return $typo3->getContentObject('IMAGE', $setup);
+        $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
+        return $cObj->cObjGetSingle('IMAGE', $setup);
     }

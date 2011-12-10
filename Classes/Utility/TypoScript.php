@@ -69,12 +69,11 @@ class Tx_Smarty_Utility_TypoScript
      *
      * Gets TypoScript from the current global TypoScript setup array
      *
-     * @static
      * @see t3lib_TSparser::getVal($string, $setup)
      * @param string $string Object path for which to get the value
      * @return array
      */
-    private static function getSetupFromTypo3($string)
+    public static function getSetupFromTypo3($string)
     {
 
         // Cast the object path to a string
@@ -119,6 +118,39 @@ class Tx_Smarty_Utility_TypoScript
 
         // Return the object configuration and type
         return array($setup, $type);
+    }
+
+    /**
+     * Recursively apply stdWrap to a typoscript array
+     *
+     * @param array $in
+     * @param null|tslib_cObj $cObj
+     * @return array
+     */
+    public static function arrayStdWrap(array $in = array(), tslib_cObj $cObj = null)
+    {
+        if(is_null($cObj) || !($cObj instanceof tslib_cObj)) {
+            $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
+        }
+        reset($in);
+        while(list($key, $value) = each($in)) {
+            if(is_array($value)) {
+                $tempValue = null;
+                if(substr($key, -1) === '.' && empty($in[substr($key, 0, -1)])) {
+                    if($tempValue = $cObj->stdWrap(null, $in[$key])) {
+                        $key = substr($key, 0, -1);
+                    }
+                } else {
+                    $tempValue = $cObj->stdWrap($value, $in[$key . '.']);
+                }
+                $out[$key] = is_null($tempValue) ? self::arrayStdWrap($value, $cObj) : $tempValue;
+            } elseif(is_scalar($in[$key])) {
+                $out[$key] = $cObj->stdWrap($value, $in[$key . '.']);
+            } else {
+                $out[$key] = $value;
+            }
+        }
+        return $out;
     }
 
     /**

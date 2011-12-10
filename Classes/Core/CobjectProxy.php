@@ -1,21 +1,19 @@
 <?php
 
-class Tx_Smarty_Core_Typo3_CobjectProxy
+class Tx_Smarty_Core_CobjectProxy
 {
-
     /**
-     * @var tslib_fe contains a backup of the current $GLOBALS['TSFE'] if used in BE mode
+     * @var tslib_fe Contains a backup of the current $GLOBALS['TSFE'] if used in BE mode
      */
     private $tsfeBackup                 = null;
 
     /**
-     * @var tslib_fe contains a backup of the current $GLOBALS['TSFE'] if used in BE mode
+     * @var tslib_cObj
      */
     private $contentObject              = null;
 
     /**
      * @throws RuntimeException
-     * 
      */
     public function __construct()
     {
@@ -32,7 +30,7 @@ class Tx_Smarty_Core_Typo3_CobjectProxy
     }
 
     /**
-     * Reroutes cObj methods to the tslib_cObj instance
+     * Reroutes cObj method calls to the tslib_cObj instance
      *
      * @param string $method
      * @param array $args
@@ -40,24 +38,29 @@ class Tx_Smarty_Core_Typo3_CobjectProxy
      */
     public final function __call($method, array $args = array())
     {
+        if(!method_exists($this->getContentObject(), $method)) {
+            throw new BadMethodCallException('No such method');
+        }
         return call_user_func_array(array($this->getContentObject(), $method), $args);
     }
 
     /**
-     * Sets the $TSFE->cObjectDepthCounter in Backend mode
-     * This somewhat hacky work around is currently needed because the cObjGetSingle() function of tslib_cObj relies on this setting
+     * Creates a tslib_Cobj instance for backend mode
      *
-     * @return void
-     * @author Bastian Waidelich <bastian@typo3.org>
-     * @coauthor Simon Tuck <stu@rtp.ch>
+     * @return Tx_Smarty_Core_CobjectProxy
+     * @see Tx_Extbase_Utility_FrontendSimulator::simulateFrontendEnvironment
      */
     protected function simulateFrontendEnvironment()
     {
         $this->tsfeBackup = isset($GLOBALS['TSFE']) ? $GLOBALS['TSFE'] : null;
+        // This somewhat hacky work around is currently needed because the cObjGetSingle()
+        // function of tslib_cObj relies on this setting
         $GLOBALS['TSFE'] = new stdClass();
+        // Sets the $TSFE->cObjectDepthCounter in Backend mode
         $GLOBALS['TSFE']->cObjectDepthCounter = 100;
         $GLOBALS['TSFE']->cObj = t3lib_div::makeInstance('tslib_cObj');
-        $GLOBALS['TSFE']->cObj->start(array(), 'pages');
+        $GLOBALS['TSFE']->cObj->start(array());
+        return $this;
     }
 
     /**
@@ -72,9 +75,9 @@ class Tx_Smarty_Core_Typo3_CobjectProxy
     }
 
     /**
-     * @throws InvalidArgumentException
      * @param tslib_cObj $contentObject
-     * @return void
+     * @return Tx_Smarty_Core_CobjectProxy
+     * @throws InvalidArgumentException
      */
     protected function setContentObject(tslib_cObj $contentObject)
     {
@@ -82,14 +85,14 @@ class Tx_Smarty_Core_Typo3_CobjectProxy
             throw new InvalidArgumentException('Shadupayouface!');
         }
         $this->contentObject = $contentObject;
+        return $this;
     }
 
     /**
      * Resets $GLOBALS['TSFE'] if it was previously changed by simulateFrontendEnvironment()
      *
      * @return void
-     * @author Bastian Waidelich <bastian@typo3.org>
-     * @see simulateFrontendEnvironment()
+     * @see Tx_Extbase_Utility_FrontendSimulator::resetFrontendEnvironment
      */
     public final function __destruct()
     {

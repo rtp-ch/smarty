@@ -56,7 +56,6 @@
     function smarty_modifier_format($content, $setup = false)
     {
         list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($setup);
-        $typo3 = t3lib_div::makeInstance('Tx_Smarty_Utility_Typo3');
-        $formatedContent = $typo3->cObj->parseFunc($content, $setup);
-        return $formatedContent;
+        $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
+        return $cObj->parseFunc($content, $setup);
     }

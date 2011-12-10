@@ -22,21 +22,14 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-/**
- * @copyright (c) 2011 Simon Tuck
- * @author Simon Tuck <stu@rtp.ch>
- * @link http://www.rtp.ch/
- * @package Smarty (smarty)
- **/
-class Tx_Smarty_Facade_Wrapper
+class Tx_Smarty_Core_Wrapper
     extends SmartyBC
 {
 
     /**
-     * @var Tx_Smarty_Facade_Configuration
+     * @var Tx_Smarty_Core_Configuration
      */
-    private $configuration              = null;
+    private $configuration               = null;
 
     /**
      *
@@ -44,7 +37,7 @@ class Tx_Smarty_Facade_Wrapper
      *
      * @var string|array
      */
-    public $language_file               = null;
+    private $language_file               = null;
 
     /**
      *
@@ -52,7 +45,7 @@ class Tx_Smarty_Facade_Wrapper
      *
      * @var null
      */
-    public $parent_object               = null;
+    private $parent_object               = null;
 
     /**
      *
@@ -60,7 +53,7 @@ class Tx_Smarty_Facade_Wrapper
      *
      * @var tslib_cObj
      */
-    public $content_object              = null;
+    private $content_object              = null;
 
     /**
      * @param array $options
@@ -87,14 +80,30 @@ class Tx_Smarty_Facade_Wrapper
      *
      * Gets the instance of the configuration manager
      *
-     * @return Tx_Smarty_Facade_Configuration
+     * @return Tx_Smarty_Core_Configuration
      */
     public function getConfiguration()
     {
         if(is_null($this->configuration)) {
-            $this->configuration = t3lib_div::makeInstance('Tx_Smarty_Facade_Configuration', $this);
+            $this->configuration = t3lib_div::makeInstance('Tx_Smarty_Core_Configuration', $this);
         }
         return $this->configuration;
+    }
+
+    /**
+     * @param mixed $pObj The instance of the calling class
+     */
+    public function setParentObject($pObj)
+    {
+        $this->parent_object = $pObj;
+    }
+
+    /**
+     * @return mixed Returns the instance of the calling class
+     */
+    public function getParentObject()
+    {
+        return $this->parent_object;
     }
 
    /**
@@ -137,7 +146,7 @@ class Tx_Smarty_Facade_Wrapper
     * @api
     * @param mixed $language_file
     * @param string $key of the array element to assign
-    * @return Tx_Smarty_Facade_Wrapper current Smarty instance for chaining
+    * @return Tx_Smarty_Core_Wrapper current Smarty instance for chaining
     */
     public function addLanguageFile($language_file, $key = null)
     {
@@ -174,7 +183,7 @@ class Tx_Smarty_Facade_Wrapper
     */
     public function setTemplateDir($template_dir)
     {
-        $template_dir = $this->getConfiguration()->getPaths($template_dir);
+        $template_dir = Tx_Smarty_Utility_Path::resolvePaths($template_dir);
         return parent::setTemplateDir($template_dir);
     }
 
@@ -188,9 +197,9 @@ class Tx_Smarty_Facade_Wrapper
     * @return Smarty current Smarty instance for chaining
     * @throws SmartyException when the given template directory is not valid
     */
-    public function addTemplateDir($template_dir, $key=null)
+    public function addTemplateDir($template_dir, $key = null)
     {
-        $template_dir = $this->getConfiguration()->getPaths($template_dir);
+        $template_dir = Tx_Smarty_Utility_Path::resolvePaths($template_dir);
         return parent::addTemplateDir($template_dir, $key);
     }
 
@@ -204,7 +213,7 @@ class Tx_Smarty_Facade_Wrapper
     */
     public function setConfigDir($config_dir)
     {
-        $config_dir = $this->getConfiguration()->getPaths($config_dir);
+        $config_dir = Tx_Smarty_Utility_Path::resolvePaths($config_dir);
         return parent::setConfigDir($config_dir);
     }
 
@@ -217,9 +226,9 @@ class Tx_Smarty_Facade_Wrapper
     * @param string $key of the array element to assign the config dir to
     * @return Smarty current Smarty instance for chaining
     */
-    public function addConfigDir($config_dir, $key=null)
+    public function addConfigDir($config_dir, $key = null)
     {
-        $config_dir = $this->getConfiguration()->getPaths($config_dir);
+        $config_dir = Tx_Smarty_Utility_Path::resolvePaths($config_dir);
         return parent::addConfigDir($config_dir, $key);
     }
 
@@ -233,7 +242,7 @@ class Tx_Smarty_Facade_Wrapper
     */
     public function setPluginsDir($plugins_dir)
     {
-        $plugins_dir = $this->getConfiguration()->getPaths($plugins_dir);
+        $plugins_dir = Tx_Smarty_Utility_Path::resolvePaths($plugins_dir);
         return parent::setPluginsDir($plugins_dir);
     }
 
@@ -247,7 +256,7 @@ class Tx_Smarty_Facade_Wrapper
     */
     public function addPluginsDir($plugins_dir)
     {
-        $plugins_dir = $this->getConfiguration()->getPaths($plugins_dir);
+        $plugins_dir = Tx_Smarty_Utility_Path::resolvePaths($plugins_dir);
         return parent::addPluginsDir($plugins_dir);
     }
 
@@ -261,7 +270,7 @@ class Tx_Smarty_Facade_Wrapper
     */
     public function setCompileDir($compile_dir)
     {
-        $compile_dir = $this->getConfiguration()->getPaths($compile_dir);
+        $compile_dir = Tx_Smarty_Utility_Path::resolvePaths($compile_dir);
         return parent::setCompileDir($compile_dir);
     }
 
@@ -275,7 +284,7 @@ class Tx_Smarty_Facade_Wrapper
     */
     public function setCacheDir($cache_dir)
     {
-        $cache_dir = $this->getConfiguration()->getPaths($cache_dir);
+        $cache_dir = Tx_Smarty_Utility_Path::resolvePaths($cache_dir);
         return parent::setCacheDir($cache_dir);
     }
 
@@ -290,26 +299,8 @@ class Tx_Smarty_Facade_Wrapper
     */
     public function setDebugTemplate($tpl_name)
     {
-        $tpl_name = $this->getConfiguration()->getPaths($tpl_name);
+        $tpl_name = Tx_Smarty_Utility_Path::resolvePaths($tpl_name);
         return parent::setDebugTemplate($tpl_name);
-    }
-
-    /**
-     * @throws Tx_Smarty_Exception_BadMethodCallException
-     * @param $pluginName
-     * @return void
-     */
-    public function loadPlugin($pluginName)
-    {
-// TODO:!!!!
-        return parent::loadPlugin($pluginName);
-        // Modified to throw an exception of the plugin can'be found
-        if (!function_exists($pluginName)) {
-            if (!parent::loadPlugin($pluginName)) {
-                $message = 'Couldn\'t find smarty plugin "' . $pluginName . '"!';
-                throw new Tx_Smarty_Exception_BadMethodCallException($message, 1322296921);
-            }
-        }
     }
 
 
@@ -329,6 +320,7 @@ class Tx_Smarty_Facade_Wrapper
             return $this->getParentObject();
 
         } elseif ($property === 'cObj') {
+            // TODO: Remove this, Use the cObj Proxy instead!
             return $this->getContentObject();
 
         } elseif ($property === 'path_to_template_directory') {
@@ -363,6 +355,9 @@ class Tx_Smarty_Facade_Wrapper
         } elseif ($property === 'path_to_language_file') {
             $this->setLanguageFile($value);
 
+        } elseif ($property === 'relPathToLanguageFile') {
+            $this->setLanguageFile($value);
+
         } else {
             throw new InvalidArgumentException('Attempted to set unknown smarty property "' . $property . '"!', 1322384939);
         }
@@ -387,6 +382,19 @@ class Tx_Smarty_Facade_Wrapper
      * @return void
      * @deprecated use setLanguageFile() instead
      */
+    public function setRelPathToLanguageFile($path_to_language_file)
+    {
+        $this->setLanguageFile($path_to_language_file);
+    }
+
+    /**
+     *
+     * Set the language file
+     *
+     * @param $path_to_language_file
+     * @return void
+     * @deprecated use setLanguageFile() instead
+     */
     public function setPathToLanguageFile($path_to_language_file)
     {
         $this->setLanguageFile($path_to_language_file);
@@ -399,7 +407,7 @@ class Tx_Smarty_Facade_Wrapper
      * @param $smartyVar
      * @param $smartyValue
      * @return void
-     * @deprecated use accessors instead, e.g. setSmartyVar(smartyValue)
+     * @deprecated use accessors instead. For example setCacheLifetime(3600)
      */
     public function setSmartyVar($smartyVar, $smartyValue)
     {

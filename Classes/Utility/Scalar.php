@@ -31,45 +31,25 @@
  **/
 
 
-class Tx_Smarty_Utility_Typo3   
+
+class Tx_Smarty_Utility_Scalar
 {
-
-    /*public function getContentObject($type, $setup)
+    /**
+     * Converts strings like "off" or "yes" to equivalent boolean values
+     *
+     * @param $string 
+     * @return mixed
+     */
+    public function booleanize($string)
     {
-        // Gets the content object from the current frontend instance
-        if (self::isFeInstance()) {
-            $contentObject =  $GLOBALS['TSFE']->cObj->cObjGetSingle($type, $setup);
-
-        // Throws an exception when attempting to access tdlib_cObj from the backend
-        // TODO: Simulate a frontend environment (see extBase/Fluid)
-        } elseif(self::isBeInstance()) {
-            throw new Exception('Not here!');
-
-        // Something went seriously wrong: there's neither a valid backend
-        // nor frontend environment available!
-        } else {
-            throw new Exception('WTF');
+        $bool = $string;
+        if (is_scalar($string)) {
+            if (preg_match("/^(on|true|yes)$/i", trim($string))) {
+                $bool = true;
+            } elseif (preg_match("/^(off|false|no)$/i", trim($string))) {
+                $bool = false;
+            }
         }
-
-        //
-        return $contentObject;
-    }*/
-
-    /**
-     * @static
-     * @return bool
-     */
-    public static function isFeInstance()
-    {
-        return (boolean) (TYPO3_MODE === 'FE' && $GLOBALS['TSFE'] instanceof tslib_fe);
-    }
-
-    /**
-     * @static
-     * @return bool
-     */
-    public static function isBeInstance()
-    {
-        return (boolean) (TYPO3_MODE === 'BE' && $GLOBALS['BE_USER'] instanceof t3lib_tsfeBeUserAuth);
+        return $bool;
     }
 }

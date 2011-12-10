@@ -30,7 +30,7 @@
  **/
 
 
-class Tx_Smarty_Facade_Configuration
+class Tx_Smarty_Core_Configuration
 {
     /**
      * @var null|ReflectionClass
@@ -38,7 +38,7 @@ class Tx_Smarty_Facade_Configuration
     private $smartyClass            = null;
 
     /**
-     * @var null|Tx_Smarty_Facade_Wrapper
+     * @var null|Tx_Smarty_Core_Wrapper
      */
     private $smartyInstance         = null;
 
@@ -58,11 +58,11 @@ class Tx_Smarty_Facade_Configuration
     const ADDER_ACTION              = 'add';
     
     /**
-     * @param Tx_Smarty_Facade_Wrapper $smartyInstance
+     * @param Tx_Smarty_Core_Wrapper $smartyInstance
      */
-    public function __construct(Tx_Smarty_Facade_Wrapper $smartyInstance)
+    public function __construct(Tx_Smarty_Core_Wrapper $smartyInstance)
     {
-        if($smartyInstance instanceof Tx_Smarty_Facade_Wrapper) {
+        if($smartyInstance instanceof Tx_Smarty_Core_Wrapper) {
             $this->smartyInstance = $smartyInstance;
             $this->smartyClass = new ReflectionClass($smartyInstance);
         } else {
@@ -72,7 +72,9 @@ class Tx_Smarty_Facade_Configuration
     }
 
     /**
-     * Handles accessors (get, set, add)
+     * Manages smarty configuration settings by handling accessors (get, set and add). For example
+     * $smarty->setCacheLifetime(12000) would be translated to setting the smarty property $cache_lifetime
+     * to a value of 12000, similairly $smarty->getCacheLifetime will return the current value for $cache_lifetime.
      *
      * @magic
      * @throws BadMethodCallException|InvalidArgumentException
@@ -82,15 +84,16 @@ class Tx_Smarty_Facade_Configuration
      */
     public final function __call($method, array $args = array())
     {
-        // Gets the action from the method call and throws
-        // an exception for any unrecognized actions.
+        // Gets the accessor from the method name and throws an execption
+        // if the method call is not a valid accessor.
         $action = self::getActionFromMethod($method);
         if(!self::hasAction($action)) {
             $message = 'Unknown action "' . $action . '" in method "' . $method .'"!';
             throw new Tx_Smarty_Exception_BadMethodCallException($message, 1320785456);
         }
 
-        // Catches adders without a corresponding method in smarty
+        // Catches adders without a corresponding method in smarty, i.e. there are no
+        // magic adders and the corresponding method must exist in the smarty class.
         if(self::isAdder($action) && !$this->smartyClass->hasMethod($method)) {
             $message = 'Method "' . $method . '" is not a valid smarty setter!';
             throw new Tx_Smarty_Exception_BadMethodCallException($message, 1320785472);
@@ -99,7 +102,16 @@ class Tx_Smarty_Facade_Configuration
         // Gets the property from the method call (the first three characters of the
         // method are the action, the remaining characters the property) and formats
         // it correctly, i.e. "template_dir" is extracted from "getTemplateDir"
-        $property = t3lib_div::camelCaseToLowerCaseUnderscored(substr($method, 3));
+        if(strlen($method) > 3) {
+            $property = t3lib_div::camelCaseToLowerCaseUnderscored(substr($method, 3));
+
+        // Alternatively if the method is just the accessor, e.g. set('template_dir', 'some/path')
+        // then the property is the first argument. And the method is constructed from the action
+        // and the property.
+        } else {
+            $property = array_shift($args);
+            $method = $action . t3lib_div::underscoredToLowerCamelCase($property);
+        }
 
         // Catches unknown smarty properties
         if(!$this->smartyClass->hasProperty($property)) {
@@ -110,8 +122,8 @@ class Tx_Smarty_Facade_Configuration
         if(self::isSetter($action) || self::isAdder($action)) {
 
             // Resolves directories or files to absolute paths
-            if(!empty($args) && (self::isDir($args[0]) || self::isFile($args[0]))) {
-                $args[0] = self::getPath($args[0]);
+            if(!empty($args) && (Tx_Smarty_Utility_Smarty::isPathSetting($args[0]))) {
+                $args[0] = Tx_Smarty_Utility_Path::resolvePaths($args[0]);
             }
 
             // Use smarty's setter or adder if available
@@ -143,7 +155,9 @@ class Tx_Smarty_Facade_Configuration
     }
 
     /**
-     * @static
+     * Determines the kind of accessor from the method name, e.g. addTemplateDir is
+     * an adder, setCacheDir is a setter etc.
+     *
      * @param $method
      * @return string
      */
@@ -153,7 +167,8 @@ class Tx_Smarty_Facade_Configuration
     }
 
     /**
-     * @static
+     * Checks if the method is a valid accessor
+     *
      * @param $action
      * @return bool
      */
@@ -163,7 +178,8 @@ class Tx_Smarty_Facade_Configuration
     }
 
     /**
-     * @static
+     * Checks if the method is a getter
+     *
      * @param $action
      * @return bool
      */
@@ -173,7 +189,8 @@ class Tx_Smarty_Facade_Configuration
     }
 
     /**
-     * @static
+     * Checks if the method is a setter
+     *
      * @param $action
      * @return bool
      */
@@ -182,65 +199,14 @@ class Tx_Smarty_Facade_Configuration
         return (boolean) ((string) $action === self::SETTER_ACTION);
     }
 
-
-
-
-
-
-
-
-
-    
-
     /**
-     * @static
-     * @param $dirs
-     * @return array
-     */
-    public function getPaths($dirs)
-    {
-        $paths = null;
-        if (is_array($dirs)) {
-            while($dir = array_shift($dirs)) {
-                $path = t3lib_div::getFileAbsFileName($dir);
-                $paths[] = (is_dir($path) && substr($path, -1) !== DS) ? $path . DS : $path;
-            }
-        } elseif (is_scalar($dirs)) {
-            $paths  = t3lib_div::getFileAbsFileName($dirs);
-            $paths .= (is_dir($paths) && substr($paths, -1) !== DS) ? DS : '';
-        }
-
-        // NOTE: No attempt is made to validate file path(s)
-        return $paths;
-    }
-
-    /**
-     * @static
+     * Checks if the method is a adder
+     *
      * @param $action
      * @return bool
      */
     private static function isAdder($action)
     {
         return (boolean) ((string) $action === self::ADDER_ACTION);
-    }
-
-    /**
-     * @static
-     * @param $setting
-     * @return bool
-     */
-    private static function isDir($setting)
-    {
-        return (boolean) (strtolower(substr($setting, -3)) === 'dir');
-    }
-
-    /**
-     * @static
-     * @param $setting
-     * @return bool
-     */
-    private static function isFile($setting)
-    {
-        return (boolean) (strtolower(substr($setting, -4)) === 'file');
     }
 }
