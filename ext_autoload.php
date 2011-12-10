@@ -1,6 +1,6 @@
 <?php
 
-	if(!defined ('TYPO3_MODE')) die ('Access denied.');
+    if(!defined ('TYPO3_MODE')) die ('Access denied.');
 
     // Defines shorthand directory separator constant
     if(!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
@@ -19,9 +19,11 @@
     // List of autoload classes
     return array(
         'smartybc'                          => $smartyPath . 'SmartyBC.class.php',
-        'tx_smarty_facade_configuration'    => $classPath  . 'Facade'  . DS . 'Configuration.php',
-        'tx_smarty_facade_wrapper'          => $classPath  . 'Facade'  . DS . 'Wrapper.php',
-        'tx_smarty_facade_builder'          => $classPath  . 'Facade'  . DS . 'Builder.php',
+        'tx_smarty_core_configuration'      => $classPath  . 'Core'  . DS . 'Configuration.php',
+        'tx_smarty_core_wrapper'            => $classPath  . 'Core'  . DS . 'Wrapper.php',
+        'tx_smarty_core_builder'            => $classPath  . 'Core'  . DS . 'Builder.php',
+        'tx_smarty_core_cobjectproxy'       => $classPath  . 'Core'  . DS . 'CobjectProxy.php',
+        'tx_smarty'                         => $classPath  . 'Backport'  . DS . 'class.tx_smarty.php',
         'tx_smarty_exception_exception'     => $classPath  . 'Exception'  . DS . 'Exception.php',
         'tx_smarty_exception_badmethodcallexception' => $classPath  . 'Exception'  . DS . 'BadMethodCallException.php',
         'tx_smarty_exception_invalidargumentexception' => $classPath  . 'Exception'  . DS . 'InvalidArgumentException.php',
@@ -31,7 +33,8 @@
         'tx_smarty_utility_array'           => $classPath  . 'Utility' . DS . 'Array.php',
         'tx_smarty_utility_typo3'           => $classPath  . 'Utility' . DS . 'Typo3.php',
         'tx_smarty_utility_smarty'          => $classPath  . 'Utility' . DS . 'Smarty.php',
-        't3lib_tsparser'                    => PATH_t3lib  . 'class.t3lib_tsparser.php',
+        'tx_smarty_utility_path'            => $classPath  . 'Utility' . DS . 'Path.php',
+        'tx_smarty_utility_scalar'          => $classPath  . 'Utility' . DS . 'Scalar.php',
         'tx_smarty_filters_dotnotation'     => $classPath  . 'Filters' . DS . 'DotNotation.php',
     );
 

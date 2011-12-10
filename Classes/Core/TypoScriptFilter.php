@@ -32,7 +32,7 @@
  ***************************************************************/
 
 
-class Tx_Smarty_Filters_DotNotation
+class Tx_Smarty_Core_TypoScriptFilter
 {
     /**
      *
