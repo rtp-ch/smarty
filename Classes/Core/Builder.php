@@ -24,17 +24,34 @@
 
 class Tx_Smarty_Core_Builder
 {
+    private static $pluginDirs = array(
+        'EXT:smarty/Classes/SmartyPlugins/Filters',
+        'EXT:smarty/Classes/SmartyPlugins/Frontend'
+    );
+
     public function &Get(array $options = array())
     {
         // Creates an instance of smarty
         $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Core_Wrapper');
+
+        //
+        $smartyInstance->addPluginsDir(self::$pluginDirs);
+
+        // Cache and compile dirs in typo3temp
+        $smartyInstance->setCacheDir('typo3temp/smarty_cache/');
+        $smartyInstance->setCompileDir('typo3temp/smarty_compile/');
+
+        // Register the TypoScript Filter which allows creating parameters using the
+        // dot notation, e.g. {plugin filter.this.notation="bla"}
+        $smartyInstance->registerFilter('pre', array('Tx_Smarty_Filters_DotNotation', 'pre'));
+        $smartyInstance->registerFilter('post', array('Tx_Smarty_Filters_DotNotation', 'post'));
 
         // Registers a reference to the calling class. Apparently "$this" is
         // accessible when referenced statically in a non-static context...
         $pObj = is_object($this) ? $this : new stdClass();
         $smartyInstance->setParentObject($pObj);
 
-        // Gets the smarty configuration
+        // Gets and parses the smarty configuration from TypoScript
         $setup = array();
         if(isset($smartyInstance->getParentObject()->prefixId)) {
             $prefixId = $smartyInstance->getParentObject()->prefixId;
@@ -43,7 +60,7 @@ class Tx_Smarty_Core_Builder
         $setup = t3lib_div::array_merge_recursive_overrule($setup, $options);
         $setup = Tx_Smarty_Utility_TypoScript::arrayStdWrap($setup);
 
-        // Applies the smarty configuration
+        // Applies the smarty configuration to the instance
         foreach($setup as $key => $value) {
             $smartyInstance->set($key, $value);
         }
