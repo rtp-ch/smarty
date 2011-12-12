@@ -32,7 +32,7 @@ class Tx_Smarty_Core_Builder
     public function &Get(array $options = array())
     {
         // Creates an instance of smarty
-        $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Core_Wrapper');
+        $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Core_Wrapper', $options);
 
         //
         $smartyInstance->addPluginsDir(self::$pluginDirs);
