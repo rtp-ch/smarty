@@ -72,9 +72,11 @@ class Tx_Smarty_Core_Configuration
     }
 
     /**
-     * Manages smarty configuration settings by handling accessors (get, set and add). For example
-     * $smarty->setCacheLifetime(12000) would be translated to setting the smarty property $cache_lifetime
-     * to a value of 12000, similairly $smarty->getCacheLifetime will return the current value for $cache_lifetime.
+     * Manages smarty configuration settings by handling accessors (get, set and add). Adders are limited to
+     * corresponding smarty methods (i.e. there are a limited number of adders), but setter/getters can be used for all
+     * smarty properties. For example, $smarty->setCacheLifetime(12000) is equivalent to $smarty->cache_lifetime = 12000,
+     * similarly $smarty->getCacheLifetime() will return $smarty->cache_lifetime. In the same vein the methods
+     * $smarty->set('cache_lifetime', 12000) and $smarty->get('cache_lifetime') can be used to set/get smarty properties.
      *
      * @magic
      * @throws BadMethodCallException|InvalidArgumentException
@@ -90,13 +92,6 @@ class Tx_Smarty_Core_Configuration
         if(!self::hasAction($action)) {
             $message = 'Unknown action "' . $action . '" in method "' . $method .'"!';
             throw new Tx_Smarty_Exception_BadMethodCallException($message, 1320785456);
-        }
-
-        // Catches adders without a corresponding method in smarty, i.e. there are no
-        // magic adders and the corresponding method must exist in the smarty class.
-        if(self::isAdder($action) && !$this->smartyClass->hasMethod($method)) {
-            $message = 'Method "' . $method . '" is not a valid smarty setter!';
-            throw new Tx_Smarty_Exception_BadMethodCallException($message, 1320785472);
         }
 
         // Gets the property from the method call (the first three characters of the
@@ -118,6 +113,12 @@ class Tx_Smarty_Core_Configuration
             throw new InvalidArgumentException('Unknown property "' . $property . '" in method "' . $method .'"!', 1320785462);
         }
 
+        // Catches adders without a corresponding method in smarty.
+        if(self::isAdder($action) && !$this->smartyClass->hasMethod($method)) {
+            $message = 'Method "' . $method . '" is not a valid smarty setter!';
+            throw new Tx_Smarty_Exception_BadMethodCallException($message, 1320785472);
+        }
+
         // Sets or adds smarty configuration setting
         if(self::isSetter($action) || self::isAdder($action)) {
 
@@ -131,7 +132,7 @@ class Tx_Smarty_Core_Configuration
                 call_user_func(array($this->smartyInstance, $method), $args);
 
             // Set the smarty property directly
-            } elseif($this->smartyClass->hasProperty($property)) {
+            } else {
                 $this->smartyInstance->{$property} = $args[0];
 
             }
@@ -142,12 +143,12 @@ class Tx_Smarty_Core_Configuration
         // Gets smarty configuration setting
         } else {
 
-            // Use smarty's adder if available
+            // Use smarty's getter if available
             if($this->smartyClass->hasMethod($method)) {
                 return call_user_func(array($this->smartyInstance, $method));
 
             // Get the smarty property directly
-            } elseif($this->smartyClass->hasProperty($property)) {
+            } else {
                 return $this->smartyInstance->{$property};
 
             }
