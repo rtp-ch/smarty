@@ -33,23 +33,27 @@
 
 /**
  *
- * Smarty plugin "headerData"
+ * Smarty plugin "number_format"
  * -------------------------------------------------------------
- * File:    block.headerData.php
- * Type:    block
- * Name:    Insert header data
+ * File:    modifier.number_format.php
+ * Type:    modifier
+ * Name:    Format
  * Version: 1.0
  * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
- * Purpose: Inject a block of text (e.g. javascript) into the page header
- * Example: {headerData}<script type="text/javascript">document.write("Hello World!")</script>{/headerData}
+ * Purpose: Format a string as a number using "number_format"
+ * Example: {$number|number_format:2:".":"'"}
  * -------------------------------------------------------------
  *
  **/
 
-
-	function smarty_block_headerData($params, $content, &$smarty) {
-		$GLOBALS["TSFE"]->additionalHeaderData[] = $content;
-		return;
-	}
-
-?>
+    /**
+     * @param $string
+     * @param int $decimals
+     * @param string $dec_point
+     * @param string $thousands_sep
+     * @return string
+     */
+    function smarty_modifier_number_format($string, $decimals = 2, $dec_point = '.', $thousands_sep = '')
+    {
+        return number_format($string, $decimals, $dec_point, $thousands_sep);
+    }
