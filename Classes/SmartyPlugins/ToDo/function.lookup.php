@@ -52,7 +52,7 @@
  *
  **/
 
-
+    // TODO: Model logic in the presentation layer
 	function smarty_function_lookup($params, &$smarty) {
 
 		// Check for a valid FE instance (this plugin cannot be run in the backend)

@@ -33,43 +33,22 @@
 
 /**
  *
- * Smarty plugin "typoscript"
+ * Smarty plugin "br2nl"
  * -------------------------------------------------------------
- * File:    block.typoscript.php
- * Type:    block
- * Name:    TypoScript
+ * File:    modifier.br2nl.php
+ * Type:    modifier
+ * Name:    br2nl
  * Version: 1.0
  * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
- * Purpose: Interprets the text between the tags as TypoScript, parses it and returns the result.
- * Example:	{typoscript}
- * 				10 = TEXT
- * 				10.value = hello world
- * 			{/typoscript}
+ * Purpose: Replaces html br tags in a string with newlines
+ * Example: {$someVar|br2nl}
  * -------------------------------------------------------------
  *
  **/
 
 
-	function smarty_block_typoscript($params, $content, &$smarty) {
-	
-		// Check for a valid FE instance (this plugin cannot be run in the backend)
-		if(!tx_smarty_div::validateTypo3Instance('FE')) {
-			$smarty->trigger_error($smarty->fePluginError);
-			return false;
-		}		
-
-		// Make sure there is a valid instance of tslib_cObj
-		if (!method_exists($smarty->cObj,'cObjGet')) {
-		    $smarty->trigger_error('TYPO3 Method cObjGet unavailable in smarty_block_typoscript');
-		    return;
-		}
-
-		// Get TypoScript from $params
-		$setup = tx_smarty_div::parseTypoScript($content);
-
-		// return the TypoScript object
-		if($setup) return $smarty->cObj->cObjGet($setup);
-
-	}
-
-?>
+    function smarty_modifier_nl2space($str)
+    {
+        $content = preg_replace('/(\s{0,}[\r\n|\r|\n|\t])/m', ' ', $content); // strip newlines, tabs etc.
+        return preg_replace('/(\s{2,})/m', ' ', $content);  // Turn multiple spaces into single spaces
+    }
