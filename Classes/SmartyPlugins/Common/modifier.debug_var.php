@@ -4,8 +4,8 @@
  *  Copyright notice
  *
  *
- *	Created by Simon Tuck <stu@rtpartner.ch>
- *	Copyright (c) 2006-2007, Rueegg Tuck Partner GmbH (wwww.rtpartner.ch)
+ *    Created by Simon Tuck <stu@rtpartner.ch>
+ *    Copyright (c) 2006-2007, Rueegg Tuck Partner GmbH (wwww.rtpartner.ch)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,10 +24,10 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  *
- *	@copyright 	2006, 2007 Rueegg Tuck Partner GmbH
- *	@author 	Simon Tuck <stu@rtpartner.ch>
- *	@link 		http://www.rtpartner.ch/
- *	@package 	Smarty (smarty)
+ *    @copyright     2006, 2007 Rueegg Tuck Partner GmbH
+ *    @author     Simon Tuck <stu@rtpartner.ch>
+ *    @link         http://www.rtpartner.ch/
+ *    @package     Smarty (smarty)
  *
  ***************************************************************/
 
@@ -39,23 +39,33 @@
  * Type:    modifier
  * Name:    Debug Variable
  * Version: 1.2
- * Author:	Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
+ * Author:    Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Uses the class dBug to dump a variable to a popup window
- * Example:	{$assignedPHPvariable|@debug_var}
+ * Example:    {$assignedPHPvariable|@debug_var}
  * -------------------------------------------------------------
  *
  **/
 
-	// Include debug class
-    if(!class_exists('krumo')) {
-	    require_once(t3lib_extMgm::extPath('smarty') . 'lib/krumo/class.krumo.php');
-    }
-
-	function smarty_modifier_debug_var($var)
+    /**
+     * Smarty plugin "debug_var"
+     * -------------------------------------------------------------
+     * File:    modifier.debug_var.php
+     * Type:    modifier
+     * Name:    Debug Variable
+     * Version: 1.2
+     * Author:    Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
+     * Purpose: Uses the class dBug to dump a variable to a popup window
+     * Example:    {$assignedPHPvariable|@debug_var}
+     * -------------------------------------------------------------
+     *
+     * @param $var
+     * @return string
+     */
+    function smarty_modifier_debug_var($var)
     {
         ob_start();
-		krumo($var);
-		$output = ob_get_contents();
-		ob_end_clean();
-		return $output;
+        krumo($var);
+        $output = ob_get_contents();
+        ob_end_clean();
+        return $output;
     }

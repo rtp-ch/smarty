@@ -32,38 +32,24 @@
  ***************************************************************/
 
     /**
-     * Smarty plugin "data"
+     *
+     * Smarty plugin "get_debug_info"
      * -------------------------------------------------------------
-     * File:    function.data.php
+     * File:    function.function_get_debug_info.php
      * Type:    function
-     * Name:    Data
-     * Version: 2.0
+     * Name:    Get debug info
+     * Version: 1.1
      * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
-     * Purpose: Implements the TypoScript data type "getText". For details check
-     *          http://typo3.org/documentation/document-library/references/doc_core_tsref/current/view/2/2/
-     * Example: {data source="page:title"} Gets the current page title
-     * Example: {data source="DB:tt_content:234:header"} Gets the header for content id 234
-     * Example: {data source="DB:TSFE:lang"} Gets the current language key
-     * Note:    Use the parameter "source" to define the type & pointer for the getText function
+     * Purpose: Gets debug info for the smarty debug template
+     * Example: {get_debug_info}
      * -------------------------------------------------------------
      *
      * @param $params
      * @param Smarty_Internal_Template $template
-     * @return mixed
-     * @throws Tx_Smarty_Exception_InvalidArgumentException
+     * @return null
+     * @deprecated
      */
-    function smarty_function_data($params, Smarty_Internal_Template $template)
+    function smarty_function_get_debug_info($params, Smarty_Internal_Template $template)
     {
-        //
-        $params = array_change_key_case($params, CASE_LOWER);
-
-        //
-        if (isset($params['source'])) {
-            $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
-            return $cObj->getData($params['source'], null);
-
-        // Throws an exception if the source setting is missing
-        } else {
-            throw new Tx_Smarty_Exception_InvalidArgumentException('Missing required "source" setting for smarty plugin "data"!', 1324020249);
-        }
+        return null;
     }
