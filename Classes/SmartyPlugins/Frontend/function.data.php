@@ -31,32 +31,39 @@
  *
  ***************************************************************/
 
-
     /**
-     *
-     * Smarty plugin "typoscript"
+     * Smarty plugin "data"
      * -------------------------------------------------------------
-     * File:    block.typoscript.php
-     * Type:    block
-     * Name:    TypoScript
+     * File:    function.data.php
+     * Type:    function
+     * Name:    Data
      * Version: 2.0
-     * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
-     * Purpose: Interprets the text between the tags as TypoScript, parses it and returns the result.
-     * Example:    {typoscript}
-     *                 10 = TEXT
-     *                 10.value = hello world
-     *             {/typoscript}
+     * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
+     * Purpose: Implements the TypoScript data type "getText". For details check
+     *             http://typo3.org/documentation/document-library/references/doc_core_tsref/current/view/2/2/
+     * Example: {data source="page:title"} Gets the current page title
+     * Example: {data source="DB:tt_content:234:header"} Gets the header for content id 234
+     * Example: {data source="DB:TSFE:lang"} Gets the current language key
+     * Note:    Use the parameter "source" to define the type & pointer for the getText function
      * -------------------------------------------------------------
      *
      * @param $params
-     * @param $content
      * @param Smarty_Internal_Template $template
      * @return mixed
+     * @throws Tx_Smarty_Exception_InvalidArgumentException
      */
-    function smarty_block_typoscript($params, $content, Smarty_Internal_Template $template)
+    function smarty_function_data($params, Smarty_Internal_Template $template)
     {
-        $ts = t3lib_div::makeInstance('t3lib_TSparser');
-        $ts->parse($content);
-        $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
-        return $cObj->cObjGet($ts->setup);
+        //
+        $params = array_change_key_case($params, CASE_LOWER);
+
+        //
+        if (isset($params['source'])) {
+            $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
+            return $cObj->getData($params['source'], null);
+
+        // Throws an exception if the source setting is missing
+        } else {
+            throw new Tx_Smarty_Exception_InvalidArgumentException('Missing required "source" setting for smarty plugin "data"!', 1324020249);
+        }
     }

@@ -47,7 +47,7 @@
  **/
 
 
-    function smarty_modifier_nl2space($str)
+    function smarty_modifier_nl2space($content)
     {
         $content = preg_replace('/(\s{0,}[\r\n|\r|\n|\t])/m', ' ', $content); // strip newlines, tabs etc.
         return preg_replace('/(\s{2,})/m', ' ', $content);  // Turn multiple spaces into single spaces

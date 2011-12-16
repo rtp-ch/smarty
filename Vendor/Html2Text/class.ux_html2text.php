@@ -23,23 +23,68 @@
 ***************************************************************/
 
 /**
- * @copyright 	2007 Rueegg Tuck Partner GmbH
- * @author 		Simon Tuck <stu@rtpartner.ch>
- * @link 		http://www.rtpartner.ch/
- * @package 	Smarty (smarty)
+ * @copyright     2007 Rueegg Tuck Partner GmbH
+ * @author         Simon Tuck <stu@rtpartner.ch>
+ * @link         http://www.rtpartner.ch/
+ * @package     Smarty (smarty)
  **/
-
-// Include html2text class
-require_once(t3lib_extMgm::extPath('smarty').'lib/class.html2text.php');
 
 class ux_html2text extends html2text
 {
+    /**
+     * @var bool
+     */
+    public $appendLinks         = false;
 
-    var $appendLinks = false;
-    var $stripLinks = false;
-    var $stripLines = false;
+    /**
+     * @var bool
+     */
+    public $stripLinks          = false;
 
-    function _convert()
+    /**
+     * @var bool
+     */
+    public $stripLines          = false;
+
+    /**
+     * @param $behaviour
+     * @return ux_html2text
+     */
+    public function setLinkBehaviour(string $behaviour = '')
+    {
+        $behaviour = strtolower(trim($behaviour));
+        if ($behaviour === 'strip') {
+            $n = array_search('$this->_build_link_list("\\1", "\\2")', $this->replace);
+            if($n) $this->replace[$n] = '';
+            $this->stripLinks = true;
+        } elseif ($behaviour === 'append') {
+            $this->appendLinks = true;
+        }
+        return $this;
+    }
+
+    /**
+     * @param bool $stripLines
+     * @return ux_html2text
+     */
+    public function setLineBehaviour(boolean $stripLines = false)
+    {
+        $this->stripLines = $stripLines;
+        return $this;
+    }
+
+    /**
+     *  Workhorse function that does actual conversion.
+     *
+     *  First performs custom tag replacement specified by $search and
+     *  $replace arrays. Then strips any remaining HTML tags, reduces whitespace
+     *  and newlines to a readable format, and word wraps the text to
+     *  $width characters.
+     *
+     *  @access private
+     *  @return void
+     */
+    public function _convert()
     {
         // Variables used for building the link list
         $this->_link_count = 0;
@@ -54,9 +99,10 @@ class ux_html2text extends html2text
         $text = strip_tags($text, $this->allowed_tags);
 
         // Bring down number of empty lines to 2 max
+        // XXX: [STU] Stripping lines is now optional
         if($this->stripLines) {
-	        $text = preg_replace("/\n\s+\n/", "\n\n", $text);
-	        $text = preg_replace("/[\n]{3,}/", "\n\n", $text);
+            $text = preg_replace("/\n\s+\n/", "\n\n", $text);
+            $text = preg_replace("/[\n]{3,}/", "\n\n", $text);
         }
 
         // Add link list
@@ -95,7 +141,7 @@ class ux_html2text extends html2text
              substr($link, 0, 7) == 'mailto:' ) {
             $this->_link_count++;
             $this->_link_list .= "[" . $this->_link_count . "] $link\n";
-// XXX: Changed definition of $additional
+// XXX: [STU] Changed definition of $additional
             $additional = $this->_build_additional($link);
         } elseif ( substr($link, 0, 11) == 'javascript:' ) {
             // Don't count the link; ignore it
@@ -108,8 +154,8 @@ class ux_html2text extends html2text
                 $this->_link_list .= '/';
             }
             $this->_link_list .= "$link\n";
-// XXX: Changed definition of $additional
-			$additional = $this->_build_additional($this->url.'/'.$link);
+// XXX: [STU] Changed definition of $additional
+            $additional = $this->_build_additional($this->url.'/'.$link);
         }
 
         return $display . $additional;
@@ -118,9 +164,9 @@ class ux_html2text extends html2text
     function _build_additional($link)
     {
         if($this->stripLinks) {
-        	return '';
+            return '';
         } elseif($this->appendLinks) {
-        	return ' [' . $this->_link_count . ']';
+            return ' [' . $this->_link_count . ']';
         }
         return ' [' . $link . ']';
     }

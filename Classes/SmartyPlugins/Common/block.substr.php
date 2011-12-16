@@ -31,20 +31,6 @@
  *
  ***************************************************************/
 
-/**
- *
- * Smarty plugin "substr"
- * -------------------------------------------------------------
- * File:    block.substr.php
- * Type:    block
- * Name:    Substring
- * Version: 1.0
- * Author:    Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
- * Purpose: Apply PHP substr to a block of text
- * Example:    {substr start="-1" length="5"}Some text{/substr}
- * -------------------------------------------------------------
- *
- **/
 
     /**
      * Smarty plugin "substr"
