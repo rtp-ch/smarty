@@ -39,7 +39,8 @@
         'tx_smarty_smartyplugins_core_extresource'       => $classPath  . 'SmartyPlugins' . DS . 'Core' . DS . 'ExtResource.php',
         'tx_smarty_smartyplugins_core_pathresource'      => $classPath  . 'SmartyPlugins' . DS . 'Core' . DS . 'PathResource.php',
         'ux_html2text'                      => $vendorPath . DS . 'Html2Text' . DS . 'class.ux_html2text.php',
-        'html2text'                         => $vendorPath . DS . 'Html2Text' . DS . 'class.html2text.php'
+        'html2text'                         => $vendorPath . DS . 'Html2Text' . DS . 'class.html2text.php',
+        'krumo'                             => $vendorPath . DS . 'Krumo' . DS . 'class.krumo.php',
     );
 
 

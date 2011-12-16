@@ -26,8 +26,8 @@
  *
  * Smarty plugin "krumo"
  * -------------------------------------------------------------
- * File:	function.krumo.php
- * Type:	function
+ * File:    function.krumo.php
+ * Type:    function
  * Version: 2.0
  * Author:  Manuel Stofer <mst@rtp.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Debug with krumo
@@ -35,22 +35,36 @@
  *
  **/
 
-
-    if(!class_exists('krumo')) {
-	    require_once(t3lib_extMgm::extPath('smarty') . 'lib/krumo/class.krumo.php');
+    /**
+     * Smarty plugin "krumo"
+     * -------------------------------------------------------------
+     * File:    function.krumo.php
+     * Type:    function
+     * Version: 2.0
+     * Author:  Manuel Stofer <mst@rtp.ch>, Rueegg Tuck Partner GmbH
+     * Purpose: Debug with krumo
+     * -------------------------------------------------------------
+     *
+     * @param $params
+     * @param Smarty_Internal_Template $template
+     * @return mixed
+     */
+    function smarty_function_krumo($params, Smarty_Internal_Template $template)
+    {
+        if(!isset($params['var'])){
+            $var = $template->tpl_vars;
+        } else{
+            $var = $params['var'];
+        }
+        return self::getKrumoDebug($var);
     }
 
-	function smarty_function_krumo($params, &$smarty)
+    function getKrumoDebug($var)
     {
-		if(!isset($params['var'])){
-			$var = $smarty->_tpl_vars;
-		} else{
-			$var = $params['var'];
-		}
+        ob_start();
+        krumo($var);
+        $output = ob_get_contents();
+        ob_end_clean();
 
-		ob_start();
-		krumo($var);
-		$output = ob_get_contents();
-		ob_end_clean();
-		return $output;
-	}
+        return $output;
+    }
