@@ -43,8 +43,16 @@ class Tx_Smarty_Core_Builder
 
         // Register the TypoScript Filter which allows creating parameters using the
         // dot notation, e.g. {plugin filter.this.notation="bla"}
-        $smartyInstance->registerFilter('pre', array('Tx_Smarty_Filters_DotNotation', 'pre'));
-        $smartyInstance->registerFilter('post', array('Tx_Smarty_Filters_DotNotation', 'post'));
+        $smartyInstance->registerFilter('pre', array('Tx_Smarty_SmartyPlugins_Core_DotNotationFilter', 'pre'));
+        $smartyInstance->registerFilter('post', array('Tx_Smarty_SmartyPlugins_Core_DotNotationFilter', 'post'));
+
+        // Registers "EXT" as a custom smarty resource so that template files can be
+        // referenced as EXT:path/to/my/template.html
+        $smartyInstance->registerResource('EXT', new Tx_Smarty_SmartyPlugins_Core_ExtResource());
+
+        // Register "path" as a resource, mainly for backwards compatibility. Can retrieve a file
+        // from the resource-list. @see t3lib_TStemplate::getFileName()
+        $smartyInstance->registerResource('path', new Tx_Smarty_SmartyPlugins_Core_PathResource());
 
         // Registers a reference to the calling class. Apparently "$this" is
         // accessible when referenced statically in a non-static context...

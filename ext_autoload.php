@@ -35,7 +35,11 @@
         'tx_smarty_utility_smarty'          => $classPath  . 'Utility' . DS . 'Smarty.php',
         'tx_smarty_utility_path'            => $classPath  . 'Utility' . DS . 'Path.php',
         'tx_smarty_utility_scalar'          => $classPath  . 'Utility' . DS . 'Scalar.php',
-        'tx_smarty_filters_dotnotation'     => $classPath  . 'Filters' . DS . 'DotNotation.php',
+        'tx_smarty_smartyplugins_core_dotnotationfilter' => $classPath  . 'SmartyPlugins' . DS . 'Core' . DS . 'DotNotationFilter.php',
+        'tx_smarty_smartyplugins_core_extresource'       => $classPath  . 'SmartyPlugins' . DS . 'Core' . DS . 'ExtResource.php',
+        'tx_smarty_smartyplugins_core_pathresource'      => $classPath  . 'SmartyPlugins' . DS . 'Core' . DS . 'PathResource.php',
+        'ux_html2text'                      => $vendorPath . DS . 'Html2Text' . DS . 'class.ux_html2text.php',
+        'html2text'                         => $vendorPath . DS . 'Html2Text' . DS . 'class.html2text.php'
     );
 
 

@@ -4,8 +4,8 @@
  *  Copyright notice
  *
  *
- *	Created by Simon Tuck <stu@rtpartner.ch>
- *	Copyright (c) 2006-2007, Rueegg Tuck Partner GmbH (wwww.rtpartner.ch)
+ *    Created by Simon Tuck <stu@rtpartner.ch>
+ *    Copyright (c) 2006-2007, Rueegg Tuck Partner GmbH (wwww.rtpartner.ch)
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,15 +24,15 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  *
- *	@copyright 	2006, 2007 Rueegg Tuck Partner GmbH
- *	@author 	Simon Tuck <stu@rtpartner.ch>
- *	@link 		http://www.rtpartner.ch/
- *	@package 	Smarty (smarty)
+ *    @copyright     2006, 2007 Rueegg Tuck Partner GmbH
+ *    @author     Simon Tuck <stu@rtpartner.ch>
+ *    @link         http://www.rtpartner.ch/
+ *    @package     Smarty (smarty)
  *
  ***************************************************************/
 
 
-class Tx_Smarty_Filters_DotNotation
+class Tx_Smarty_SmartyPlugins_Core_DotNotationFilter
 {
     /**
      *

@@ -31,24 +31,6 @@
  *
  ***************************************************************/
 
-/**
- *
- * Smarty plugin "nl2space"
- * -------------------------------------------------------------
- * File:    block.nl2space.php
- * Type:    block
- * Name:    Newlines to spaces
- * Version: 1.0
- * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
- * Purpose: Regex all linebreaks to spaces in a block of text
- * Example: {nl2space}
- *                This is a line of text
- *                This is another line of text
- *                But this will all end up on 1 line...
- *            {/nl2space}
- * -------------------------------------------------------------
- *
- **/
 
     /**
      * Smarty plugin "nl2space"
@@ -74,5 +56,5 @@
     function smarty_block_nl2space($params, $content, Smarty_Internal_Template $template)
     {
         Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_modifier_nl2space');
-        return smarty_modifier_nl2space($params, $content);
+        return smarty_modifier_nl2space($content);
     }

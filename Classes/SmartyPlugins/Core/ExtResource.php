@@ -32,31 +32,21 @@
  ***************************************************************/
 
 
+class Tx_Smarty_SmartyPlugins_Core_ExtResource extends Smarty_Resource_Custom
+{
     /**
+     * fetch template and its modification time from data source
      *
-     * Smarty plugin "typoscript"
-     * -------------------------------------------------------------
-     * File:    block.typoscript.php
-     * Type:    block
-     * Name:    TypoScript
-     * Version: 2.0
-     * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
-     * Purpose: Interprets the text between the tags as TypoScript, parses it and returns the result.
-     * Example:    {typoscript}
-     *                 10 = TEXT
-     *                 10.value = hello world
-     *             {/typoscript}
-     * -------------------------------------------------------------
-     *
-     * @param $params
-     * @param $content
-     * @param Smarty_Internal_Template $template
-     * @return mixed
+     * @param string  $name    template name
+     * @param string  &$source template source
+     * @param integer &$mtime  template modification timestamp (epoch)
      */
-    function smarty_block_typoscript($params, $content, Smarty_Internal_Template $template)
+    protected function fetch($name, &$source, &$mtime)
     {
-        $ts = t3lib_div::makeInstance('t3lib_TSparser');
-        $ts->parse($content);
-        $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
-        return $cObj->cObjGet($ts->setup);
+        $file = t3lib_div::getFileAbsFileName('EXT' . $name);
+        if(is_file($file) && is_readable($file)) {
+            $mtime  = filemtime($file);
+            $source = file_get_contents($file);
+        }
     }
+}

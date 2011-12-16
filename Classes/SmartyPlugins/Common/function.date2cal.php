@@ -50,7 +50,8 @@
 
 	include_once(t3lib_extMgm::siteRelPath('date2cal') . '/src/class.jscalendar.php');
 	
-	function smarty_function_date2cal($params, &$smarty) {
+	function smarty_function_date2cal($params, Smarty_Internal_Template $template)
+    {
 	
 	    static $allowed = array(
 			'date'				=> 'date',
