@@ -25,7 +25,7 @@
 class Tx_Smarty_Core_Builder
 {
     private static $pluginDirs = array(
-        'EXT:smarty/Classes/SmartyPlugins/Filters',
+        'EXT:smarty/Classes/SmartyPlugins/Common',
         'EXT:smarty/Classes/SmartyPlugins/Frontend'
     );
 
@@ -34,7 +34,7 @@ class Tx_Smarty_Core_Builder
         // Creates an instance of smarty
         $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Core_Wrapper', $options);
 
-        //
+        // Sets plugin dirs
         $smartyInstance->addPluginsDir(self::$pluginDirs);
 
         // Cache and compile dirs in typo3temp
@@ -73,6 +73,34 @@ class Tx_Smarty_Core_Builder
             $smartyInstance->set($key, $value);
         }
 
+        // Initializes language file
+        self::setLanguageFile($smartyInstance);
+
         return $smartyInstance;
+    }
+    
+    private static function setLanguageFile($smartyInstance)
+    {
+        if(!$smartyInstance->getLanguageFile()) {
+
+            // Case: language file is undefined and traditional tslib_pibase
+            // scenario is in effect. Tries to get the localllang file from the
+            // extension cofiguration.
+            if (isset($smartyInstance->getParentObject()->extKey)
+                && isset($smartyInstance->getParentObject()->scriptRelPath)) {
+
+                $extKey = $smartyInstance->getParentObject()->extKey;
+                $scriptRelPath = $smartyInstance->getParentObject()->scriptRelPath;
+
+                $langFileBase = t3lib_extMgm::extPath($extKey) . dirname($scriptRelPath) . '/locallang';
+                if (is_file($langFileBase . '.xml')) {
+                    $smartyInstance->setLanguageFile($langFileBase . '.xml');
+                } elseif (is_file($langFileBase . '.php')) {
+                    $smartyInstance->setLanguageFile($langFileBase . '.php');
+                }
+            }
+
+            // TODO: Language file is undefined and extBase scenario is in effect
+        }
     }
 }
