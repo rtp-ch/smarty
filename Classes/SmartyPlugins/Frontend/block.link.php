@@ -64,5 +64,5 @@
     function smarty_block_link($params, $content, Smarty_Internal_Template $template)
     {
         Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_typolink');
-        return smarty_block_header($params, $content, $template);
+        return smarty_block_typolink($params, $content, $template);
     }

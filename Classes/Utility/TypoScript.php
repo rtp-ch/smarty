@@ -38,9 +38,6 @@ class Tx_Smarty_Utility_TypoScript
      */
     public function getSetupFromParameters(array $parameters = array())
     {
-        // Setup is the array of parameters passed to the smarty plugin
-        $setup = array();
-
         // "setup" is a special parameter which can point to a value in the
         // current global TypoScript scope. Retrieves the matching value from
         // the current global TypoScript scope if "setup" is defined.
