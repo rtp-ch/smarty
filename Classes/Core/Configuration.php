@@ -105,11 +105,11 @@ class Tx_Smarty_Core_Configuration
         // and the property.
         } else {
             $property = array_shift($args);
-            $method = $action . t3lib_div::underscoredToLowerCamelCase($property);
+            $method = $action . t3lib_div::underscoredToUpperCamelCase($property);
         }
 
         // Catches unknown smarty properties
-        if(!$this->smartyClass->hasProperty($property)) {
+        if(!$this->smartyClass->hasProperty($property) && !$this->smartyClass->hasMethod($method)) {
             throw new InvalidArgumentException('Unknown property "' . $property . '" in method "' . $method .'"!', 1320785462);
         }
 
@@ -117,6 +117,12 @@ class Tx_Smarty_Core_Configuration
         if(self::isAdder($action) && !$this->smartyClass->hasMethod($method)) {
             $message = 'Method "' . $method . '" is not a valid smarty setter!';
             throw new Tx_Smarty_Exception_BadMethodCallException($message, 1320785472);
+        }
+
+        // Sepcial case: never overwrite plugins_dir!
+        if ($property === 'plugins_dir') {
+            $action = 'add';
+            $method = $action . t3lib_div::underscoredToUpperCamelCase($property);
         }
 
         // Sets or adds smarty configuration setting
@@ -129,7 +135,7 @@ class Tx_Smarty_Core_Configuration
 
             // Use smarty's setter or adder if available
             if($this->smartyClass->hasMethod($method)) {
-                call_user_func(array($this->smartyInstance, $method), $args);
+                call_user_func(array($this->smartyInstance, $method), $args[0]);
 
             // Set the smarty property directly
             } else {
