@@ -118,7 +118,7 @@ class Tx_Smarty_Core_Wrapper
     {
         $this->language_file = array();
         foreach ((array) $language_file as $k => $v) {
-            $this->language_file[$k] = rtrim($v, '/\\') . DS;
+            $this->language_file[$k] = $v;
         }
         return $this;
     }
@@ -157,15 +157,15 @@ class Tx_Smarty_Core_Wrapper
             foreach ($language_file as $k => $v) {
                 if (is_int($k)) {
                     // indexes are not merged but appended
-                    $this->language_file[] = rtrim($v, '/\\') . DS;
+                    $this->language_file[] = $v;
                 } else {
                     // string indexes are overridden
-                    $this->language_file[$k] = rtrim($v, '/\\') . DS;
+                    $this->language_file[$k] = $v;
                 }
             }
         } else {
             // append new directory
-            $this->language_file[] = rtrim($language_file, '/\\') . DS;
+            $this->language_file[] = $language_file;
         }
 
         $this->language_file = array_unique($this->language_file);
@@ -319,9 +319,8 @@ class Tx_Smarty_Core_Wrapper
         if ($property === 'pObj') {
             return $this->getParentObject();
 
-        } elseif ($property === 'cObj') {
-            // TODO: Remove this, Use the cObj Proxy instead!
-            return $this->getContentObject();
+        //} elseif ($property === 'cObj') {
+        //    return new Tx_Smarty_Core_CobjectProxy();
 
         } elseif ($property === 'path_to_template_directory') {
             return $this->getTemplateDir();
@@ -346,8 +345,8 @@ class Tx_Smarty_Core_Wrapper
         if ($property === 'pObj') {
             $this->setParentObject($value);
 
-        } elseif ($property === 'cObj') {
-            $this->setContentObject($value);
+        //} elseif ($property === 'cObj') {
+        //    $this->setContentObject($value);
 
         } elseif ($property === 'path_to_template_directory') {
             $this->setTemplateDir($value);

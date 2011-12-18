@@ -73,16 +73,17 @@
                 $key = array_pop($parts);
                 $languageFile = implode(':', $parts);
             }
-            $languageFile = ($languageFile) ? $languageFile : $template->smarty->getLanguageFile();
-
-            // Makes sure only relative path is used for readLLfile
-            $languageFile = str_replace(t3lib_div::getIndpEnv('TYPO3_SITE_URL'), '', $languageFile);
+            $languageFiles = ($languageFile) ? array($languageFile) : $template->smarty->getLanguageFile();
 
             // Calls the sL method from tslib_fe to translate the label
-            if (Tx_Smarty_Utility_Typo3::isFeInstance()) {
-                $translation = $GLOBALS['TSFE']->sL('LLL:' . $languageFile . ':' . $key);
-            } elseif (is_object($GLOBALS['LANG'])) {
-                $translation = $GLOBALS['LANG']->sL('LLL:' . $languageFile . ':' . $key);
+            foreach($languageFiles as $languageFile) {
+                // Makes sure only relative path is used for readLLfile
+                $languageFile = str_replace(t3lib_div::getIndpEnv('TYPO3_SITE_URL'), '', $languageFile);
+                if (Tx_Smarty_Utility_Typo3::isFeInstance()) {
+                    $translation = $GLOBALS['TSFE']->sL('LLL:' . $languageFile . ':' . $key);
+                } elseif (is_object($GLOBALS['LANG'])) {
+                    $translation = $GLOBALS['LANG']->sL('LLL:' . $languageFile . ':' . $key);
+                }
             }
 
             // Sets an alternate translation if no translation was found
