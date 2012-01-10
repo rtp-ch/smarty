@@ -51,7 +51,7 @@ class Tx_Smarty_SmartyPlugins_Core_DotNotationFilter
     }
 
     /**
-     * 
+     *
      * Removes all TypoScript styled paramaters in functions, modifiers etc. so that, for example:
      * {function some.setting=$foo.bar another.setting.or.value=$hello[world].1} becomes:
      * {function some.setting=$fooXXXXXXbar anotherXXXXXXsettingXXXXXXorXXXXXXvalue=$hello[world].1}
@@ -70,20 +70,8 @@ class Tx_Smarty_SmartyPlugins_Core_DotNotationFilter
         $lDel = preg_quote($template->left_delimiter, '%');
         $rDel = preg_quote($template->right_delimiter, '%');
 
-        // Remove any text from the source which is enclosed in smarty literals, i.e. {literal}...{/literal}.
-        // Literal text blocks (if found) are replaced with a placeholder and reinsterted into the text after
-        // the prefilter action.
-        // TODO: Is this necessary? The effects of regexing literals will always be reversed by the post filter.
-        $literalPattern = '%' . $lDel . 'literal' . $rDel . '.*?' . $lDel . '/literal' . $rDel . '%si';
-        if(preg_match_all($literalPattern, $tplSource, $literals, PREG_PATTERN_ORDER)) {
-            for( $n = count($literals[0]), $i = 0; $i < $n; $i++ ) {
-                $placeHolders[$i] = '<@>' . uniqid('LITERAL_', true) . '<@>';
-            }
-            $tplSource = str_replace($literals[0], $placeHolders, $tplSource);
-        };
-
         // Regex pattern matches dot notations inside delimiters
-        $tsPattern = '%(\b(?<!$)([\w]+[.]{1}[\w]+)+\s*?=)(?=[^' . $rDel . '|' . $lDel . ']*?' . $rDel . ')%';
+        $tsPattern = '%(\s+\b(?<!$)([\w]+[.]{1}[\w]+)+\s*?=)(?=[^' . $rDel . '|' . $lDel . ']*?' . $rDel . ')%';
         if (preg_match_all($tsPattern, $tplSource, $tsParams)) {
 
             // Gets the string which will be used to replace the dots in typoscript notations
@@ -95,12 +83,6 @@ class Tx_Smarty_SmartyPlugins_Core_DotNotationFilter
             // Replaces the typoscript notations in the template with their
             // modified versions which have dots replaced.
             $tplSource = str_replace($tsParams[1], $tsParamsModified, $tplSource);
-        }
-
-        // Reinserts the literal textblocks
-        // TODO: See above...
-        if($literals) {
-            $tplSource = str_replace($placeHolders, $literals[0], $tplSource);
         }
 
         // Return the tpl_source to the compiler
