@@ -33,10 +33,10 @@
 
 /**
  *
- * Smarty prefilter "dots"
+ * Smarty postfilter "dots"
  * -------------------------------------------------------------
- * File:    prefilter.dots.php
- * Type:    prefilter
+ * File:    postfilter.dots.php
+ * Type:    postfilter
  * Name:    Dots
  * Version: 2.0
  * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
@@ -47,28 +47,8 @@
  **/
 
 
-    function smarty_prefilter_dots($tplSource, &$template)
+    function smarty_postfilter_dots($tplSource, &$template)
     {
-
-        // Gets the template delimiters to use in the regex pattern
-        $lDel = preg_quote($template->left_delimiter, '%');
-        $rDel = preg_quote($template->right_delimiter, '%');
-
-        // Regex pattern matches dot notations inside delimiters
-        $tsPattern = '%(\s+\b(?<!$)([\w]+[.]{1}[\w]+)+\s*?=)(?=[^' . $rDel . '|' . $lDel . ']*?' . $rDel . ')%';
-        if (preg_match_all($tsPattern, $tplSource, $tsParams)) {
-
-            // Gets the string which will be used to replace the dots in typoscript notations
-            $templateId = '___' . $template->_smarty_md5 . '___';
-
-            // Replaces all the dots in the typoscript notation with a unique id.
-            $tsParamsModified = str_replace('.', $templateId, $tsParams[1]);
-
-            // Replaces the typoscript notations in the template with their
-            // modified versions which have dots replaced.
-            $tplSource = str_replace($tsParams[1], $tsParamsModified, $tplSource);
-        }
-
-        // Return the tpl_source to the compiler
-        return $tplSource;
+        $templateId = '___' . $template->_smarty_md5 . '___';
+        return str_replace($templateId, '.', $tplSource);
     }

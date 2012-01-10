@@ -30,5 +30,6 @@ plugin.smarty {
 	// Load default smarty prefilters
 	autoload_filters.pre.0 = conditions
 	autoload_filters.pre.1 = dots
+	autoload_filters.post.0 = dots
 
 }

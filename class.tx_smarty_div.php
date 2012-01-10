@@ -76,12 +76,12 @@ class tx_smarty_div {
 	}
 
 	// Turns an array (assumed to be TypoScript Parameters) into
-	// text. Any occurences of _DOT_ (see prefilter dots) are replaced with a dot (.)
+	// text.
 	function makeTypoScriptFromArray($params)
 	{
 	    $return = null;
 		foreach($params as $param => $value) {
-			$return .= str_replace('_DOT_','.',$param) . ' = ' . $value . chr(10);
+			$return .= $param . ' = ' . $value . chr(10);
 		}
 		return $return;
 	}
