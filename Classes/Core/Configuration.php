@@ -56,9 +56,10 @@ class Tx_Smarty_Core_Configuration
      * @var string
      */
     const ADDER_ACTION              = 'add';
-    
+
     /**
      * @param Tx_Smarty_Core_Wrapper $smartyInstance
+     * @throws Tx_Smarty_Exception_InvalidArgumentException
      */
     public function __construct(Tx_Smarty_Core_Wrapper $smartyInstance)
     {
@@ -79,9 +80,11 @@ class Tx_Smarty_Core_Configuration
      * $smarty->set('cache_lifetime', 12000) and $smarty->get('cache_lifetime') can be used to set/get smarty properties.
      *
      * @magic
-     * @throws BadMethodCallException|InvalidArgumentException
+     *
      * @param string $method
      * @param array $args
+     * @throws Tx_Smarty_Exception_BadMethodCallException
+     * @throws InvalidArgumentException
      * @return mixed
      */
     public final function __call($method, array $args = array())

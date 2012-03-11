@@ -35,9 +35,11 @@ class Tx_Smarty_Utility_Smarty
 {
     /**
      * @static
-     * @throws Tx_Smarty_Exception_InvalidArgumentException
+     *
      * @param Smarty_Internal_Template $template
      * @param $pluginName
+     * @throws Tx_Smarty_Exception_InvalidArgumentException
+     * @throws Tx_Smarty_Exception_BadMethodCallException
      * @return void
      */
     public static function loadPlugin(Smarty_Internal_Template $template, $pluginName)

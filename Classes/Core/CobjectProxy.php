@@ -33,23 +33,6 @@ class Tx_Smarty_Core_CobjectProxy
     }
 
     /**
-     * Simulates a frontend environment for backend mode. Inspired by various hacks for simulating the frontend in
-     * Tx_Fluid_ViewHelpers_CObjectViewHelper, Tx_Fluid_ViewHelpers_ImageViewHelper,
-     * Tx_Fluid_ViewHelpers_Format_CropViewHelper, Tx_Fluid_ViewHelpers_Format_HtmlViewHelper and
-     * Tx_Extbase_Utility_FrontendSimulator (and possibly others...)
-     *
-     * @param array $data
-     * @param string $table
-     */
-    protected function simulateFrontendEnvironment(array $data = array(), $table = '')
-    {
-        $this->setWorkingDir();
-        $this->setCharSet();
-        $this->setTypoScript();
-        $this->setContentObject($data, $table);
-    }
-
-    /**
      * Resets $GLOBALS['TSFE'] if it was previously changed by simulateFrontendEnvironment()
      *
      * @return void
@@ -71,12 +54,27 @@ class Tx_Smarty_Core_CobjectProxy
      */
     public function __call($method, array $args = array())
     {
-        if (!($this->getTsfe() instanceof tslib_fe)) {
-            throw new RuntimeException('Couldn\'t get a valid instance of "tslib_fe"!', 1329912412);
-        } elseif(!method_exists($this->getTsfe()->cObj, $method)) {
+        if(!method_exists($this->getTsfe()->cObj, $method)) {
             throw new BadMethodCallException('No such method "' . $method . '" in class "tslib_cObj"!', 1329912359);
         }
         return call_user_func_array(array($this->getTsfe()->cObj, $method), $args);
+    }
+
+    /**
+     * Simulates a frontend environment for backend mode. Inspired by various hacks for simulating the frontend in
+     * Tx_Fluid_ViewHelpers_CObjectViewHelper, Tx_Fluid_ViewHelpers_ImageViewHelper,
+     * Tx_Fluid_ViewHelpers_Format_CropViewHelper, Tx_Fluid_ViewHelpers_Format_HtmlViewHelper and
+     * Tx_Extbase_Utility_FrontendSimulator (and possibly others...)
+     *
+     * @param array $data
+     * @param string $table
+     */
+    protected function simulateFrontendEnvironment(array $data = array(), $table = '')
+    {
+        $this->setWorkingDir();
+        $this->setCharSet();
+        $this->setTypoScript();
+        $this->setContentObject($data, $table);
     }
 
     /**
