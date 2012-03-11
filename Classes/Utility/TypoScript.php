@@ -68,6 +68,7 @@ class Tx_Smarty_Utility_TypoScript
      *
      * @see t3lib_TSparser::getVal($string, $setup)
      * @param string $string Object path for which to get the value
+     * @throws Exception
      * @return array
      */
     public static function getSetupFromTypo3($string)

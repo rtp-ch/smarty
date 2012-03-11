@@ -29,7 +29,7 @@ class Tx_Smarty_Utility_Path
 
     /**
      * Gets the absolute path of a given directory or file. If the directory or
-     * file name starts with a directory seperator it's already assumed to be relative.
+     * file name starts with a directory separator it's already assumed to be relative.
      *
      * @param $dir
      * @return string
