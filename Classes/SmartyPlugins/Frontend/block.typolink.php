@@ -62,39 +62,47 @@
      * @param $params
      * @param $content
      * @param Smarty_Internal_Template $template
-     * @return mixed
+     * @param $repeat
+     * @return mixed|string
      */
-    function smarty_block_typolink($params, $content, Smarty_Internal_Template $template)
+    function smarty_block_typolink($params, $content, Smarty_Internal_Template $template, &$repeat)
     {
-        // Catch the keyword _self to create a link to the current page
-        if($params['parameter']) {
-            $params['parameter'] = preg_replace('/^_self\b/im', $GLOBALS['TSFE']->id, $params['parameter']);
-        }
-        
-        // Prefix the url with the base url or a defined path
-        if($params['absRefPrefix']) {
-            $prefix = parse_url($params['absRefPrefix'], PHP_URL_SCHEME) ? trim($params['absRefPrefix']) : trim($GLOBALS['TSFE']->baseUrl);
-            if(substr($prefix, -1, 1) !== '/')  $prefix .= '/';
-            // Save a copy of the current global $GLOBALS['TSFE']->absRefPrefix setting
-            $tempAbsRefPrefix = $GLOBALS['TSFE']->absRefPrefix;
-            $GLOBALS['TSFE']->absRefPrefix = $prefix;
-        }        
 
-        // Get the typolink
-        list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
-        $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
-        $link = $cObj->typolink($content, $setup);
-        
-        // Copy the original global absRefPrefix setting back into $GLOBALS['TSFE']->absRefPrefix
-        if($params['absRefPrefix']) {
-            $GLOBALS['TSFE']->absRefPrefix = $tempAbsRefPrefix;
-        }
+        // Execute the block function on the closing tag
+        if (!$repeat) {
 
-        // Automatically set the "title" attribute from the content of the tag if undefined
-        if (!preg_match('%<a[^>]*title=[^>]*>[^<]*</a>%i', $link)) {
-            $content = str_replace('"','',$content);
-            $link = preg_replace('%(<a[^>]*)(>)([^<]*</a>)%i', '\1 title="'.$content.'">\3', $link);
-        }
+            // Gets an instance of tslib_cobj
+            $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
 
-        return $link;
+            // Catch the keyword _self to create a link to the current page
+            if ($params['parameter']) {
+                $params['parameter'] = preg_replace('/^_self\b/im', $GLOBALS['TSFE']->id, $params['parameter']);
+            }
+
+            // Prefix the url with the base url or a defined path
+            if ($params['absRefPrefix']) {
+                $prefix = parse_url($params['absRefPrefix'], PHP_URL_SCHEME) ? trim($params['absRefPrefix']) : trim($GLOBALS['TSFE']->baseUrl);
+                if(substr($prefix, -1, 1) !== '/')  $prefix .= '/';
+                // Save a copy of the current global $GLOBALS['TSFE']->absRefPrefix setting
+                $tempAbsRefPrefix = $GLOBALS['TSFE']->absRefPrefix;
+                $GLOBALS['TSFE']->absRefPrefix = $prefix;
+            }
+
+            // Gets the link
+            list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
+            $link = $cObj->typolink($content, $setup);
+
+            // Copy the original global absRefPrefix setting back into $GLOBALS['TSFE']->absRefPrefix
+            if ($params['absRefPrefix']) {
+                $GLOBALS['TSFE']->absRefPrefix = $tempAbsRefPrefix;
+            }
+
+            // Automatically set the "title" attribute from the content of the tag if undefined
+            if (!preg_match('%<a[^>]*title=[^>]*>[^<]*</a>%i', $link)) {
+                $content = str_replace('"','',$content);
+                $link = preg_replace('%(<a[^>]*)(>)([^<]*</a>)%i', '\1 title="'.$content.'">\3', $link);
+            }
+
+            return $link;
+        }
     }
