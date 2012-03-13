@@ -6,9 +6,9 @@
 class Tx_Smarty_Core_CobjectProxy
 {
     /**
-     * Contains a backup of the current $GLOBALS['TSFE'].
+     * Contains a backup of $GLOBALS['TSFE']
      *
-     * @var tslib_fe|null
+     * @var mixed
      */
     private $tsfeBackup;
 
@@ -33,7 +33,7 @@ class Tx_Smarty_Core_CobjectProxy
     }
 
     /**
-     * Resets $GLOBALS['TSFE'] if it was previously changed by simulateFrontendEnvironment()
+     * Resets the working directory
      *
      * @return void
      * @see Tx_Extbase_Utility_FrontendSimulator::resetFrontendEnvironment
@@ -54,10 +54,10 @@ class Tx_Smarty_Core_CobjectProxy
      */
     public function __call($method, array $args = array())
     {
-        if(!method_exists($this->getTsfe()->cObj, $method)) {
+        if(!method_exists($this->tsfe()->cObj, $method)) {
             throw new BadMethodCallException('No such method "' . $method . '" in class "tslib_cObj"!', 1329912359);
         }
-        return call_user_func_array(array($this->getTsfe()->cObj, $method), $args);
+        return call_user_func_array(array($this->tsfe()->cObj, $method), $args);
     }
 
     /**
@@ -73,6 +73,7 @@ class Tx_Smarty_Core_CobjectProxy
     {
         $this->setWorkingDir();
         $this->setCharSet();
+        $this->setPageSelect();
         $this->setTypoScript();
         $this->setContentObject($data, $table);
     }
@@ -83,45 +84,27 @@ class Tx_Smarty_Core_CobjectProxy
      */
     private function setContentObject(array $data = array(), $table = '')
     {
-        $this->getTsfe()->cObj = t3lib_div::makeInstance('tslib_cObj');
-        $this->getTsfe()->cObj->start($data, $table);
+
+        $this->tsfe()->cObj = t3lib_div::makeInstance('tslib_cObj');
+        $this->tsfe()->cObj->start($data, $table);
     }
 
     /**
-     * Creates a dummy global instance of tslib_fe.
+     * Creates an instance of t3lib_pageSelect
      */
-    private function setTsfe()
+    private function setPageSelect()
     {
-        $this->tsfeBackup = ($GLOBALS['TSFE'] instanceof tslib_fe) ? $GLOBALS['TSFE'] : false;
-        $GLOBALS['TSFE'] = new stdClass();
-        $GLOBALS['TSFE']->cObjectDepthCounter = 100;
+        $this->tsfe()->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
+        $this->tsfe()->sys_page->versioningPreview = false;
+        $this->tsfe()->sys_page->versioningWorkspaceId = false;
+        $this->tsfe()->where_hid_del = ' AND pages.deleted=0';
+        $this->tsfe()->sys_page->init(false);
+        $this->tsfe()->sys_page->where_hid_del .= ' AND pages.doktype<200';
+        $this->tsfe()->sys_page->where_groupAccess = $this->tsfe()->sys_page->getMultipleGroupsWhereClause('pages.fe_group', 'pages');
     }
 
     /**
-     * Checks if the global tslib_fe instance has already been set. This is the case as soon
-     * as $tsfeBackup has been set (containing either a backup of the current tslib_fe global
-     * or the boolean "false").
-     *
-     * @return bool
-     */
-    private function hasTsfe()
-    {
-        return !is_null($this->tsfeBackup);
-    }
-
-    /**
-     * @return tslib_fe
-     */
-    private function getTsfe()
-    {
-        if (!$this->hasTsfe()) {
-            $this->setTsfe();
-        }
-        return $GLOBALS['TSFE'];
-    }
-
-    /**
-     *
+     * Initializes TypoScript templating
      */
     private function setTypoScript()
     {
@@ -130,41 +113,53 @@ class Tx_Smarty_Core_CobjectProxy
         $template->tt_track = 0;
         $template->init();
         $template->getFileName_backPath = PATH_site;
-        $this->getTsfe()->tmpl = $template;
-        $this->getTsfe()->tmpl->setup = $typoScriptSetup;
-        $this->getTsfe()->config = $typoScriptSetup;
+        $this->tsfe()->tmpl = $template;
+        $this->tsfe()->tmpl->setup = $typoScriptSetup;
+        $this->tsfe()->config = $typoScriptSetup;
     }
 
     /**
-     *
+     * Initializes global charset helpers
      */
     private function setCharSet()
     {
         // preparing csConvObj
-        if (!is_object($this->getTsfe()->csConvObj)) {
+        if (!is_object($this->tsfe()->csConvObj)) {
             if (is_object($GLOBALS['LANG'])) {
-                $this->getTsfe()->csConvObj = $GLOBALS['LANG']->csConvObj;
+                $this->tsfe()->csConvObj = $GLOBALS['LANG']->csConvObj;
             } else {
-                $this->getTsfe()->csConvObj = t3lib_div::makeInstance('t3lib_cs');
+                $this->tsfe()->csConvObj = t3lib_div::makeInstance('t3lib_cs');
             }
         }
 
         // preparing renderCharset
-        if (!is_object($this->getTsfe()->renderCharset)) {
+        if (!is_object($this->tsfe()->renderCharset)) {
             if (is_object($GLOBALS['LANG'])) {
-                $this->getTsfe()->renderCharset = $GLOBALS['LANG']->charSet;
+                $this->tsfe()->renderCharset = $GLOBALS['LANG']->charSet;
             } else {
-                $this->getTsfe()->renderCharset = $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'];
+                $this->tsfe()->renderCharset = $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'];
             }
         }
     }
 
+    /*
+     * ========================================
+     * Working Directory
+     * ========================================
+     */
+
+    /**
+     * Resets the current working directory to the TYPO3 installation path
+     */
     private function setWorkingDir()
     {
         $this->workingDirBackup = getcwd();
         chdir(PATH_site);
     }
 
+    /**
+     * Sets the current working directory back to it's original value
+     */
     private function resetWorkingDir()
     {
         if (!is_null($this->workingDirBackup)) {
@@ -172,12 +167,44 @@ class Tx_Smarty_Core_CobjectProxy
         }
     }
 
+    /*
+     * ========================================
+     * $GLOBALS['TSFE']
+     * ========================================
+     */
+
+    /**
+     * Sets $GLOBALS['TSFE']
+     */
+    private function setTsfe()
+    {
+        $this->tsfeBackup = ($GLOBALS['TSFE'] instanceof tslib_fe) ? $GLOBALS['TSFE'] : false;
+        $GLOBALS['TSFE'] = new stdClass();
+        $GLOBALS['TSFE']->cObjectDepthCounter = 100;
+        $GLOBALS['TSFE']->baseUrl = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
+    }
+
+    /**
+     * Resets $GLOBALS['TSFE']
+     */
     private function resetTsfe()
     {
+        unset($GLOBALS['TSFE']);
         if ($this->tsfeBackup instanceof tslib_fe) {
             $GLOBALS['TSFE'] = $this->tsfeBackup;
-        } else {
-            unset($GLOBALS['TSFE']);
         }
+    }
+
+    /**
+     * Provides access to $GLOBALS['TSFE']
+     *
+     * @return stdClass
+     */
+    private function tsfe()
+    {
+        if (is_null($this->tsfeBackup)) {
+            $this->setTsfe();
+        }
+        return $GLOBALS['TSFE'];
     }
 }

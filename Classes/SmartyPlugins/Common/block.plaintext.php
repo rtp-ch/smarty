@@ -55,45 +55,48 @@
  *
  **/
 
-    /**
-     *
-     * Smarty plugin "plaintext"
-     * -------------------------------------------------------------
-     * File:    block.plaintext.php
-     * Type:    block
-     * Name:    Plaintext
-     * Version: 1.0
-     * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
-     * Purpose: Turns HTML into plaintext using the html2text class
-     * Example: {plaintext}
-     *                This is a line of text
-     *                This is another line of text
-     *                But this will all end up on 1 line...
-     *            {/plaintext}
-     * Note:    By default multiple linebreaks are collapsed. To preserve linebreaks
-     *             set the parameter 'newlines' to 'keep' (newlines="keep")
-     * Note:    By default links are printed in plaintext. To append a list of links
-     *             in the text to the end of the text block set the paramter 'links' to 'append' (links="append").
-     *             To remove links from the text entirely set the parameter 'links' to 'strip' (links="strip")
-     * -------------------------------------------------------------
-     *
-     * @param $params
-     * @param $content
-     * @param Smarty_Internal_Template $template
-     * @return string
-     */
-    function smarty_block_plaintext($params, $content, Smarty_Internal_Template $template)
+/**
+ *
+ * Smarty plugin "plaintext"
+ * -------------------------------------------------------------
+ * File:    block.plaintext.php
+ * Type:    block
+ * Name:    Plaintext
+ * Version: 1.0
+ * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
+ * Purpose: Turns HTML into plaintext using the html2text class
+ * Example: {plaintext}
+ *                This is a line of text
+ *                This is another line of text
+ *                But this will all end up on 1 line...
+ *            {/plaintext}
+ * Note:    By default multiple linebreaks are collapsed. To preserve linebreaks
+ *             set the parameter 'newlines' to 'keep' (newlines="keep")
+ * Note:    By default links are printed in plaintext. To append a list of links
+ *             in the text to the end of the text block set the paramter 'links' to 'append' (links="append").
+ *             To remove links from the text entirely set the parameter 'links' to 'strip' (links="strip")
+ * -------------------------------------------------------------
+ *
+ * @param $params
+ * @param $content
+ * @param Smarty_Internal_Template $template
+ * @param $repeat
+ * @return string
+ */
+    function smarty_block_plaintext($params, $content, Smarty_Internal_Template $template, &$repeat)
     {
-        // An instance of the modified html2text class by Jon Abernathy <jon@chuggnutt.com>
-        $textConversion = new ux_html2text($content);
+        if (!$repeat) {
+            // An instance of the modified html2text class by Jon Abernathy <jon@chuggnutt.com>
+            $textConversion = new ux_html2text($content);
 
-        // Set the absolute site path
-        $textConversion->set_base_url(t3lib_div::getIndpEnv('TYPO3_SITE_URL'));
+            // Set the absolute site path
+            $textConversion->set_base_url(t3lib_div::getIndpEnv('TYPO3_SITE_URL'));
 
-        // Sets behaviour regarding link collection and line stripping from plugin params
-        $params = array_change_key_case($params, CASE_LOWER);
-        $textConversion->setLinkBehaviour($params['links'])->setLineBehaviour($params['newlines']);
+            // Sets behaviour regarding link collection and line stripping from plugin params
+            $params = array_change_key_case($params, CASE_LOWER);
+            $textConversion->setLinkBehaviour($params['links'])->setLineBehaviour($params['newlines']);
 
-        // Performs plaintext conversion and returns result
-        return $textConversion->get_text();
+            // Performs plaintext conversion and returns result
+            return $textConversion->get_text();
+        }
     }

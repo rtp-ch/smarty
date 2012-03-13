@@ -31,15 +31,18 @@
  *
  ***************************************************************/
 
-    /**
-     * @param $params
-     * @param $content
-     * @param Smarty_Internal_Template $template
-     * @return string
-     * @see smarty_block_LLL
-     */
-    function smarty_block_getLL($params, $content, Smarty_Internal_Template $template) 
+/**
+ * @param $params
+ * @param $content
+ * @param Smarty_Internal_Template $template
+ * @param $repeat
+ * @return string
+ * @see smarty_block_LLL
+ */
+    function smarty_block_getLL($params, $content, Smarty_Internal_Template $template, &$repeat)
     {
-        Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_LLL');
-        return smarty_block_LLL($params, $content, $template);
+        if (!$repeat) {
+            Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_LLL');
+            return smarty_block_LLL($params, $content, $template, $repeat);
+        }
     }

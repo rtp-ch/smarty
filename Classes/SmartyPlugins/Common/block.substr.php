@@ -32,28 +32,31 @@
  ***************************************************************/
 
 
-    /**
-     * Smarty plugin "substr"
-     * -------------------------------------------------------------
-     * File:    block.substr.php
-     * Type:    block
-     * Name:    Substring
-     * Version: 1.0
-     * Author:    Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
-     * Purpose: Apply PHP substr to a block of text
-     * Example:    {substr start="-1" length="5"}Some text{/substr}
-     * -------------------------------------------------------------
-     *
-     * @param $params
-     * @param $content
-     * @param Smarty_Internal_Template $template
-     * @return string
-     */
-    function smarty_block_substr($params, $content, Smarty_Internal_Template $template)
+/**
+ * Smarty plugin "substr"
+ * -------------------------------------------------------------
+ * File:    block.substr.php
+ * Type:    block
+ * Name:    Substring
+ * Version: 1.0
+ * Author:    Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
+ * Purpose: Apply PHP substr to a block of text
+ * Example:    {substr start="-1" length="5"}Some text{/substr}
+ * -------------------------------------------------------------
+ *
+ * @param $params
+ * @param $content
+ * @param Smarty_Internal_Template $template
+ * @param $repeat
+ * @return string
+ */
+    function smarty_block_substr($params, $content, Smarty_Internal_Template $template, &$repeat)
     {
-        if (is_null($content)) return;
-        $params = array_change_key_case($params);
-        $params['start'] = t3lib_div::intInRange((int) $params['start'], -strlen($content), strlen($content));
-        $length = $params['length'] ? intval($params['length']) : null;
-        return substr($content,$params['start'], $length);
+        if (!$repeat) {
+            if (is_null($content)) return;
+            $params = array_change_key_case($params);
+            $params['start'] = t3lib_div::intInRange((int) $params['start'], -strlen($content), strlen($content));
+            $length = $params['length'] ? intval($params['length']) : null;
+            return substr($content,$params['start'], $length);
+        }
     }
