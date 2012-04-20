@@ -29,10 +29,10 @@ class Tx_Smarty_Core_Builder
         'EXT:smarty/Classes/SmartyPlugins/Frontend'
     );
 
-    public function &Get(array $options = array())
+    public function &Get($options = array())
     {
         // Creates an instance of smarty
-        $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Core_Wrapper', $options);
+        $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Core_Wrapper', (array) $options);
 
         // Sets plugin dirs
         $smartyInstance->addPluginsDir(self::$pluginDirs);
@@ -66,11 +66,11 @@ class Tx_Smarty_Core_Builder
             list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3('plugin.' . $prefixId . '.smarty');
         }
         $setup = t3lib_div::array_merge_recursive_overrule($setup, $options);
-        $setup = Tx_Smarty_Utility_TypoScript::arrayStdWrap($setup);
+        //$setup = Tx_Smarty_Utility_TypoScript::arrayStdWrap($setup);
 
         // Applies the smarty configuration to the instance
         foreach($setup as $key => $value) {
-            $smartyInstance->set($key, $value);
+            $smartyInstance->{$key} = $value;
         }
 
         // Initializes language file

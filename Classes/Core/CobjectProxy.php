@@ -82,11 +82,11 @@ class Tx_Smarty_Core_CobjectProxy
      * @param array $data
      * @param string $table
      */
-    private function setContentObject(array $data = array(), $table = '')
+    private function setContentObject($data = array(), $table = null)
     {
 
         $this->tsfe()->cObj = t3lib_div::makeInstance('tslib_cObj');
-        $this->tsfe()->cObj->start($data, $table);
+        $this->tsfe()->cObj->start((array) $data, $table);
     }
 
     /**
