@@ -95,7 +95,7 @@ class Tx_Smarty_Utility_TypoScript
             if (isset($setup[$objPathPart . '.'])) {
                 $setup = $setup[$objPathPart . '.'];
             } else {
-                throw new Exception('Stop');
+                return array();
             }
         }
 
