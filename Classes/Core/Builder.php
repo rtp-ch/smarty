@@ -66,11 +66,12 @@ class Tx_Smarty_Core_Builder
             list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3('plugin.' . $prefixId . '.smarty');
         }
         $setup = t3lib_div::array_merge_recursive_overrule($setup, $options);
+        // TODO: Fix #1329912359: No such method "stdWrap" in class "tslib_cObj"!
         //$setup = Tx_Smarty_Utility_TypoScript::arrayStdWrap($setup);
 
         // Applies the smarty configuration to the instance
         foreach($setup as $key => $value) {
-            $smartyInstance->{$key} = $value;
+            $smartyInstance->set($key, $value);
         }
 
         // Initializes language file
