@@ -95,7 +95,7 @@ class Tx_Smarty_Utility_TypoScript
             if (isset($setup[$objPathPart . '.'])) {
                 $setup = $setup[$objPathPart . '.'];
             } else {
-                throw new Exception('Stop');
+                return array();
             }
         }
 
@@ -143,7 +143,7 @@ class Tx_Smarty_Utility_TypoScript
                     $tempValue = $cObj->stdWrap($value, $in[$key . '.']);
                 }
                 $out[$key] = is_null($tempValue) ? self::arrayStdWrap($value, $cObj) : $tempValue;
-            } elseif(is_scalar($in[$key] && method_exists($cObj, 'stdWrap'))) {
+            } elseif(is_scalar($in[$key])) {
                 $out[$key] = $cObj->stdWrap($value, $in[$key . '.']);
             } else {
                 $out[$key] = $value;

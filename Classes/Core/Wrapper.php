@@ -328,6 +328,24 @@ class Tx_Smarty_Core_Wrapper
         } elseif ($property === 'path_to_language_file') {
             return $this->getLanguageFile();
 
+        } elseif ($property === 'template_dir') {
+            $this->getTemplateDir();
+
+        } elseif ($property === 'plugins_dir') {
+            $this->getPluginsDir();
+
+        } elseif ($property === 'config_dir') {
+            $this->getConfigDir();
+
+        } elseif ($property === 'compile_dir') {
+            $this->getCompileDir();
+
+        } elseif ($property === 'cache_dir') {
+            $this->getCacheDir();
+
+        } elseif ($property == 't3_extVars') {
+            // Do nothing!
+
         } else {
             throw new InvalidArgumentException('Attempted to get unknown smarty property "' . $property . '"!', 1322384939);
         }
@@ -356,6 +374,27 @@ class Tx_Smarty_Core_Wrapper
 
         } elseif ($property === 'relPathToLanguageFile') {
             $this->setLanguageFile($value);
+
+        } elseif ($property === 'template_dir') {
+            $this->setTemplateDir($value);
+
+        } elseif ($property === 'plugins_dir') {
+            $this->addPluginsDir($value);
+
+        } elseif ($property === 'config_dir') {
+            $this->setConfigDir($value);
+
+        } elseif ($property === 'compile_dir') {
+            $this->setCompileDir($value);
+
+        } elseif ($property === 'cache_dir') {
+            $this->setCacheDir($value);
+
+        } elseif ($property === 'respect_no_cache') {
+            // Do nothing
+
+        } elseif ($property == 't3_extVars') {
+            // Do nothing!
 
         } else {
             throw new InvalidArgumentException('Attempted to set unknown smarty property "' . $property . '"!', 1322384939);

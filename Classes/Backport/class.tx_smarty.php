@@ -24,18 +24,18 @@
 
 class tx_smarty
 {
-    function &smarty(array $options = array())
+    function &smarty($options = array())
     {
-        return Tx_Smarty_Core_Builder::Get($options);
+        return Tx_Smarty_Core_Builder::Get((array) $options);
     }
 
-    function &newSmarty(array $options = array())
+    function &newSmarty($options = array())
     {
-        return Tx_Smarty_Core_Builder::Get($options);
+        return Tx_Smarty_Core_Builder::Get((array) $options);
     }
 
-    function &newSmartyTemplate(array $options = array())
+    function &newSmartyTemplate($options = array())
     {
-        return Tx_Smarty_Core_Builder::Get($options);
+        return Tx_Smarty_Core_Builder::Get((array) $options);
     }
 }
