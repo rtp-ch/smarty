@@ -65,5 +65,5 @@
     {
         Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_typolink');
         $params['returnLast'] = 'url';
-        return smarty_block_header($params, '', $template);
+        return smarty_block_typolink($params, '', $template);
     }

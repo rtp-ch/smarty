@@ -120,6 +120,7 @@ class Tx_Smarty_Utility_TypoScript
 
     /**
      * Recursively apply stdWrap to a typoscript array
+     * TODO: Throws Fix #1329912359: No such method "stdWrap" in class "tslib_cObj"!
      *
      * @param array $in
      * @param null|tslib_cObj $cObj
@@ -142,7 +143,7 @@ class Tx_Smarty_Utility_TypoScript
                     $tempValue = $cObj->stdWrap($value, $in[$key . '.']);
                 }
                 $out[$key] = is_null($tempValue) ? self::arrayStdWrap($value, $cObj) : $tempValue;
-            } elseif(is_scalar($in[$key])) {
+            } elseif(is_scalar($in[$key] && method_exists($cObj, 'stdWrap'))) {
                 $out[$key] = $cObj->stdWrap($value, $in[$key . '.']);
             } else {
                 $out[$key] = $value;
