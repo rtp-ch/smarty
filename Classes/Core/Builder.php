@@ -65,7 +65,7 @@ class Tx_Smarty_Core_Builder
             $prefixId = $smartyInstance->getParentObject()->prefixId;
             list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3('plugin.' . $prefixId . '.smarty');
         }
-        $setup = t3lib_div::array_merge_recursive_overrule($setup, $options);
+        $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, $options);
         $setup = Tx_Smarty_Utility_TypoScript::arrayStdWrap($setup);
 
         // Applies the smarty configuration to the instance
