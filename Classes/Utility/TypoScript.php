@@ -104,7 +104,8 @@ class Tx_Smarty_Utility_TypoScript
         if (isset($setup[$lastObjPathPart . '.'])) {
             $setup = $setup[$lastObjPathPart . '.'];
         } else {
-            throw new Exception('No Way!');
+            // No configuration
+            return array();
         }
 
         // The last part of the object path might also point to the object type.
@@ -120,7 +121,6 @@ class Tx_Smarty_Utility_TypoScript
 
     /**
      * Recursively apply stdWrap to a typoscript array
-     * TODO: Throws Fix #1329912359: No such method "stdWrap" in class "tslib_cObj"!
      *
      * @param array $in
      * @param null|tslib_cObj $cObj

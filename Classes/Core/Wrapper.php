@@ -48,14 +48,6 @@ class Tx_Smarty_Core_Wrapper
     private $parent_object               = null;
 
     /**
-     *
-     * Instance of cObj (FE only)
-     *
-     * @var tslib_cObj
-     */
-    private $content_object              = null;
-
-    /**
      * @param array $options
      */
     public function __construct(array $options = array())
@@ -87,6 +79,7 @@ class Tx_Smarty_Core_Wrapper
         if(is_null($this->configuration)) {
             $this->configuration = t3lib_div::makeInstance('Tx_Smarty_Core_Configuration', $this);
         }
+
         return $this->configuration;
     }
 
@@ -136,6 +129,7 @@ class Tx_Smarty_Core_Wrapper
         if ($index !== null) {
             return isset($this->language_file[$index]) ? $this->language_file[$index] : null;
         }
+
         return (array) $this->language_file;
     }
 
@@ -319,9 +313,6 @@ class Tx_Smarty_Core_Wrapper
         if ($property === 'pObj') {
             return $this->getParentObject();
 
-        //} elseif ($property === 'cObj') {
-        //    return new Tx_Smarty_Core_CobjectProxy();
-
         } elseif ($property === 'path_to_template_directory') {
             return $this->getTemplateDir();
 
@@ -363,9 +354,6 @@ class Tx_Smarty_Core_Wrapper
         if ($property === 'pObj') {
             $this->setParentObject($value);
 
-        //} elseif ($property === 'cObj') {
-        //    $this->setContentObject($value);
-
         } elseif ($property === 'path_to_template_directory') {
             $this->setTemplateDir($value);
 
@@ -399,6 +387,21 @@ class Tx_Smarty_Core_Wrapper
         } else {
             throw new InvalidArgumentException('Attempted to set unknown smarty property "' . $property . '"!', 1322384939);
         }
+    }
+
+    /**
+     * returns a rendered Smarty template: Modifies the display method to fetch the rendered
+     * template instead of displaying it.
+     *
+     * @param string $template   the resource handle of the template file or template object
+     * @param mixed  $cache_id   cache id to be used with this template
+     * @param mixed  $compile_id compile id to be used with this template
+     * @param object $parent     next higher level of Smarty variables
+     * @return string|void       rendered template
+     */
+    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null)
+    {
+        return $this->fetch($template, $cache_id, $compile_id, $parent, false);
     }
 
     /**

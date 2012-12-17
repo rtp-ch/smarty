@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'A library for developers who want to use the Smarty templating engine for frontend extension templating. Includes Smarty and some custom Smarty tags for common TYPO3 functions.',
 	'category' => 'misc',
 	'shy' => 0,
-	'version' => '1.11.0',
+	'version' => '1.12.0',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
@@ -28,13 +28,13 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearcacheonload' => 0,
 	'lockType' => '',
 	'author' => 'Simon Tuck',
-	'author_email' => 'stu@rtpartner.ch',
-	'author_company' => 'Rueegg Tuck Partner',
+	'author_email' => 'stu@rtp.ch',
+	'author_company' => 'www.rtp.ch',
 	'CGLcompliance' => '',
 	'CGLcompliance_note' => '',
 	'constraints' => array(
 		'depends' => array(
-			'php' => '5.0.0-0.0.0',
+			'php' => '5.2.0-0.0.0',
 		),
 		'conflicts' => array(
 		),
