@@ -66,6 +66,7 @@ class Tx_Smarty_Core_Configuration
         if($smartyInstance instanceof Tx_Smarty_Core_Wrapper) {
             $this->smartyInstance = $smartyInstance;
             $this->smartyClass = new ReflectionClass($smartyInstance);
+
         } else {
             $message = 'Configuration manager requires a valid instance of smarty!';
             throw new Tx_Smarty_Exception_InvalidArgumentException($message, 1320785449);
