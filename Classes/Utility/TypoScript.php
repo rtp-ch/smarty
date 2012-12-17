@@ -95,7 +95,7 @@ class Tx_Smarty_Utility_TypoScript
             if (isset($setup[$objPathPart . '.'])) {
                 $setup = $setup[$objPathPart . '.'];
             } else {
-                return array();
+                return array(array(), null);
             }
         }
 
@@ -105,7 +105,7 @@ class Tx_Smarty_Utility_TypoScript
             $setup = $setup[$lastObjPathPart . '.'];
         } else {
             // No configuration
-            return array();
+            return array(array(), null);
         }
 
         // The last part of the object path might also point to the object type.
