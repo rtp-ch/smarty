@@ -32,8 +32,8 @@ class Tx_Smarty_Utility_ExtConf
      * 
      * @var array
      */
-    private static $extConf       = null;
-    
+    private static $extConf;
+
     /**
      * Gets the system wide extension configuration
      * 
@@ -41,12 +41,13 @@ class Tx_Smarty_Utility_ExtConf
      */
     public static function getExtConf()
     {
-        if(is_null(self::$extConf)) {
+        if (is_null(self::$extConf)) {
             self::$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['smarty']);
         }
+
         return self::$extConf;
     }
-    
+
     /**
      * Retrieves a setting for a given key from the system wide extension configuration.
      *
@@ -57,10 +58,6 @@ class Tx_Smarty_Utility_ExtConf
     {
         $extConf = self::getExtConf();
 
-        $extConfValue = null;
-        if(isset($extConf[$key])) {
-            $extConfValue = $extConf[$key];
-        }
-        return $extConfValue;
+        return isset($extConf[$key]) ? $extConf[$key] : null;
     }
 }

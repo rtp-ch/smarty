@@ -1,0 +1,64 @@
+{
+    "name": "rtp/smarty",
+    "description": "Smarty Templating Engine for TYPO3",
+    "type": "typo3-module",
+    "extra": {
+        "installer-name": "smarty"
+    },
+    "keywords": ["templating"],
+    "version": "1.13.0",
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "Simon Tuck",
+            "email": "stu@rtp.ch"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rtp-ch/smarty.git"
+    },
+    "autoload": {
+        "classmap": [
+            "vendor/jevon-phd/html2text/",
+            "vendor/nickcernis/html2markdown/"
+        ],
+        "files": [
+            "vendor/jevon-phd/html2text/html2text.php"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "jevon-phd/html2text",
+                "version": "dev-master",
+                "dist": {
+                    "url": "http://iaml.googlecode.com/svn/trunk/org.openiaml.model.runtime/src/include/html2text/html2text.php",
+                    "type": "file",
+                    "reference": "master"
+                }
+            },
+            "type": "package",
+            "package": {
+                "name": "nickcernis/html2markdown",
+                "version": "1.0.1",
+                "source": {
+                    "url": "https://github.com/nickcernis/html2markdown.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/nickcernis/html2markdown/archive/master.zip",
+                    "type": "zip"
+                }
+            }
+        }
+    ],
+    "require": {
+        "smarty/smarty": "3.1.*",
+        "php": ">=5.3.4",
+        "jevon-phd/html2text" : "*@dev",
+        "nickcernis/html2markdown": "1.0.1"
+    }
+}

@@ -5,7 +5,7 @@ class Tx_Smarty_Utility_Path
 {
     /**
      * Resolves paths to absolute locations, e.g. EXT:my_ext/foo/bar is
-     * expaned to it's absolute location.
+     * expanded to it's absolute location.
      *
      * @param array|string $dirs Path(s) to resolve
      * @return array
@@ -14,13 +14,12 @@ class Tx_Smarty_Utility_Path
     {
         $paths = null;
         if (is_array($dirs)) {
-            while($dir = array_shift($dirs)) {
-                $path = self::resolvePath($dir);
-                $paths[] = (is_dir($path) && substr($path, -1) !== DS) ? $path . DS : $path;
+            while ($dir = array_shift($dirs)) {
+                $paths[] =  self::resolvePath($dir);
             }
+
         } elseif (is_scalar($dirs)) {
             $paths  = self::resolvePath($dirs);
-            $paths .= (is_dir($paths) && substr($paths, -1) !== DS) ? DS : '';
         }
 
         // NOTE: No attempt is made to validate file path(s)
@@ -31,15 +30,24 @@ class Tx_Smarty_Utility_Path
      * Gets the absolute path of a given directory or file. If the directory or
      * file name starts with a directory separator it's already assumed to be relative.
      *
-     * @param $dir
+     * @param $path
      * @return string
      */
-    private static function resolvePath($dir)
+    private static function resolvePath($path)
     {
-        $dir = trim($dir);
-        if(substr($dir, 0, 1) !== DS) {
-            $dir = t3lib_div::getFileAbsFileName($dir, false);
+        $path = trim($path);
+
+        // Resolves the path in relation to the TYPO3 directory if
+        // the path is not absolute (e.g. /absolute/path/to/somewehere)
+        if (substr($path, 0, 1) !== DIRECTORY_SEPARATOR) {
+            $path = t3lib_div::getFileAbsFileName($path, false);
         }
-        return $dir;
+
+        // Ensures path has ending directory separator
+        if ((is_dir($path) && substr($path, -1) !== DIRECTORY_SEPARATOR)) {
+            $path .= DIRECTORY_SEPARATOR;
+        }
+
+        return $path;
     }
 }
