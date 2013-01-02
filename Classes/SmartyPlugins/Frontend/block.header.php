@@ -50,13 +50,13 @@
  * @param $repeat
  * @return void
  */
-    function smarty_block_header($params, $content, Smarty_Internal_Template $template, &$repeat)
-    {
-        if (!$repeat) {
-            // TODO: $GLOBALS['TSFE']->getPageRenderer()->addCssFile() etc.
-            // TODO: Tx_Smarty_Utility_Typo3::isBeInstance()
-            if(Tx_Smarty_Utility_Typo3::isFeInstance()) {
-                $GLOBALS['TSFE']->additionalHeaderData[] = $content;
-            }
+function smarty_block_header($params, $content, Smarty_Internal_Template $template, &$repeat)
+{
+    if (!$repeat) {
+        // TODO: $GLOBALS['TSFE']->getPageRenderer()->addCssFile() etc.
+        // TODO: Tx_Smarty_Utility_Typo3::isBeInstance()
+        if (Tx_Smarty_Utility_Typo3::isFeInstance()) {
+            $GLOBALS['TSFE']->additionalHeaderData[] = $content;
         }
     }
+}

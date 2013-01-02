@@ -15,8 +15,8 @@
 /**
  * 
  */
-class Tx_Smarty_Exception_InvalidArgumentException
-    extends InvalidArgumentException
+class Tx_Smarty_Exception_PluginException
+    extends Exception
 {
 
 }

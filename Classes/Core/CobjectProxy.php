@@ -119,7 +119,7 @@ class Tx_Smarty_Core_CobjectProxy
      */
     private function setTypoScript()
     {
-        $typoScriptSetup = array(); // TODO: Smarty setup
+        $typoScriptSetup = array();
         $template = t3lib_div::makeInstance('t3lib_TStemplate');
         $template->tt_track = 0;
         $template->init();

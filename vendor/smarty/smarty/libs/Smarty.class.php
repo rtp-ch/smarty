@@ -815,13 +815,13 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * Set template directory
      *
-     * @param string|array $template_dir directory(s) of template sources
+     * @param string|array $templateDir directory(s) of template sources
      * @return Smarty current Smarty instance for chaining
      */
-    public function setTemplateDir($template_dir)
+    public function setTemplateDir($templateDir)
     {
         $this->template_dir = array();
-        foreach ((array) $template_dir as $k => $v) {
+        foreach ((array) $templateDir as $k => $v) {
             $this->template_dir[$k] = rtrim($v, '/\\') . DS;
         }
 
@@ -832,18 +832,18 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * Add template directory(s)
      *
-     * @param string|array $template_dir directory(s) of template sources
+     * @param string|array $templateDir directory(s) of template sources
      * @param string       $key          of the array element to assign the template dir to
      * @return Smarty current Smarty instance for chaining
      * @throws SmartyException when the given template directory is not valid
      */
-    public function addTemplateDir($template_dir, $key=null)
+    public function addTemplateDir($templateDir, $key=null)
     {
         // make sure we're dealing with an array
         $this->template_dir = (array) $this->template_dir;
 
-        if (is_array($template_dir)) {
-            foreach ($template_dir as $k => $v) {
+        if (is_array($templateDir)) {
+            foreach ($templateDir as $k => $v) {
                 if (is_int($k)) {
                     // indexes are not merged but appended
                     $this->template_dir[] = rtrim($v, '/\\') . DS;
@@ -854,10 +854,10 @@ class Smarty extends Smarty_Internal_TemplateBase {
             }
         } elseif ($key !== null) {
             // override directory at specified index
-            $this->template_dir[$key] = rtrim($template_dir, '/\\') . DS;
+            $this->template_dir[$key] = rtrim($templateDir, '/\\') . DS;
         } else {
             // append new directory
-            $this->template_dir[] = rtrim($template_dir, '/\\') . DS;
+            $this->template_dir[] = rtrim($templateDir, '/\\') . DS;
         }
         $this->joined_template_dir = join(DIRECTORY_SEPARATOR, $this->template_dir);
         return $this;

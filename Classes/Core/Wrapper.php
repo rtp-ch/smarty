@@ -29,54 +29,40 @@ class Tx_Smarty_Core_Wrapper
     /**
      * @var Tx_Smarty_Core_Configuration
      */
-    private $configuration               = null;
+    private $configuration;
 
     /**
-     *
      * Language file(s) for the translate view helper
      *
      * @var string|array
      */
-    private $language_file               = null;
+    private $language_file;
 
     /**
-     *
-     * Instance of the calling class
-     *
-     * @var null
+     * @var boolean|array
      */
-    private $parent_object               = null;
+    private $mute_errors = false;
 
     /**
-     * @param array $options
-     */
-    public function __construct(array $options = array())
-    {
-        parent::__construct($options);
-    }
-
-    /**
-     *
      * Reroutes all undefined method calls to the configuration manager
      *
      * @param $method
      * @param $args
      * @return mixed
      */
-    public final function __call($method, $args)
+    final public function __call($method, $args)
     {
         return call_user_func_array(array($this->getConfiguration(), $method), $args);
     }
 
     /**
-     *
      * Gets the instance of the configuration manager
      *
      * @return Tx_Smarty_Core_Configuration
      */
     public function getConfiguration()
     {
-        if(is_null($this->configuration)) {
+        if (is_null($this->configuration)) {
             $this->configuration = t3lib_div::makeInstance('Tx_Smarty_Core_Configuration', $this);
         }
 
@@ -84,46 +70,21 @@ class Tx_Smarty_Core_Wrapper
     }
 
     /**
-     * @param mixed $pObj The instance of the calling class
+     * Set language file(s)
+     *
+     * @param $languageFile
      */
-    public function setParentObject($pObj)
+    public function setLanguageFile($languageFile)
     {
-        $this->parent_object = $pObj;
+        $this->addLanguageFile($languageFile);
     }
 
     /**
-     * @return mixed Returns the instance of the calling class
+     * Get language file(s)
+     *
+     * @param null $index
+     * @return array|null
      */
-    public function getParentObject()
-    {
-        return $this->parent_object;
-    }
-
-   /**
-    *
-    * Set language file(s)
-    *
-    * @api
-    * @param string|array $language_file language file(s)
-    * @return Smarty current Smarty instance for chaining
-    */
-    public function setLanguageFile($language_file)
-    {
-        $this->language_file = array();
-        foreach ((array) $language_file as $k => $v) {
-            $this->language_file[$k] = $v;
-        }
-        return $this;
-    }
-
-   /**
-    *
-    * Get language file(s)
-    *
-    * @api
-    * @param mixed $index of language file to get, null to get all
-    * @return array|null language file
-    */
     public function getLanguageFile($index = null)
     {
         if ($index !== null) {
@@ -133,260 +94,149 @@ class Tx_Smarty_Core_Wrapper
         return (array) $this->language_file;
     }
 
-   /**
-    *
-    * Adds language file(s)
-    *
-    * @api
-    * @param mixed $language_file
-    * @param string $key of the array element to assign
-    * @return Tx_Smarty_Core_Wrapper current Smarty instance for chaining
-    */
-    public function addLanguageFile($language_file, $key = null)
+    /**
+     * Adds language file(s)
+     *
+     * @param $languageFile
+     * @param null $key
+     * @return Tx_Smarty_Core_Wrapper
+     */
+    public function addLanguageFile($languageFile, $key = null)
     {
         // make sure we're dealing with an array
         $this->language_file = (array) $this->language_file;
 
-        if (is_array($language_file)) {
-            foreach ($language_file as $k => $v) {
+        if (is_array($languageFile)) {
+            foreach ($languageFile as $k => $v) {
                 if (is_int($k)) {
                     // indexes are not merged but appended
                     $this->language_file[] = $v;
+
                 } else {
                     // string indexes are overridden
                     $this->language_file[$k] = $v;
                 }
             }
+        } elseif (!is_null($key)) {
+            $this->language_file[$key] = $languageFile;
+
         } else {
-            // append new directory
-            $this->language_file[] = $language_file;
+            $this->language_file[] = $languageFile;
         }
 
         $this->language_file = array_unique($this->language_file);
+
         return $this;
     }
 
-
-   /**
-    *
-    * Set template directory
-    *
-    * @api
-    * @param string|array $template_dir directory(s) of template sources
-    * @return Smarty current Smarty instance for chaining
-    */
-    public function setTemplateDir($template_dir)
+    /**
+     * Set template directory
+     *
+     * @param array|string $templateDir
+     * @return Smarty
+     */
+    public function setTemplateDir($templateDir)
     {
-        $template_dir = Tx_Smarty_Utility_Path::resolvePaths($template_dir);
-        return parent::setTemplateDir($template_dir);
+        $templateDir = Tx_Smarty_Utility_Path::resolvePaths($templateDir);
+        return parent::setTemplateDir($templateDir);
     }
 
-   /**
-    *
-    * Add template directory(s)
-    *
-    * @api
-    * @param string|array $template_dir directory(s) of template sources
-    * @param string       $key          of the array element to assign the template dir to
-    * @return Smarty current Smarty instance for chaining
-    * @throws SmartyException when the given template directory is not valid
-    */
-    public function addTemplateDir($template_dir, $key = null)
+    /**
+     * Add template directory(s)
+     *
+     * @param array|string $templateDir
+     * @param null $key
+     * @return Smarty
+     */
+    public function addTemplateDir($templateDir, $key = null)
     {
-        $template_dir = Tx_Smarty_Utility_Path::resolvePaths($template_dir);
-        return parent::addTemplateDir($template_dir, $key);
+        $templateDir = Tx_Smarty_Utility_Path::resolvePaths($templateDir);
+        return parent::addTemplateDir($templateDir, $key);
     }
 
-   /**
-    *
-    * Set config directory
-    *
-    * @api
-    * @param string|array $config_dir directory(s) of configuration sources
-    * @return Smarty current Smarty instance for chaining
-    */
+    /**
+     * Set config directory
+     *
+     * @param $config_dir
+     * @return Smarty
+     */
     public function setConfigDir($config_dir)
     {
         $config_dir = Tx_Smarty_Utility_Path::resolvePaths($config_dir);
         return parent::setConfigDir($config_dir);
     }
 
-   /**
-    *
-    * Add config directory(s)
-    *
-    * @api
-    * @param string|array $config_dir directory(s) of config sources
-    * @param string $key of the array element to assign the config dir to
-    * @return Smarty current Smarty instance for chaining
-    */
+    /**
+     * Add config directory(s)
+     *
+     * @param array|string $config_dir
+     * @param null $key
+     * @return Smarty
+     */
     public function addConfigDir($config_dir, $key = null)
     {
         $config_dir = Tx_Smarty_Utility_Path::resolvePaths($config_dir);
         return parent::addConfigDir($config_dir, $key);
     }
 
-   /**
-    *
-    * Set plugins directory
-    *
-    * @api
-    * @param string|array $plugins_dir directory(s) of plugins
-    * @return Smarty current Smarty instance for chaining
-    */
+    /**
+     * Set plugins directory
+     *
+     * @param array|string $plugins_dir
+     * @return Smarty
+     */
     public function setPluginsDir($plugins_dir)
     {
         $plugins_dir = Tx_Smarty_Utility_Path::resolvePaths($plugins_dir);
-        return parent::setPluginsDir($plugins_dir);
+        // NOTE: never overwrite plugins_dir! Always translate the setPluginsDir action
+        // to addPluginsDir
+        return parent::addPluginsDir($plugins_dir);
     }
 
-   /**
-    * 
-    * Adds directory of plugin files
-    *
-    * @api
-    * @param string|array $plugins_dir
-    * @return Smarty current Smarty instance for chaining
-    */
+    /**
+     * @param $plugins_dir
+     * @return Smarty
+     */
     public function addPluginsDir($plugins_dir)
     {
         $plugins_dir = Tx_Smarty_Utility_Path::resolvePaths($plugins_dir);
         return parent::addPluginsDir($plugins_dir);
     }
 
-   /**
-    *
-    * Set compile directory
-    *
-    * @api
-    * @param string $compile_dir directory to store compiled templates in
-    * @return Smarty current Smarty instance for chaining
-    */
+    /**
+     * Set compile directory
+     *
+     * @param string $compile_dir
+     * @return Smarty
+     */
     public function setCompileDir($compile_dir)
     {
         $compile_dir = Tx_Smarty_Utility_Path::resolvePaths($compile_dir);
         return parent::setCompileDir($compile_dir);
     }
 
-   /**
-    *
-    * Set cache directory
-    *
-    * @api
-    * @param string $cache_dir directory to store cached templates in
-    * @return Smarty current Smarty instance for chaining
-    */
+    /**
+     * Set cache directory
+     *
+     * @param string $cache_dir
+     * @return Smarty
+     */
     public function setCacheDir($cache_dir)
     {
         $cache_dir = Tx_Smarty_Utility_Path::resolvePaths($cache_dir);
         return parent::setCacheDir($cache_dir);
     }
 
-   /**
-    *
-    * Set the debug template
-    *
-    * @api
-    * @param string $tpl_name
-    * @return Smarty current Smarty instance for chaining
-    * @throws SmartyException if file is not readable
-    */
+    /**
+     * Set the debug template
+     *
+     * @param string $tpl_name
+     * @return Smarty
+     */
     public function setDebugTemplate($tpl_name)
     {
         $tpl_name = Tx_Smarty_Utility_Path::resolvePaths($tpl_name);
         return parent::setDebugTemplate($tpl_name);
-    }
-
-
-    /************************************************************************
-     * Deprecated methods
-     ************************************************************************/
-    
-    /**
-     * @throws InvalidArgumentException
-     * @param $property
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        // Log deprecated properties
-        if ($property === 'pObj') {
-            return $this->getParentObject();
-
-        } elseif ($property === 'path_to_template_directory') {
-            return $this->getTemplateDir();
-
-        } elseif ($property === 'path_to_language_file') {
-            return $this->getLanguageFile();
-
-        } elseif ($property === 'template_dir') {
-            $this->getTemplateDir();
-
-        } elseif ($property === 'plugins_dir') {
-            $this->getPluginsDir();
-
-        } elseif ($property === 'config_dir') {
-            $this->getConfigDir();
-
-        } elseif ($property === 'compile_dir') {
-            $this->getCompileDir();
-
-        } elseif ($property === 'cache_dir') {
-            $this->getCacheDir();
-
-        } elseif ($property == 't3_extVars') {
-            // Do nothing!
-
-        } else {
-            throw new InvalidArgumentException('Attempted to get unknown smarty property "' . $property . '"!', 1322384939);
-        }
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     * @param $property
-     * @param $value
-     * @return void
-     */
-    public function __set($property, $value)
-    {
-        // Log deprecated properties
-        if ($property === 'pObj') {
-            $this->setParentObject($value);
-
-        } elseif ($property === 'path_to_template_directory') {
-            $this->setTemplateDir($value);
-
-        } elseif ($property === 'path_to_language_file') {
-            $this->setLanguageFile($value);
-
-        } elseif ($property === 'relPathToLanguageFile') {
-            $this->setLanguageFile($value);
-
-        } elseif ($property === 'template_dir') {
-            $this->setTemplateDir($value);
-
-        } elseif ($property === 'plugins_dir') {
-            $this->addPluginsDir($value);
-
-        } elseif ($property === 'config_dir') {
-            $this->setConfigDir($value);
-
-        } elseif ($property === 'compile_dir') {
-            $this->setCompileDir($value);
-
-        } elseif ($property === 'cache_dir') {
-            $this->setCacheDir($value);
-
-        } elseif ($property === 'respect_no_cache') {
-            // Do nothing
-
-        } elseif ($property == 't3_extVars') {
-            // Do nothing!
-
-        } else {
-            throw new InvalidArgumentException('Attempted to set unknown smarty property "' . $property . '"!', 1322384939);
-        }
     }
 
     /**
@@ -405,40 +255,227 @@ class Tx_Smarty_Core_Wrapper
     }
 
     /**
+     * @param string $property
+     * @return array|mixed|null|string
+     * @throws Tx_Smarty_Exception_CoreException
+     */
+    public function __get($property)
+    {
+        if ($property === 'template_dir') {
+            $this->getTemplateDir();
+
+        } elseif ($property === 'plugins_dir') {
+            $this->getPluginsDir();
+
+        } elseif ($property === 'config_dir') {
+            $this->getConfigDir();
+
+        } elseif ($property === 'compile_dir') {
+            $this->getCompileDir();
+
+        } elseif ($property === 'cache_dir') {
+            $this->getCacheDir();
+
+        } elseif ($property === 'path_to_template_directory') {
+            $this->getPathToTemplateDirectory();
+
+        } elseif ($property === 'path_to_language_file') {
+            $this->getPathToLanguageFile();
+
+        } elseif ($property === 'relPathToLanguageFile') {
+            $this->getRelPathToLanguageFile();
+
+        } elseif ($property === 'respect_no_cache') {
+            $this->getRespectNoCache();
+
+        } elseif ($property == 't3_extVars') {
+            return $this->getT3extVars();
+
+        } elseif ($property === 'pObj') {
+            return $this->getPobj();
+
+        } else {
+            $msg = 'Attempted to get unknown smarty property "' . $property . '"!';
+            throw new Tx_Smarty_Exception_CoreException($msg, 1322384939);
+        }
+    }
+
+    /**
+     * Generic setter for properties which are either deprecated or not accessible (i.e. private and therefore have
+     * to be translated to the appropriate setter method).
+     *
+     * @param string $property
+     * @param mixed $value
+     * @throws Tx_Smarty_Exception_CoreException
+     */
+    public function __set($property, $value)
+    {
+        if ($property === 'template_dir') {
+            $this->setTemplateDir($value);
+
+        } elseif ($property === 'plugins_dir') {
+            $this->addPluginsDir($value);
+
+        } elseif ($property === 'config_dir') {
+            $this->setConfigDir($value);
+
+        } elseif ($property === 'compile_dir') {
+            $this->setCompileDir($value);
+
+        } elseif ($property === 'cache_dir') {
+            $this->setCacheDir($value);
+
+        } elseif ($property === 'path_to_template_directory') {
+            $this->setPathToTemplateDirectory($value);
+
+        } elseif ($property === 'path_to_language_file') {
+            $this->setPathToLanguageFile($value);
+
+        } elseif ($property === 'relPathToLanguageFile') {
+            $this->setRelPathToLanguageFile($value);
+
+        } elseif ($property === 'respect_no_cache') {
+            $this->setRespectNoCache($value);
+
+        } elseif ($property === 't3_extVars') {
+            $this->setT3extVars($value);
+
+        } elseif ($property === 'pObj') {
+            $this->setPobj($value);
+
+        } else {
+            $msg = 'Attempted to set unknown smarty property "' . $property . '"!';
+            throw new Tx_Smarty_Exception_CoreException($msg, 1322384939);
+        }
+    }
+
+
+    /************************************************************************
+     * Deprecated methods
+     ************************************************************************/
+
+    /**
+     * @param $value
+     * @deprecated Feature has been dropped
+     */
+    private function setPobj($value)
+    {
+        t3lib_div::logDeprecatedFunction();
+    }
+
+    /**
+     * @deprecated Feature has been dropped
+     */
+    private function getPobj()
+    {
+        t3lib_div::logDeprecatedFunction();
+    }
+
+    /**
+     * @param $value
+     * @deprecated Feature has been dropped
+     */
+    private function setRespectNoCache($value)
+    {
+        t3lib_div::logDeprecatedFunction();
+    }
+
+    /**
+     * @deprecated Feature has been dropped
+     */
+    private function getRespectNoCache()
+    {
+        t3lib_div::logDeprecatedFunction();
+        return false;
+    }
+
+    /**
+     * @param $value
+     * @deprecated Feature has been dropped
+     */
+    private function setT3extVars($value)
+    {
+        t3lib_div::logDeprecatedFunction();
+    }
+
+    /**
+     * @deprecated Feature has been dropped
+     */
+    private function getT3extVars()
+    {
+        t3lib_div::logDeprecatedFunction();
+    }
+
+    /**
+     * Sets the template directory
      *
      * @param $path_to_template_directory
-     * @return void
      * @deprecated Use setTemplateDir() instead
      */
     public function setPathToTemplateDirectory($path_to_template_directory)
     {
+        t3lib_div::logDeprecatedFunction();
         $this->setTemplateDir($path_to_template_directory);
     }
 
     /**
+     * Gets the template directory
      *
+     * @return array|null
+     * @deprecated Use setTemplateDir() instead
+     */
+    public function getPathToTemplateDirectory()
+    {
+        t3lib_div::logDeprecatedFunction();
+        return $this->getTemplateDir();
+    }
+
+    /**
      * Set the language file
      *
      * @param $path_to_language_file
-     * @return void
      * @deprecated use setLanguageFile() instead
      */
     public function setRelPathToLanguageFile($path_to_language_file)
     {
+        t3lib_div::logDeprecatedFunction();
         $this->setLanguageFile($path_to_language_file);
     }
 
     /**
+     * Get the language file(s)
      *
+     * @return array|null
+     * @deprecated use getLanguageFile() instead
+     */
+    public function getRelPathToLanguageFile()
+    {
+        t3lib_div::logDeprecatedFunction();
+        return $this->getLanguageFile();
+    }
+
+    /**
      * Set the language file
      *
      * @param $path_to_language_file
-     * @return void
      * @deprecated use setLanguageFile() instead
      */
     public function setPathToLanguageFile($path_to_language_file)
     {
+        t3lib_div::logDeprecatedFunction();
         $this->setLanguageFile($path_to_language_file);
+    }
+
+    /**
+     * Get the language file(s)
+     *
+     * @return array|null
+     * @deprecated use getLanguageFile() instead
+     */
+    public function getPathToLanguageFile()
+    {
+        t3lib_div::logDeprecatedFunction();
+        return $this->getLanguageFile();
     }
 
     /**
@@ -447,11 +484,11 @@ class Tx_Smarty_Core_Wrapper
      *
      * @param $smartyVar
      * @param $smartyValue
-     * @return void
      * @deprecated use accessors instead. For example setCacheLifetime(3600)
      */
     public function setSmartyVar($smartyVar, $smartyValue)
     {
+        t3lib_div::logDeprecatedFunction();
         $method = 'set' . t3lib_div::underscoredToUpperCamelCase($smartyVar);
         $this->{$method}($smartyValue);
     }

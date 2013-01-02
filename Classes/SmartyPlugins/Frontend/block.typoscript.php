@@ -54,12 +54,12 @@
  * @param $repeat
  * @return mixed
  */
-    function smarty_block_typoscript($params, $content, Smarty_Internal_Template $template, &$repeat)
-    {
-        if (!$repeat) {
-            $ts = t3lib_div::makeInstance('t3lib_TSparser');
-            $ts->parse($content);
-            $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
-            return $cObj->cObjGet($ts->setup);
-        }
+function smarty_block_typoscript($params, $content, Smarty_Internal_Template $template, &$repeat)
+{
+    if (!$repeat) {
+        $ts = t3lib_div::makeInstance('t3lib_TSparser');
+        $ts->parse($content);
+        $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
+        return $cObj->cObjGet($ts->setup);
     }
+}

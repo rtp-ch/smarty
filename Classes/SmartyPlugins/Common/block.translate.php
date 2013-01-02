@@ -31,17 +31,17 @@
  *
  ***************************************************************/
 
-    /**
-     * @param $params
-     * @param $content
-     * @param Smarty_Internal_Template $template
-     * @param $repeat
-     * @return string
-     */
-    function smarty_block_translate($params, $content, Smarty_Internal_Template $template, &$repeat)
-    {
-        if (!$repeat) {
-            Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_LLL');
-            return smarty_block_LLL($params, $content, $template, $repeat);
-        }
+/**
+ * @param $params
+ * @param $content
+ * @param Smarty_Internal_Template $template
+ * @param $repeat
+ * @return string
+ */
+function smarty_block_translate($params, $content, Smarty_Internal_Template $template, &$repeat)
+{
+    if (!$repeat) {
+        Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_LLL');
+        return smarty_block_LLL($params, $content, $template, $repeat);
     }
+}

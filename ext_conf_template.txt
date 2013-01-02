@@ -1,9 +1,20 @@
 
-  # cat=basic/enable/20; type=boolean; label= Disable Smarty Caching: When set smarty caching is disabled. This setting is applied globally, overriding any other settings.
+  # cat=basic/enable/10; type=boolean; label= Disable Smarty Caching: When set smarty caching is disabled. Note that this setting is applied globally, overriding any other settings.
 disable_caching = 0
 
-  # cat=basic/enable/20; type=boolean; label = Enable Development Mode: When set smarty is configured for a development environment. For example, templates are recompiled on every hit and debugging is enabled. This setting is applied globally.
+  # cat=basic/enable/30; type=boolean; label = Escape all Template Variable Output: When set smarty will escape all template variable output by wrapping it in htmlspecialchars. This is a default setting which can overridden
+escape_html = 0
+
+  # cat=basic/enable/40; type=boolean; label = Enable Development Mode: When set smarty is configured for a development environment. For example, templates are recompiled on every hit and debugging is enabled. This setting is applied globally.
 enable_development_mode = 0
 
-  # cat=basic/enable/20; type=string; label = Development Mode Conext: If defined, development mode is only available in the these server contexts. Contexts are server environment variables which can be defined in the server configuration or in a .htaccess file.
-development_mode_context = TYPO3_CONTEXT=development,testing
+  # cat=basic/enable/50; type=string; label = Development Environment Definitions: Comma seperated list of server environment variables which, when detected, will trigger the development mode. Server environment variables which can be defined in the server configuration or in an .htaccess file.
+development_environment_definitions =
+
+TSConstantEditor.basic {
+    header = Development Environment Configuration
+    description = <ul><li><span style="background:red; padding:1px 2px; color:#fff; font-weight:bold;">1</span> "Development Mode" can be used to define additional configuration options which are only active when devlopment mode has either been enabled or any of the defined server environment variables is detected.<br /> The development mode configuration can be defined in TypoScript. By default when smarty is in development mode error reporting is increased and compile as well as cache files are regenerated on every hit.<br /> Server environment variables can be defined via .htacess or in your server configuration. The following are examples of Development Environment Definitions: <dl> <dt><strong>TYPO3_MODE</strong> would match:</dt><dd>SetEnv TYPO3_MODE 1</dd><dd>SetEnv TYPO3_MODE true</dd><dd>SetEnv TYPO3_MODE on</dd> <dt><strong>TYPO3_MODE=development</strong> would match:</dt> <dd>SetEnv TYPO3_MODE development</dd> <dt><strong>TYPO3_MODE=development,DEV_MODE</strong> would match:</dt> <dd>SetEnv TYPO3_MODE development</dd><dd>SetEnv DEV_MODE 1</dd></dl></li></ul>
+    1=enable_development_mode,development_mode_contexts
+}
+
+

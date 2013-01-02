@@ -15,8 +15,8 @@
 /**
  * 
  */
-class Tx_Smarty_Exception_BadMethodCallException
-    extends BadMethodCallException
+class Tx_Smarty_Exception_CoreException
+    extends Exception
 {
 
 }

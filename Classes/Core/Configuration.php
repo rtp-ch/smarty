@@ -1,168 +1,191 @@
 <?php
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2006-2007 Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
-
-/**
- * @copyright     2011 Rueegg Tuck Partner GmbH
- * @author         Simon Tuck <stu@rtp.ch>
- * @link         http://www.rtpartner.ch/
- * @package     Smarty (smarty)
- **/
-
 
 class Tx_Smarty_Core_Configuration
 {
     /**
      * @var null|ReflectionClass
      */
-    private $smartyClass            = null;
+    private $smartyClass;
 
     /**
      * @var null|Tx_Smarty_Core_Wrapper
      */
-    private $smartyInstance         = null;
+    private $smartyInstance;
 
     /**
      * @var string
      */
-    const GETTER_ACTION             = 'get';
+    const GETTER_PREFIX = 'get';
 
     /**
      * @var string
      */
-    const SETTER_ACTION             = 'set';
+    const SETTER_PREFIX = 'set';
 
     /**
      * @var string
      */
-    const ADDER_ACTION              = 'add';
+    const ADDER_PREFIX  = 'add';
 
     /**
+     *
      * @param Tx_Smarty_Core_Wrapper $smartyInstance
-     * @throws Tx_Smarty_Exception_InvalidArgumentException
+     * @throws Tx_Smarty_Exception_CoreException
      */
     public function __construct(Tx_Smarty_Core_Wrapper $smartyInstance)
     {
-        if($smartyInstance instanceof Tx_Smarty_Core_Wrapper) {
+        if ($smartyInstance instanceof Tx_Smarty_Core_Wrapper) {
             $this->smartyInstance = $smartyInstance;
             $this->smartyClass = new ReflectionClass($smartyInstance);
 
         } else {
-            $message = 'Configuration manager requires a valid instance of smarty!';
-            throw new Tx_Smarty_Exception_InvalidArgumentException($message, 1320785449);
+            $msg = 'Configuration manager requires a valid instance of smarty!';
+            throw new Tx_Smarty_Exception_CoreException($msg, 1320785449);
         }
     }
 
     /**
      * Manages smarty configuration settings by handling accessors (get, set and add). Adders are limited to
-     * corresponding smarty methods (i.e. there are a limited number of adders), but setter/getters can be used for all
-     * smarty properties. For example, $smarty->setCacheLifetime(12000) is equivalent to $smarty->cache_lifetime = 12000,
-     * similarly $smarty->getCacheLifetime() will return $smarty->cache_lifetime. In the same vein the methods
-     * $smarty->set('cache_lifetime', 12000) and $smarty->get('cache_lifetime') can be used to set/get smarty properties.
+     * corresponding smarty methods (i.e. there are a limited number of adders), but setter/getters can be
+     * used for all smarty properties which are publicly accessible.
      *
-     * @magic
+     * For example, $smarty->setCacheLifetime(12000) is equivalent to $smarty->cache_lifetime = 12000,
+     * similarly $smarty->getCacheLifetime() will return $smarty->cache_lifetime. In the same vein the methods
+     * $smarty->set('cache_lifetime', 12000) and $smarty->get('cache_lifetime') can be used to set/get properties.
      *
      * @param string $method
      * @param array $args
-     * @throws Tx_Smarty_Exception_BadMethodCallException
-     * @throws InvalidArgumentException
+     * @throws Tx_Smarty_Exception_CoreException
      * @return mixed
      */
-    public final function __call($method, array $args = array())
+    final public function __call($method, array $args = array())
     {
-        // Gets the accessor from the method name and throws an execption
+        // Gets the accessor from the method name and throws an exception
         // if the method call is not a valid accessor.
-        $action = self::getActionFromMethod($method);
-        if(!self::hasAction($action)) {
-            $message = 'Unknown action "' . $action . '" in method "' . $method .'"!';
-            throw new Tx_Smarty_Exception_BadMethodCallException($message, 1320785456);
+        $accessor = self::getAccessorFromMethod($method);
+        if (!self::hasAccessor($accessor)) {
+            $msg = 'Method "' . $method .'" is not a valid accessor!';
+            throw new Tx_Smarty_Exception_CoreException($msg, 1320785456);
         }
 
-        // Gets the property from the method call (the first three characters of the
-        // method are the action, the remaining characters the property) and formats
-        // it correctly, i.e. "template_dir" is extracted from "getTemplateDir"
-        if(strlen($method) > 3) {
+        // Constructs the proper method name and, if available, property from the
+        // accessor, the method and the arguments
+        if (strlen($method) > 3) {
+
+            // Gets the property from the method call (the first three characters of the
+            // method are the action, the remaining characters the property) and formats
+            // it correctly, i.e. "template_dir" is extracted from "getTemplateDir"
             $property = t3lib_div::camelCaseToLowerCaseUnderscored(substr($method, 3));
 
-        // Alternatively if the method is just the accessor, e.g. set('template_dir', 'some/path')
-        // then the property is the first argument. And the method is constructed from the action
-        // and the property.
         } else {
+            // Alternatively if the method is just the accessor, e.g. set('template_dir', 'some/path')
+            // then the property is the first argument. And the method is constructed from the action
+            // and the property.
             $property = array_shift($args);
-            $method = $action . t3lib_div::underscoredToUpperCamelCase($property);
+            $method = $accessor . t3lib_div::underscoredToUpperCamelCase($property);
         }
 
-        // Catches unknown smarty properties
-        if(!$this->smartyClass->hasProperty($property) && !$this->smartyClass->hasMethod($method)) {
-            throw new InvalidArgumentException('Unknown property "' . $property . '" in method "' . $method .'"!', 1320785462);
+        // Halts execution with an exception if neither the method nor the property are available in smarty
+        if (!$this->smartyClass->hasProperty($property) && !$this->smartyClass->hasMethod($method)) {
+            $msg = 'Unknown property "' . $property . '" in method "' . $method .'"!';
+            throw new Tx_Smarty_Exception_CoreException($msg, 1320785462);
         }
 
-        // Catches adders without a corresponding method in smarty.
-        if(self::isAdder($action) && !$this->smartyClass->hasMethod($method)) {
-            $message = 'Method "' . $method . '" is not a valid smarty setter!';
-            throw new Tx_Smarty_Exception_BadMethodCallException($message, 1320785472);
+        // Special case: Halts execution with an exception if the accessor is an adder but there is no corresponding
+        // method in smarty. This is necessary because there are only a few properties which have adders (for example,
+        // plugins_dir is one of these).
+        if (self::isAdder($accessor) && !$this->smartyClass->hasMethod($method)) {
+            $msg = 'Method "' . $method . '" is not a valid smarty method!';
+            throw new Tx_Smarty_Exception_CoreException($msg, 1320785472);
         }
 
-        // Sepcial case: never overwrite plugins_dir!
-        if ($property === 'plugins_dir') {
-            $action = 'add';
-            $method = $action . t3lib_div::underscoredToUpperCamelCase($property);
-        }
+        // Executes the accessor on the smarty property
+        if (self::isSetter($accessor) || self::isAdder($accessor)) {
 
-        // Sets or adds smarty configuration setting
-        if(self::isSetter($action) || self::isAdder($action)) {
+            // Gets the value to add or set from the arguments
+            if (is_array($args) && !empty($args)) {
 
-            // Resolves directories or files to absolute paths
-            if(!empty($args) && (Tx_Smarty_Utility_Smarty::isPathSetting($args[0]))) {
-                $args[0] = Tx_Smarty_Utility_Path::resolvePaths($args[0]);
-            }
+                $value = array_shift($args);
 
-            // Use smarty's setter or adder if available
-            if($this->smartyClass->hasMethod($method)) {
-                call_user_func(array($this->smartyInstance, $method), $args[0]);
+                if (strpos($value, ',')) {
+                    $values = Tx_Smarty_Utility_Array::trimExplode(',', $value);
+                    foreach ($values as $v) {
+                        $value = self::parseValue($v);
+                    }
 
-            // Set the smarty property directly
+                } else {
+                    $value = self::parseValue($value);
+                }
+
             } else {
-                $this->smartyInstance->{$property} = $args[0];
-
+                // If undefined the value is null and the action is equivalent to unsetting
+                $value = null;
             }
 
-            // Return current Smarty instance for chaining
+            // Sets, adds or gets the value of the smarty property
+            if ($this->smartyClass->hasMethod($method)) {
+
+                // Uses smarty's setter or adder if available
+                call_user_func(array($this->smartyInstance, $method), $value);
+
+            } else {
+                // Sets the smarty property directly
+                $this->smartyInstance->{$property} = $value;
+            }
+
+            // Returns the current Smarty instance for chaining
             return $this->smartyInstance;
 
-        // Gets smarty configuration setting
         } else {
-
-            // Use smarty's getter if available
-            if($this->smartyClass->hasMethod($method)) {
+            if ($this->smartyClass->hasMethod($method)) {
+                // Uses smarty's getter if available
                 return call_user_func(array($this->smartyInstance, $method));
 
-            // Get the smarty property directly
             } else {
+                // Accesses the smarty property directly
                 return $this->smartyInstance->{$property};
-
             }
         }
+    }
+
+    /**
+     * Handles additional parsing of the value
+     *
+     * @param $value
+     * @throws Tx_Smarty_Exception_CoreException
+     * @return array|mixed
+     */
+    private static function parseValue($value)
+    {
+        // Casts boolean from corresponding strings or returns the string unchanged
+        $value = Tx_Smarty_Utility_Scalar::booleanize($value);
+
+        if (Tx_Smarty_Utility_Smarty::isPathSetting($value)) {
+
+            // Translates directories or files to absolute paths
+            $value = Tx_Smarty_Utility_Path::resolvePaths($value);
+
+        } elseif(strpos($value, '::')) {
+
+            $staticPropertyParts = Tx_Smarty_Utility_Array::trimExplode('::', $value, true, 2);
+            $class = $staticPropertyParts[0];
+            $property = $staticPropertyParts[1];
+            if (class_exists($class)) {
+                $reflection = new ReflectionClass($class);
+                if ($reflection->hasProperty($property)) {
+                    $value = $reflection->getStaticPropertyValue($property);
+
+                } else {
+                    $msg = 'Class "' . $class . '" has no static property "' . $property . '"!';
+                    throw new Tx_Smarty_Exception_CoreException($msg, 1356914788);
+                }
+            } else {
+                $msg = 'Unable to locate class "' . $class . '" with static property "' . $property . '"!';
+                throw new Tx_Smarty_Exception_CoreException($msg, 1356914936);
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -172,52 +195,54 @@ class Tx_Smarty_Core_Configuration
      * @param $method
      * @return string
      */
-    private static function getActionFromMethod($method)
+    private static function getAccessorFromMethod($method)
     {
         return strtolower(substr($method, 0, 3));
     }
 
     /**
-     * Checks if the method is a valid accessor
+     * Checks if a method prefix is an accessor (i.e. a getter, setter or an adder)
      *
-     * @param $action
+     * @param $prefix
      * @return bool
      */
-    private static function hasAction($action)
+    private static function hasAccessor($prefix)
     {
-        return (boolean) (self::isSetter($action) || self::isGetter($action) || self::isAdder($action));
+        return self::isGetter($prefix)
+            || self::isSetter($prefix)
+            || self::isAdder($prefix);
     }
 
     /**
-     * Checks if the method is a getter
+     * Checks if the method prefix is a getter
      *
-     * @param $action
+     * @param $prefix
      * @return bool
      */
-    private static function isGetter($action)
+    private static function isGetter($prefix)
     {
-        return (boolean) ((string) $action === self::GETTER_ACTION);
+        return $prefix === self::GETTER_PREFIX;
     }
 
     /**
-     * Checks if the method is a setter
+     * Checks if the method prefix is a setter
      *
-     * @param $action
+     * @param $prefix
      * @return bool
      */
-    private static function isSetter($action)
+    private static function isSetter($prefix)
     {
-        return (boolean) ((string) $action === self::SETTER_ACTION);
+        return $prefix === self::SETTER_PREFIX;
     }
 
     /**
-     * Checks if the method is a adder
+     * Checks if the method prefix is an adder
      *
-     * @param $action
+     * @param $prefix
      * @return bool
      */
-    private static function isAdder($action)
+    private static function isAdder($prefix)
     {
-        return (boolean) ((string) $action === self::ADDER_ACTION);
+        return $prefix === self::ADDER_PREFIX;
     }
 }

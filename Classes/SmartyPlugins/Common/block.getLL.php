@@ -39,10 +39,10 @@
  * @return string
  * @see smarty_block_LLL
  */
-    function smarty_block_getLL($params, $content, Smarty_Internal_Template $template, &$repeat)
-    {
-        if (!$repeat) {
-            Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_LLL');
-            return smarty_block_LLL($params, $content, $template, $repeat);
-        }
+function smarty_block_getLL($params, $content, Smarty_Internal_Template $template, &$repeat)
+{
+    if (!$repeat) {
+        Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_LLL');
+        return smarty_block_LLL($params, $content, $template, $repeat);
     }
+}

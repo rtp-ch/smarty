@@ -1,106 +1,107 @@
 <?php
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2006-2007 Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
 
 class Tx_Smarty_Core_Builder
 {
     private static $pluginDirs = array(
         'EXT:smarty/Classes/SmartyPlugins/Common',
-        'EXT:smarty/Classes/SmartyPlugins/Frontend'
+        'EXT:smarty/Classes/SmartyPlugins/Frontend',
+        'EXT:smarty/Classes/SmartyPlugins/Backend'
     );
 
-    public function &Get($options = array())
+    /**
+     * Creates, configures and returns an instance of smarty.
+     *
+     * @param array $options
+     * @param null $extensionKey
+     * @return Tx_Smarty_Core_Wrapper
+     */
+    public static function get($options = array(), $extensionKey = null)
     {
-        // Creates an instance of smarty
-        $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Core_Wrapper', (array) $options);
+        /**
+         * Initializes the smarty instance and apply core settings
+         * - Sets the
+         * -
+         */
 
-        // Sets plugin dirs
-        $smartyInstance->addPluginsDir(self::$pluginDirs);
+        // Creates an instance of smarty
+        $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Core_Wrapper');
 
         // Cache and compile dirs in typo3temp
         $smartyInstance->setCacheDir('typo3temp/smarty_cache/');
         $smartyInstance->setCompileDir('typo3temp/smarty_compile/');
 
+        // Sets plugin dirs
+        $smartyInstance->addPluginsDir(self::$pluginDirs);
+
         // Register the TypoScript Filter which allows creating parameters using the
         // dot notation, e.g. {plugin filter.this.notation="bla"}
-        $smartyInstance->registerFilter('pre', array('Tx_Smarty_SmartyPlugins_Core_DotNotationFilter', 'pre'));
-        $smartyInstance->registerFilter('post', array('Tx_Smarty_SmartyPlugins_Core_DotNotationFilter', 'post'));
+        $smartyInstance->registerFilter('pre', array('Tx_Smarty_SysPlugins_DotNotationFilter', 'pre'));
+        $smartyInstance->registerFilter('post', array('Tx_Smarty_SysPlugins_DotNotationFilter', 'post'));
 
         // Registers "EXT" as a custom smarty resource so that template files can be
         // referenced as EXT:path/to/my/template.html
-        $smartyInstance->registerResource('EXT', new Tx_Smarty_SmartyPlugins_Core_ExtResource());
+        $smartyInstance->registerResource('EXT', new Tx_Smarty_SysPlugins_ExtResource());
 
         // Register "path" as a resource, mainly for backwards compatibility. Can retrieve a file
         // from the resource-list. @see t3lib_TStemplate::getFileName()
-        $smartyInstance->registerResource('path', new Tx_Smarty_SmartyPlugins_Core_PathResource());
+        $smartyInstance->registerResource('path', new Tx_Smarty_SysPlugins_PathResource());
 
-        // Registers a reference to the calling class. Apparently "$this" is
-        // accessible when referenced statically in a non-static context...
-        $pObj = is_object($this) ? $this : new stdClass();
-        $smartyInstance->setParentObject($pObj);
+        // Gets and merges the smarty configuration in order of priority from the following sources:
+        // [A] Configuration options passed directly to this builder
+        // [B] TypoScript settings for the current extension key (if supplied)
+        // [C] The global smarty TypoScript configuration
 
-        // Gets and parses the smarty configuration from TypoScript
-        $setup = array();
-        if(isset($smartyInstance->getParentObject()->prefixId)) {
-            $prefixId = $smartyInstance->getParentObject()->prefixId;
-            list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3('plugin.' . $prefixId . '.smarty');
+        // [C] The global smarty configuration
+        list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3('plugin.smarty');
+
+        // [B] The smarty configuration for the current extension key
+        if (!is_null($extensionKey)) {
+            $typoscriptString = 'plugin.' . $extensionKey . '.smarty';
+            list($extensionSetup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3($typoscriptString);
+            $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, (array) $extensionSetup);
         }
-        $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, $options);
-        $setup = Tx_Smarty_Utility_TypoScript::arrayStdWrap($setup);
 
-        // Applies the smarty configuration to the instance
-        foreach($setup as $key => $value) {
+        // [A] Configuration options passed directly to this builder
+        $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, (array) $options);
+
+        if (self::hasDevelopmentMode()
+            && isset($setup['development.'])
+            && Tx_Smarty_Utility_Array::notEmpty($setup['development.'])) {
+
+            $setup = t3lib_div::array_merge_recursive_overrule($setup, $setup['development.']);
+        }
+
+        // Checks if caching has been disabled in the system wide configuration and globally disables it if so.
+        if ((boolean) Tx_Smarty_Utility_ExtConf::getExtConfValue('disable_caching')) {
+            $setup['caching'] = false;
+        }
+
+        if ($GLOBALS['TSFE']->no_cache) {
+            // TODO: respect no cache?
+        }
+
+        // Unset
+        unset($setup['development.']);
+
+        // Configures the smarty instance with the final configuration array
+        foreach ($setup as $key => $value) {
             $smartyInstance->set($key, $value);
         }
 
-        // Initializes language file
-        self::setLanguageFile($smartyInstance);
-
         return $smartyInstance;
     }
-    
-    private static function setLanguageFile($smartyInstance)
+
+    private static function hasDevelopmentMode()
     {
-        if(!$smartyInstance->getLanguageFile()) {
-
-            // Case: language file is undefined and traditional tslib_pibase
-            // scenario is in effect. Tries to get the localllang file from the
-            // extension cofiguration.
-            if (isset($smartyInstance->getParentObject()->extKey)
-                && isset($smartyInstance->getParentObject()->scriptRelPath)) {
-
-                $extKey = $smartyInstance->getParentObject()->extKey;
-                $scriptRelPath = $smartyInstance->getParentObject()->scriptRelPath;
-
-                $langFileBase = t3lib_extMgm::extPath($extKey) . dirname($scriptRelPath) . '/locallang';
-                if (is_file($langFileBase . '.xml')) {
-                    $smartyInstance->setLanguageFile($langFileBase . '.xml');
-                } elseif (is_file($langFileBase . '.php')) {
-                    $smartyInstance->setLanguageFile($langFileBase . '.php');
-                }
-            }
-
-            // TODO: Language file is undefined and extBase scenario is in effect
+        if ((boolean) Tx_Smarty_Utility_ExtConf::getExtConfValue('enable_development_mode')) {
+            return true;
         }
+
+        $devEnvDefnitions = trim(Tx_Smarty_Utility_ExtConf::getExtConfValue('development_environment_definitions'));
+        if ($devEnvDefnitions && Tx_Smarty_Utility_Environment::anyValid($devEnvDefnitions)) {
+            return true;
+        }
+
+        return false;
     }
 }
