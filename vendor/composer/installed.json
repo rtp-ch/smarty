@@ -1,41 +1,5 @@
 [
     {
-        "name": "smarty/smarty",
-        "version": "3.1.12",
-        "version_normalized": "3.1.12.0",
-        "source": {
-            "type": "svn",
-            "url": "http://smarty-php.googlecode.com/svn/",
-            "reference": "tags/Smarty_3_1_12/distribution/"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "http://www.smarty.net/files/Smarty-3.1.12.zip",
-            "reference": null,
-            "shasum": null
-        },
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "libs/"
-            ]
-        }
-    },
-    {
-        "name": "jevon-phd/html2text",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "dist": {
-            "type": "file",
-            "url": "http://iaml.googlecode.com/svn/trunk/org.openiaml.model.runtime/src/include/html2text/html2text.php",
-            "reference": "master",
-            "shasum": null
-        },
-        "type": "library",
-        "installation-source": "dist"
-    },
-    {
         "name": "nickcernis/html2markdown",
         "version": "1.0.1",
         "version_normalized": "1.0.1.0",
@@ -52,5 +16,103 @@
         },
         "type": "library",
         "installation-source": "source"
+    },
+    {
+        "name": "smarty/smarty",
+        "version": "v3.1.13",
+        "version_normalized": "3.1.13.0",
+        "source": {
+            "type": "svn",
+            "url": "http://smarty-php.googlecode.com/svn",
+            "reference": "/tags/v3.1.13/@4699"
+        },
+        "require": {
+            "php": ">=5.2"
+        },
+        "time": "2013-01-26 12:03:52",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "distribution/libs/Smarty.class.php",
+                "distribution/libs/SmartyBC.class.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "Monte Ohrt",
+                "email": "monte@ohrt.com"
+            },
+            {
+                "name": "Uwe Tews",
+                "email": "uwe.tews@googlemail.com"
+            },
+            {
+                "name": "Rodney Rehm",
+                "email": "rodney.rehm@medialize.de"
+            }
+        ],
+        "description": "Smarty - the compiling PHP template engine",
+        "homepage": "http://www.smarty.net",
+        "keywords": [
+            "templating"
+        ]
+    },
+    {
+        "name": "michelf/php-markdown",
+        "version": "1.3-beta4",
+        "version_normalized": "1.3.0.0-beta4",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/michelf/php-markdown.git",
+            "reference": "1.3-beta4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/michelf/php-markdown/archive/1.3-beta4.zip",
+            "reference": "1.3-beta4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2013-01-21 14:45:46",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-lib": "1.3.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "michelf": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Michel Fortin",
+                "email": "michel.fortin@michelf.ca",
+                "homepage": "http://michelf.ca/",
+                "role": "Developer"
+            },
+            {
+                "name": "John Gruber",
+                "homepage": "http://daringfireball.net/"
+            }
+        ],
+        "description": "PHP Markdown",
+        "homepage": "http://michelf.ca/projects/php-markdown/",
+        "keywords": [
+            "markdown"
+        ]
     }
 ]

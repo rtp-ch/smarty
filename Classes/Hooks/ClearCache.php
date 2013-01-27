@@ -3,7 +3,7 @@
 /**
  *
  */
-class Tx_Smarty_ClearCache
+class Tx_Smarty_Hooks_ClearCache
 {
     /**
      * @param $params

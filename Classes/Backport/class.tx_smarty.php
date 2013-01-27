@@ -10,7 +10,7 @@ class tx_smarty
     public function smarty($options = array())
     {
         $pObj = self::getCallingInstance();
-        return Tx_Smarty_Core_Builder::get((array) $options);
+        return Tx_Smarty_Factory::get((array) $options);
     }
 
     public function newSmarty($options = array())
@@ -18,13 +18,13 @@ class tx_smarty
         $pObj = self::getCallingInstance();
         $prefixId = self::getPrefixId($pObj);
         $languageFile = self::getLanguageFile($pObj);
-        return Tx_Smarty_Core_Builder::get((array) $options, $prefixId);
+        return Tx_Smarty_Factory::get((array) $options, $prefixId);
     }
 
     public function newSmartyTemplate($options = array())
     {
         $pObj = self::getCallingInstance();
-        return Tx_Smarty_Core_Builder::get((array) $options);
+        return Tx_Smarty_Factory::get((array) $options);
     }
 
     /**

@@ -2,6 +2,10 @@
 // Default smarty configuration
 plugin.smarty {
 
+    // By default smarty cache and compile dirs are located in the typo3temp directory
+    cache_dir = typo3temp/smarty_cache/
+    compile_dir = typo3temp/smarty_compile/
+
     // By setting $merge_compiled_includes to TRUE Smarty will merge the compiled template
     // code of subtemplates into the compiled code of the main template.
     // This increases rendering speed of templates using a many different sub-templates.
@@ -19,7 +23,7 @@ plugin.smarty {
     // If set to true, Smarty will respect the If-Modified-Since header sent from the client.
     // If the cached file timestamp has not changed since the last visit, then a '304: Not Modified'
     // header will be sent instead of the content.
-    cache_modified_check = false
+    cache_modified_check = true
 
     // Smarty will create subdirectories under the compiled templates and cache directories if set to true
     use_sub_dirs = true
@@ -41,7 +45,7 @@ plugin.smarty {
     // @see http://www.smarty.net/docs/en/variable.compile.check.tpl
     compile_check = Smarty::COMPILECHECK_CACHEMISS
 
-    // Settings applied in a development environment context
+    // Settings applied in a development environment context.
     development {
 
         // php error_reporting level inside of display() and fetch()

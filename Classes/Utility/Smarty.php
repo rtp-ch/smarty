@@ -33,7 +33,7 @@ class Tx_Smarty_Utility_Smarty
      */
     public static function isPathSetting($setting)
     {
-        $setting = strtolower($setting);
+        $setting = strtolower(trim($setting));
         return substr($setting, -4) === 'file'
             || substr($setting, -3) === 'dir'
             || substr($setting, -8) === 'template';
