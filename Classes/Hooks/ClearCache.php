@@ -1,7 +1,8 @@
 <?php
 
 /**
- *
+ * TODO: Implement this hook
+ * TODO: Apply required caching mechanism to smarty
  */
 class Tx_Smarty_Hooks_ClearCache
 {
