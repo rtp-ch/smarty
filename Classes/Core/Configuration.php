@@ -132,18 +132,21 @@ class Tx_Smarty_Core_Configuration
 
         } elseif(strpos($value, '::')) {
 
-            // Resolves class constants in TypoScript settings, e.g. Smarty::PHP_PASSTHRU
-            $staticPropertyParts = Tx_Smarty_Utility_Array::trimExplode('::', $value, true, 2);
-            $class = $staticPropertyParts[0];
-            $property = $staticPropertyParts[1];
+            // Resolves constants or static properties in TypoScript settings, e.g. Smarty::PHP_PASSTHRU
+            $propertyParts = Tx_Smarty_Utility_Array::trimExplode('::', $value, true, 2);
+            $class = $propertyParts[0];
+            $property = $propertyParts[1];
 
             if (class_exists($class)) {
                 $reflection = new ReflectionClass($class);
                 if ($reflection->hasProperty($property)) {
                     $value = $reflection->getStaticPropertyValue($property);
 
+                } elseif ($reflection->hasConstant($property)) {
+                    $value = $reflection->getConstant($property);
+
                 } else {
-                    $msg = 'Class "' . $class . '" has no static property "' . $property . '"!';
+                    $msg = 'Class "' . $class . '" has no static property or constant "' . $property . '"!';
                     throw new Tx_Smarty_Exception_CoreException($msg, 1356914788);
                 }
             } else {

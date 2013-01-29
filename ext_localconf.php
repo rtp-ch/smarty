@@ -13,8 +13,9 @@ if (!defined('SMARTY_RESOURCE_CHAR_SET')) {
     define('SMARTY_RESOURCE_CHAR_SET', SMARTY_MBSTRING ? 'UTF-8' : 'ISO-8859-1');
 }
 
-// Include the main extension class
-// require_once(t3lib_extMgm::extPath($_EXTKEY) . 'Vendors/Rtp/Wrapper/class.tx_smarty.php');
+// Include the autoloader for 3rd party libraries, including the smarty library
+require_once(t3lib_extMgm::extPath($_EXTKEY) . 'vendor/autoload.php');
 
-// Hook for clearing smarty cache
-// $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = t3lib_extMgm::extPath($_EXTKEY).'hook/ClearCache.php:&tx_smarty_cache->clearSmartyCache';
+// TODO: Hook for clearing smarty cache
+// $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][]
+//        = t3lib_extMgm::extPath($_EXTKEY) . 'Classes/Hooks/ClearCache.php:&Tx_Smarty_Hooks_ClearCache->clearSmartyCache';

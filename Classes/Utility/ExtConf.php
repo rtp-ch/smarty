@@ -32,6 +32,7 @@ class Tx_Smarty_Utility_ExtConf
     public static function getExtConfValue($key)
     {
         static $extConf;
+
         if (is_null($extConf)) {
             $extConf = self::getExtConf();
         }
