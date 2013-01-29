@@ -320,15 +320,6 @@ class Tx_Smarty_Core_Wrapper
         }
 
         return $this->fetch($template, $cache_id, $compile_id, $parent, false);
-
-        try {
-
-
-        } catch (Exception $e) {
-            t3lib_utility_Debug::debug($e);
-            exit;
-        }
-
     }
 
 

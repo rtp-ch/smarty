@@ -5,30 +5,53 @@ class tx_smarty
 {
     /**
      * @param array $options
-     * @return object
+     * @return Tx_Smarty_Core_Wrapper
      */
     public function smarty($options = array())
     {
-        $pObj = self::getCallingInstance();
-        return Tx_Smarty_Factory::get((array) $options);
-    }
-
-    public function newSmarty($options = array())
-    {
-        $pObj = self::getCallingInstance();
-        $prefixId = self::getPrefixId($pObj);
-        $languageFile = self::getLanguageFile($pObj);
-        return Tx_Smarty_Factory::get((array) $options, $prefixId);
-    }
-
-    public function newSmartyTemplate($options = array())
-    {
-        $pObj = self::getCallingInstance();
-        return Tx_Smarty_Factory::get((array) $options);
+        t3lib_div::logDeprecatedFunction();
+        return self::backportSmarty((array) $options);
     }
 
     /**
-     * Makes use a little known quirk/wtf of PHP to get the instance of the calling class:
+     * @param array $options
+     * @return Tx_Smarty_Core_Wrapper
+     */
+    public function newSmarty($options = array())
+    {
+        t3lib_div::logDeprecatedFunction();
+        return self::backportSmarty((array) $options);
+    }
+
+    /**
+     * @param array $options
+     * @return Tx_Smarty_Core_Wrapper
+     */
+    public function newSmartyTemplate($options = array())
+    {
+        t3lib_div::logDeprecatedFunction();
+        return self::backportSmarty((array) $options);
+    }
+
+    /**
+     * @param array $options
+     * @return Tx_Smarty_Core_Wrapper
+     */
+    private function backportSmarty($options = array())
+    {
+        $callingInstance = self::getCallingInstance();
+
+        if (!isset($options['pathToLanguageFile'])) {
+            $options['pathToLanguageFile'] = self::getLanguageFile($callingInstance);
+        }
+
+        $prefixId = self::getPrefixId($callingInstance);
+
+        return Tx_Smarty_Factory::get((array) $options, $prefixId);
+    }
+
+    /**
+     * Makes use of a little known quirk/wtf of PHP to get the instance of the calling class:
      * "$this" refers back to the instance of the calling class when a non-static method is
      * called statically.
      *
@@ -36,17 +59,14 @@ class tx_smarty
      * properties of the extension which was invoking smarty. Specifically it was used to identify
      * and load the proper locallang file.
      *
-     * As this behaviour throws an error in E_STRICT and is plain stupid it has been deprecated and
+     * As this behaviour throws an error in E_STRICT and is "wrong" it has been deprecated and
      * is only employed here for the purpose of backwards compatibility.
-     *
-     *
      *
      * @return object|stdClass
      * @deprecated
      */
     private function getCallingInstance()
     {
-        t3lib_div::logDeprecatedFunction();
         return is_object($this) ? $this : new stdClass();
     }
 
