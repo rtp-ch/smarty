@@ -80,6 +80,7 @@ class Tx_Smarty_Core_CobjectProxy
      */
     protected function simulateFrontendEnvironment(array $data = array(), $table = '')
     {
+        $this->setTimeTracker();
         $this->setTsfe();
         $this->setWorkingDir();
         $this->setCharSet();
@@ -87,6 +88,16 @@ class Tx_Smarty_Core_CobjectProxy
         $this->setTypoScript();
         $this->setContentObject($data, $table);
     }
+
+    /**
+     * Sets a fake time tracker
+     */
+    private static function setTimeTracker()
+    {
+        if (!is_object($GLOBALS['TT'])) {
+            $GLOBALS['TT'] = t3lib_div::makeInstance('t3lib_TimeTrackNull');    
+        }        
+    }    
 
     /**
      * @param array $data
@@ -110,8 +121,8 @@ class Tx_Smarty_Core_CobjectProxy
         $GLOBALS['TSFE']->where_hid_del = ' AND pages.deleted=0';
         $GLOBALS['TSFE']->sys_page->init(false);
         $GLOBALS['TSFE']->sys_page->where_hid_del .= ' AND pages.doktype<200';
-        $GLOBALS['TSFE']->sys_page->where_groupAccess =
-            $GLOBALS['TSFE']->sys_page->getMultipleGroupsWhereClause('pages.fe_group', 'pages');
+        $GLOBALS['TSFE']->sys_page->where_groupAccess 
+            = $GLOBALS['TSFE']->sys_page->getMultipleGroupsWhereClause('pages.fe_group', 'pages');
     }
 
     /**
@@ -119,7 +130,7 @@ class Tx_Smarty_Core_CobjectProxy
      */
     private function setTypoScript()
     {
-        $typoScriptSetup = array();
+        $typoScriptSetup = array(); // TODO: Smarty setup
         $template = t3lib_div::makeInstance('t3lib_TStemplate');
         $template->tt_track = 0;
         $template->init();
@@ -170,7 +181,9 @@ class Tx_Smarty_Core_CobjectProxy
     private function setTsfe()
     {
         $this->tsfeBackup = ($GLOBALS['TSFE'] instanceof tslib_fe) ? $GLOBALS['TSFE'] : false;
-        $GLOBALS['TSFE']  = new stdClass();
+        // TODO: Use an instance of tslib_fe or not...
+        $GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], 0, 0);
+        // $GLOBALS['TSFE']  = new stdClass();
         $GLOBALS['TSFE']->cObjectDepthCounter = 100;
         $GLOBALS['TSFE']->baseUrl = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
     }
