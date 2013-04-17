@@ -130,14 +130,14 @@ class Tx_Smarty_Core_CobjectProxy
      */
     private function setTypoScript()
     {
-        $typoScriptSetup = array(); // TODO: Smarty setup
-        $template = t3lib_div::makeInstance('t3lib_TStemplate');
-        $template->tt_track = 0;
-        $template->init();
-        $template->getFileName_backPath = PATH_site;
-        $GLOBALS['TSFE']->tmpl = $template;
-        $GLOBALS['TSFE']->tmpl->setup = $typoScriptSetup;
-        $GLOBALS['TSFE']->config = $typoScriptSetup;
+        $GLOBALS['TSFE']->tmpl->runThroughTemplates(
+            $GLOBALS['TSFE']->sys_page->getRootLine($GLOBALS['TSFE']->id),
+            0
+        );
+        $GLOBALS['TSFE']->tmpl->generateConfig();
+        $GLOBALS['TSFE']->tmpl->loaded = 1;
+        $GLOBALS['TSFE']->settingLanguage();
+        $GLOBALS['TSFE']->settingLocale();
     }
 
     /**
@@ -178,13 +178,19 @@ class Tx_Smarty_Core_CobjectProxy
     /**
      * Sets $GLOBALS['TSFE']
      */
-    private function setTsfe()
+    private function setTsfe($pageId = 0, $noCache = 0)
     {
         $this->tsfeBackup = ($GLOBALS['TSFE'] instanceof tslib_fe) ? $GLOBALS['TSFE'] : false;
-        // TODO: Use an instance of tslib_fe or not...
-        $GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], 0, 0);
+        $GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], $pageId, $noCache);
         // $GLOBALS['TSFE']  = new stdClass();
+        $GLOBALS['TSFE']->beUserLogin = false;
         $GLOBALS['TSFE']->cObjectDepthCounter = 100;
+        $GLOBALS['TSFE']->workspacePreview = '';
+        $GLOBALS['TSFE']->initFEuser();
+        $GLOBALS['TSFE']->determineId();
+        $GLOBALS['TSFE']->initTemplate();
+        $GLOBALS['TSFE']->config = array();
+        $GLOBALS['TSFE']->tmpl->getFileName_backPath = PATH_site;
         $GLOBALS['TSFE']->baseUrl = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
     }
 }
