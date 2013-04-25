@@ -4,7 +4,7 @@ class tx_smarty_cache {
 
 	function clearSmartyCache($params, $ref)
 	{
-        $deletePid = t3lib_div::intval_positive($params['cacheCmd']);
+        $deletePid = t3lib_utility_Math::convertToPositiveInteger($params['cacheCmd']);
 		$cacheFiles = t3lib_div::getFilesInDir(PATH_site . 'typo3temp/smarty_cache/');
 		if(!empty($cacheFiles)) {
 			if($deletePid || $params['cacheCmd'] == 'all' || $params['cacheCmd'] == 'pages') {
