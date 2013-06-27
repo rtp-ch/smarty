@@ -71,4 +71,50 @@ class Tx_Smarty_Utility_Array
     {
         return is_array($arr) && !empty($arr);
     }
+
+
+    /**
+     * Ensures that the values for the given fields of an array are themselves arrays. For example given the following
+     * array and the fields array('field_1', 'field_2')
+     *
+     * myArray => array(
+     *      'field_1' => 'value_1',
+     *      'field_2' => 'value_2,value_3,value_4',
+     *      'field_3' => 'value_5,value_6'
+     * )
+     *
+     * Will modify and return myArray as follows:
+     *
+     * myArray => array(
+     *      'field_1' => array(
+     *          'value_1'
+     *      ),
+     *      'field_2' => array(
+     *          'value_2',
+     *          'value_3',
+     *          'value_4'
+     *      ),
+     *      'field_3' => 'value_5,value_6'
+     * )
+     *
+     * @param $options
+     * @param array $fields
+     * @return mixed
+     */
+    public static function optionExplode($options, $fields = array())
+    {
+        if (!is_array($fields)) {
+            $fields = t3lib_div::trimExplode(',', $fields, true);
+        }
+
+        if (self::notEmpty($options) && self::notEmpty($fields)) {
+            foreach ($options as $key => $option) {
+                if (in_array($key, $fields) && !is_array($option)) {
+                    $options[$key] = t3lib_div::trimExplode(',', $option, true);
+                }
+            }
+        }
+
+        return $options;
+    }
 }

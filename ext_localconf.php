@@ -14,7 +14,8 @@ if (!defined('SMARTY_RESOURCE_CHAR_SET')) {
 }
 
 // Include the autoloader for 3rd party libraries, including the smarty library
-require_once(t3lib_extMgm::extPath($_EXTKEY) . 'vendor/autoload.php');
+require_once t3lib_extMgm::extPath('smarty') . 'Classes/Factory.php';
+require_once t3lib_extMgm::extPath('smarty') . 'vendor/autoload.php';
 
 // TODO: Hook for clearing smarty cache
 // $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][]

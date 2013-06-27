@@ -47,7 +47,7 @@ class tx_smarty
 
         $prefixId = self::getPrefixId($callingInstance);
 
-        return Tx_Smarty_Factory::get((array) $options, $prefixId);
+        return \RTP\smarty\Factory::get((array) $options, $prefixId);
     }
 
     /**

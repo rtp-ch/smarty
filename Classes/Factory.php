@@ -1,6 +1,15 @@
 <?php
+namespace RTP\smarty;
 
-class Tx_Smarty_Factory
+use t3lib_div;
+use Tx_Smarty_SysPlugins_ExtResource;
+use Tx_Smarty_SysPlugins_PathResource;
+use Tx_Smarty_Utility_Array;
+use Tx_Smarty_Utility_Environment;
+use Tx_Smarty_Utility_ExtConf;
+use Tx_Smarty_Utility_TypoScript;
+
+class Factory
 {
     private static $pluginDirs = array(
         'EXT:smarty/Classes/SmartyPlugins/Common',
@@ -13,7 +22,7 @@ class Tx_Smarty_Factory
      *
      * @param array $options
      * @param null $extensionKey
-     * @return Tx_Smarty_Core_Wrapper
+     * @return \Tx_Smarty_Core_Wrapper
      */
     public static function get($options = array(), $extensionKey = null)
     {
@@ -51,11 +60,13 @@ class Tx_Smarty_Factory
 
         // [c] The global smarty configuration
         list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3('plugin.smarty');
+        $setup = Tx_Smarty_Utility_Array::optionExplode($setup, array('plugins_dir'));
 
         // [b] The smarty configuration for the current extension key
         if (!is_null($extensionKey)) {
             $typoscriptString = 'plugin.' . $extensionKey . '.smarty';
             list($extensionSetup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3($typoscriptString);
+            $extensionSetup = Tx_Smarty_Utility_Array::optionExplode($extensionSetup, array('plugins_dir'));
             $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, (array) $extensionSetup);
         }
 

@@ -5,7 +5,6 @@
 $extensionPath = t3lib_extMgm::extPath('smarty');
 $extensionClassesPath = $extensionPath . 'Classes/';
 return array(
-	'tx_smarty_factory' => $extensionClassesPath . 'Factory.php',
 	'tx_smarty' => $extensionClassesPath . 'Backport/class.tx_smarty.php',
 	'tx_smarty_core_cobjectproxy' => $extensionClassesPath . 'Core/CobjectProxy.php',
 	'tx_smarty_core_configuration' => $extensionClassesPath . 'Core/Configuration.php',

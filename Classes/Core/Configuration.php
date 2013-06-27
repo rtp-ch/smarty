@@ -99,6 +99,7 @@ class Tx_Smarty_Core_Configuration
      * Generic getter for smarty properties.
      *
      * @param $key
+     * @return array|mixed|null|string
      * @throws Tx_Smarty_Exception_CoreException
      */
     final public function get($key)
