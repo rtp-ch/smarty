@@ -130,7 +130,7 @@ class Tx_Smarty_Core_Configuration
             // Translates directories or files to absolute paths
             $value = Tx_Smarty_Utility_Path::resolvePaths($value);
 
-        } elseif(strpos($value, '::')) {
+        } elseif (strpos($value, '::')) {
 
             // Resolves constants or static properties in TypoScript settings, e.g. Smarty::PHP_PASSTHRU
             $propertyParts = Tx_Smarty_Utility_Array::trimExplode('::', $value, true, 2);
