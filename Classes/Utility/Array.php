@@ -3,28 +3,29 @@
 class Tx_Smarty_Utility_Array
 {
 
+
     /**
      * Explodes a string and trims all values for whitespace in the ends.
      * If $onlyNonEmptyValues is set, then all blank ('') values are removed.
+     * @see \t3lib_div::trimExplode
+     * @see \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode
      *
-     * @static
-     * @param    string  $delimiter  Delimiter string to explode with
-     * @param    string  $str    The string to explode
-     * @param    boolean $onlyNonEmptyValues If set, all empty values (='') will NOT be set in output
-     * @param    int     $limit  If positive, the result will contain a maximum of $limit
-     *                   elements, if negative, all components except the last
-     *                   -$limit are returned, if zero (default), the result
-     *                   is not limited at all.
+     * @param string $str The string to explode
+     * @param string $delimiter Delimiter string to explode with
+     * @param boolean $onlyNonEmptyValues If set (default), all empty values (='') will NOT be set in output
+     * @param int $limit If positive, the result will contain a maximum of $limit elements, if negative,
+     *        all components except the last -$limit are returned, if zero (default), the result is not limited at all.
      *
      * @return array
      */
-    public static function trimExplode($delimiter, $str, $onlyNonEmptyValues = true, $limit = 0)
+    public static function trimExplode($str, $delimiter = ',', $onlyNonEmptyValues = true, $limit = 0)
     {
         $arr = array();
+
         if (is_string($str)) {
 
-            // Explodes and trims
-            $arr = self::trimList(explode($delimiter, $str), $onlyNonEmptyValues);
+            // Explodes and trims the array
+            $arr = (array) self::trimList(explode($delimiter, $str), $onlyNonEmptyValues);
 
             // $limit cannot be larger than the number of array members
             $limit = (is_int($limit) && abs($limit) < count($arr)) ? $limit : 0;
@@ -33,7 +34,7 @@ class Tx_Smarty_Utility_Array
             if ($limit > 0) {
                 $arr =  array_slice($arr, 0, $limit);
 
-            } elseif($limit < 0) {
+            } elseif ($limit < 0) {
                 $arr = array_slice($arr, $limit);
             }
         }
@@ -42,8 +43,8 @@ class Tx_Smarty_Utility_Array
     }
 
     /**
-     * Trims members of a list and optionally strips empty
-     * members from the list.
+     * Trims members of and optionally strips empty members from an array. An empty member is defined as
+     * a zero length string, null or an empty array.
      *
      * @static
      * @param array $arr
@@ -53,16 +54,32 @@ class Tx_Smarty_Utility_Array
      */
     public static function trimList($arr, $onlyNonEmptyValues = true)
     {
-        if ($onlyNonEmptyValues) {
-            return array_filter(array_map('trim', $arr), 'strlen');
+        $trimList = array_map(function ($item) {
+            return is_string($item) ? trim($item) : $item;
+        }, $arr);
 
-        } else {
-            return array_map('trim', $arr);
+        if ($onlyNonEmptyValues) {
+            $trimList = array_filter($trimList, function ($item) {
+                if (is_string($item)) {
+                    return strlen($item) > 0;
+
+                } elseif (is_null($item)) {
+                    return false;
+
+                } elseif (is_array($item)) {
+                    return !empty($item);
+                }
+
+                // All other items (including booleans, e.g. "false") are not removed.
+                return true;
+            });
         }
+
+        return $trimList;
     }
 
     /**
-     * Checks if an array is an array with members
+     * Checks if the given value is an array with members
      *
      * @param $arr
      * @return bool

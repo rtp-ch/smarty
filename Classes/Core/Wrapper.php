@@ -25,7 +25,6 @@
 class Tx_Smarty_Core_Wrapper
     extends SmartyBC
 {
-
     /**
      * @var Tx_Smarty_Core_Configuration
      */

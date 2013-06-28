@@ -25,6 +25,10 @@ plugin.smarty {
     // header will be sent instead of the content.
     cache_modified_check = true
 
+    // Cache locking avoids concurrent cache generation. This means resource intensive pages can be
+    // generated only once, even if they've been requested multiple times in the same moment.
+    cache_locking = true
+
     // Smarty will create subdirectories under the compiled templates and cache directories if set to true
     use_sub_dirs = true
 
@@ -49,7 +53,7 @@ plugin.smarty {
     development {
 
         // php error_reporting level inside of display() and fetch()
-        error_reporting = E_ALL & ~E_NOTICEE
+        error_reporting = E_ALL & ~E_NOTICE
 
         // Prevents muting of errors
         mute_errors = false
