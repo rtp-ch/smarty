@@ -11,7 +11,12 @@ use Tx_Smarty_Utility_TypoScript;
 
 /**
  * Gets and configures a new instance of smarty.
- * @example $smarty = \RTP\smarty\Factory::get(array('templates_dir' => 'path/to/templates', 'tx_myextension');
+ *
+ * @example $smarty = \RTP\smarty\Factory::get(array('templates_dir' => 'path/to/templates'), 'lib.my_smarty_config');
+ * => Returns an instance of smarty with templates in path/to/templates and settings applied from lib.my_smarty_config
+ *
+ * @example $smarty = \RTP\smarty\Factory::get('tx_myextension_pi1');
+ * => Returns an instance of smarty with settings applied from plugin.tx_myextension_pi1.smarty
  *
  * Class Factory
  * @package RTP\smarty
@@ -27,12 +32,17 @@ class Factory
     /**
      * Creates, configures and returns an instance of smarty.
      *
-     * @param array $options
-     * @param null $extensionKey
-     * @return \Tx_Smarty_Core_Wrapper
+     * @return object Tx_Smarty_Core_Wrapper
      */
-    public static function get($options = array(), $extensionKey = null)
+    public static function get()
     {
+        /**
+         * [0.] Get the arguments passed to the factory. Arguments can be any a string which is used to fetch
+         * configuration options form typoscript setup and any number of arrays which are interpreted as
+         * configuration options, e.g. array(plugins_dir => my/plugins/dir, templates_dir => my/templates/dir)
+         */
+        list($options, $typoscriptKey) = self::getArguments(func_get_args());
+
         /**
          * [1.] Initializes smarty and applies core settings
          */
@@ -70,9 +80,15 @@ class Factory
         $setup = Tx_Smarty_Utility_Array::optionExplode($setup, array('plugins_dir'));
 
         // [b] The smarty configuration for the current extension key
-        if (!is_null($extensionKey)) {
-            $typoscriptString = 'plugin.' . $extensionKey . '.smarty';
-            list($extensionSetup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3($typoscriptString);
+        if (!is_null($typoscriptKey)) {
+            if (strpos($typoscriptKey, '.') !== false) {
+                $typoscript = 'plugin.' . $typoscriptKey . '.smarty';
+
+            } else {
+                $typoscript = $typoscriptKey;
+            }
+
+            list($extensionSetup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3($typoscript);
             $extensionSetup = Tx_Smarty_Utility_Array::optionExplode($extensionSetup, array('plugins_dir'));
             $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, (array) $extensionSetup);
         }
@@ -88,9 +104,11 @@ class Factory
         // Applies any development settings
         if (isset($setup['development.'])
             && Tx_Smarty_Utility_Array::notEmpty($setup['development.'])
-            && self::hasDevelopmentMode()) {
+            && Tx_Smarty_Utility_Environment::hasDevelopmentMode()) {
 
-            $setup = t3lib_div::array_merge_recursive_overrule($setup, $setup['development.']);
+            // Overrides standard configuration settings
+            $developmentSetup = Tx_Smarty_Utility_Array::optionExplode($setup['development.'], array('plugins_dir'));
+            $setup = t3lib_div::array_merge_recursive_overrule($setup, $developmentSetup);
         }
 
         // Unsets development properties
@@ -110,19 +128,25 @@ class Factory
     }
 
     /**
-     * @return bool
+     * @param array $arguments
+     * @return array
      */
-    private static function hasDevelopmentMode()
+    private static function getArguments($arguments = array())
     {
-        if ((boolean) Tx_Smarty_Utility_ExtConf::getExtConfValue('enable_development_mode')) {
-            return true;
+        $typoscriptKey = null;
+        $options = array();
+
+        while ($argument = array_shift($arguments)) {
+            if (is_array($argument)) {
+                foreach ($argument as $key => $value) {
+                    $options[$key] = $value;
+                }
+
+            } elseif (is_string($argument)) {
+                $typoscriptKey = $argument;
+            }
         }
 
-        $devEnvDefnitions = trim(Tx_Smarty_Utility_ExtConf::getExtConfValue('development_environment_definitions'));
-        if ($devEnvDefnitions && Tx_Smarty_Utility_Environment::anyValid($devEnvDefnitions)) {
-            return true;
-        }
-
-        return false;
+        return array($options, $typoscriptKey);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 class Tx_Smarty_Utility_TypoScript
 {
 

@@ -8,6 +8,25 @@ class Tx_Smarty_Utility_Environment
     private static $hasValid;
 
     /**
+     * Checks if development mode is currently enabled
+     *
+     * @return bool
+     */
+    public static function hasDevelopmentMode()
+    {
+        if ((boolean) Tx_Smarty_Utility_ExtConf::getExtConfValue('enable_development_mode')) {
+            return true;
+        }
+
+        $devEnvDefnitions = trim(Tx_Smarty_Utility_ExtConf::getExtConfValue('development_environment_definitions'));
+        if ($devEnvDefnitions && self::anyValid($devEnvDefnitions)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Checks a number of contexts (comma separated list) and returns true if any one of these is valid
      *
      * @see isValid
