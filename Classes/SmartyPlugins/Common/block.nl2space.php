@@ -57,7 +57,7 @@
     function smarty_block_nl2space($params, $content, Smarty_Internal_Template $template, &$repeat)
     {
         if (!$repeat) {
-            Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_modifier_nl2space');
+            Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_modifier_nl2space');
             return smarty_modifier_nl2space($content);
         }
     }

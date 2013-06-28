@@ -39,6 +39,6 @@
      */
     function smarty_function_sl($params, Smarty_Internal_Template $template)
     {
-        Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_LLL');
+        Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_block_LLL');
         return smarty_block_LLL($params, '', $template);
     }

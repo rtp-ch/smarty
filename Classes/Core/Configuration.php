@@ -126,7 +126,7 @@ class Tx_Smarty_Core_Configuration
         // Casts boolean from corresponding strings or returns the string unchanged
         $value = Tx_Smarty_Utility_Scalar::booleanize($value);
 
-        if (Tx_Smarty_Utility_Smarty::isPathSetting($value)) {
+        if (Tx_Smarty_Service_Smarty::isPathSetting($value)) {
 
             // Translates directories or files to absolute paths
             $value = Tx_Smarty_Utility_Path::resolvePaths($value);

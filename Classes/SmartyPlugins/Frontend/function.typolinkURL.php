@@ -32,7 +32,7 @@
  */
 function smarty_function_typolinkURL($params, Smarty_Internal_Template $template)
 {
-    Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_typolink');
+    Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_block_typolink');
     $params['returnLast'] = 'url';
 
     return smarty_block_header($params, '', $template, false);

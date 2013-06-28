@@ -33,7 +33,7 @@ class Tx_Smarty_Utility_Path
      * @param $path
      * @return string
      */
-    private static function resolvePath($path)
+    public static function resolvePath($path)
     {
         $path = trim($path);
 

@@ -42,7 +42,7 @@
 function smarty_block_getLL($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
     if (!$repeat) {
-        Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_LLL');
+        Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_block_LLL');
         return smarty_block_LLL($params, $content, $template, $repeat);
     }
 }

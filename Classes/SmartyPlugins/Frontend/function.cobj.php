@@ -49,6 +49,6 @@
  */
 function smarty_function_cobj($params, Smarty_Internal_Template $template)
 {
-    Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_function_object');
+    Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_function_object');
     return smarty_function_object($params, $template);
 }

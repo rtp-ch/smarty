@@ -34,6 +34,6 @@
  */
 function smarty_block_link($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
-    Tx_Smarty_Utility_Smarty::loadPlugin($template, 'smarty_block_typolink');
+    Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_block_typolink');
     return smarty_block_typolink($params, $content, $template, $repeat);
 }

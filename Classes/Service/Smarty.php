@@ -1,6 +1,6 @@
 <?php
 
-class Tx_Smarty_Utility_Smarty
+class Tx_Smarty_Service_Smarty
 {
     /**
      * @param Smarty_Internal_Template $template

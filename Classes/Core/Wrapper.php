@@ -48,6 +48,11 @@ class Tx_Smarty_Core_Wrapper
     private $respect_no_cache = false;
 
     /**
+     * @var
+     */
+    const CACHING_LIFETIME_TYPO3 = 1;
+
+    /**
      * Gets the instance of the configuration manager
      *
      * @return Tx_Smarty_Core_Configuration
@@ -80,6 +85,25 @@ class Tx_Smarty_Core_Wrapper
     public function getRespectNoCache()
     {
         return $this->respect_no_cache;
+    }
+
+    /**
+     * @param $value
+     */
+    public function setCacheLifetime($value)
+    {
+        if ($value === self::CACHING_LIFETIME_TYPO3) {
+            if (Tx_Smarty_Utility_Typo3::isFeInstance()) {
+                $this->cache_lifetime = $GLOBALS['TSFE']->config['config']['cache_period'];
+
+            } else {
+                // Defaults to 60 * 60 * 24, which is 24 hours.
+                $this->cache_lifetime = 60 * 60 * 24;
+            }
+
+        } else {
+            $this->cache_lifetime = intval($value);
+        }
     }
 
 
@@ -535,7 +559,7 @@ class Tx_Smarty_Core_Wrapper
      *
      * @param $property
      * @param $value
-     * @deprecated use accessors instead. For example setCacheLifetime(3600)
+     * @deprecated use setter/getter instead. For example set('cache_lifetime', 3600)
      */
     public function setSmartyVar($property, $value)
     {

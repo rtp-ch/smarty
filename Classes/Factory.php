@@ -9,6 +9,13 @@ use Tx_Smarty_Utility_Environment;
 use Tx_Smarty_Utility_ExtConf;
 use Tx_Smarty_Utility_TypoScript;
 
+/**
+ * Gets and configures a new instance of smarty.
+ * @example $smarty = \RTP\smarty\Factory::get(array('templates_dir' => 'path/to/templates', 'tx_myextension');
+ *
+ * Class Factory
+ * @package RTP\smarty
+ */
 class Factory
 {
     private static $pluginDirs = array(
@@ -61,7 +68,10 @@ class Factory
         // [c] The global smarty configuration
         list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3('plugin.smarty');
         $setup = Tx_Smarty_Utility_Array::optionExplode($setup, array('plugins_dir'));
-
+\t3lib_utility_Debug::debug(array(
+    '$setup' => $setup,
+    '$options' => $options
+));
         // [b] The smarty configuration for the current extension key
         if (!is_null($extensionKey)) {
             $typoscriptString = 'plugin.' . $extensionKey . '.smarty';
@@ -72,7 +82,9 @@ class Factory
 
         // [a] Configuration options passed directly to this builder
         $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, (array) $options);
-
+\t3lib_utility_Debug::debug(array(
+    '$setup' => $setup
+));
         /**
          * [3.] Applies alternate development configuration settings to the configuration array
          * when a development context is available
