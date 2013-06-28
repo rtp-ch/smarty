@@ -1,5 +1,5 @@
 {
-    "name": "rtp/smarty",
+    "name": "RTP/smarty",
     "description": "Smarty Templating Engine for TYPO3",
     "type": "typo3-module",
     "extra": {
@@ -18,33 +18,9 @@
         "type": "git",
         "url": "https://github.com/rtp-ch/smarty.git"
     },
-    "autoload": {
-        "classmap": [
-            "vendor/nickcernis/html2markdown/"
-        ]
-    },
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "nickcernis/html2markdown",
-                "version": "1.0.1",
-                "source": {
-                    "url": "https://github.com/nickcernis/html2markdown.git",
-                    "type": "git",
-                    "reference": "master"
-                },
-                "dist": {
-                    "url": "https://github.com/nickcernis/html2markdown/archive/master.zip",
-                    "type": "zip"
-                }
-            }
-        }
-    ],
     "require": {
         "smarty/smarty": "3.1.13",
         "michelf/php-markdown" : "1.3-beta4",
-        "php": ">=5.3.4",
-        "nickcernis/html2markdown": "1.0.1"
+        "php": ">=5.3.4"
     }
 }

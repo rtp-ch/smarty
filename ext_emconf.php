@@ -12,7 +12,7 @@
 
 $composer = json_decode(file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'composer.json'), true);
 $EM_CONF[$_EXTKEY] = array(
-	'title' => $composer['name'],
+	'title' => str_ireplace('rtp/', '', $composer['name']),
 	'description' => $composer['description'],
 	'category' => 'misc',
 	'shy' => 0,
