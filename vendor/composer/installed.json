@@ -114,5 +114,23 @@
         },
         "type": "library",
         "installation-source": "dist"
+    },
+    {
+        "name": "digitalnature/php-ref",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/digitalnature/php-ref.git",
+            "reference": "master"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/digitalnature/php-ref/archive/master.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "type": "library",
+        "installation-source": "dist"
     }
 ]

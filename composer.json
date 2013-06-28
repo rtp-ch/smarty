@@ -20,7 +20,8 @@
     },
     "autoload": {
         "classmap": [
-            "vendor/nickcernis/html2markdown/"
+            "vendor/nickcernis/html2markdown/",
+            "vendor/digitalnature/php-ref/"
         ]
     },
     "repositories": [
@@ -39,12 +40,29 @@
                     "type": "zip"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "digitalnature/php-ref",
+                "version": "1.0.0",
+                "source": {
+                    "url": "https://github.com/digitalnature/php-ref.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "dist": {
+                    "url": "https://github.com/digitalnature/php-ref/archive/master.zip",
+                    "type": "zip"
+                }
+            }
         }
     ],
     "require": {
         "smarty/smarty": "3.1.13",
         "michelf/php-markdown" : "1.3-rc2",
         "php": ">=5.3.4",
-        "nickcernis/html2markdown": "*"
+        "nickcernis/html2markdown": "*",
+        "digitalnature/php-ref": "*"
     }
 }

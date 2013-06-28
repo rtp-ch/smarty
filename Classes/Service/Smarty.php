@@ -33,9 +33,15 @@ class Tx_Smarty_Service_Smarty
      */
     public static function isPathSetting($setting)
     {
-        $setting = strtolower(trim($setting));
-        return substr($setting, -4) === 'file'
-            || substr($setting, -3) === 'dir'
-            || substr($setting, -8) === 'template';
+        $isPathSetting = false;
+
+        if (is_scalar($setting)) {
+            $setting = strtolower(trim($setting));
+            $isPathSetting = substr($setting, -4) === 'file'
+                || substr($setting, -3) === 'dir'
+                || substr($setting, -8) === 'template';
+        }
+
+        return $isPathSetting;
     }
 }

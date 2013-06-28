@@ -20,7 +20,7 @@
 function smarty_function_file($params, Smarty_Internal_Template $template)
 {
     //
-    $params = array_change_key_case($params,CASE_LOWER);
+    $params = array_change_key_case($params, CASE_LOWER);
     if(!isset($params['path'])) {
         throw new Tx_Smarty_Exception_InvalidArgumentException('Missing required "path" setting for smarty plugin "file"!', 1324021795);
     }
