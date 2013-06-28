@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'HTML_Parser' => $vendorDir . '/nickcernis/html2markdown/html2markdown.php',
     'Smarty' => $vendorDir . '/smarty/smarty/distribution/libs/Smarty.class.php',
     'SmartyBC' => $vendorDir . '/smarty/smarty/distribution/libs/SmartyBC.class.php',
     'SmartyCompilerException' => $vendorDir . '/smarty/smarty/distribution/libs/Smarty.class.php',

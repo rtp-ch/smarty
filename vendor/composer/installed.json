@@ -96,5 +96,23 @@
         "keywords": [
             "markdown"
         ]
+    },
+    {
+        "name": "nickcernis/html2markdown",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/nickcernis/html2markdown.git",
+            "reference": "master"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/nickcernis/html2markdown/archive/master.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "type": "library",
+        "installation-source": "dist"
     }
 ]

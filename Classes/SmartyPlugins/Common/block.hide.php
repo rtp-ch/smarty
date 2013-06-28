@@ -7,7 +7,7 @@
  * Type:    block
  * Name:    Hide
  * Version: 1.0
- * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
+ * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Hide (do not render) anything between the hide tags
  * Example: {hide}This won't show up in the rendered html{/hide}
  * -------------------------------------------------------------

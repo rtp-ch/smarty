@@ -82,7 +82,7 @@ class Tx_Smarty_Utility_TypoScript
         // configuration are picked up:
         // lib.foo.bar = OBJECT_TYPE
         // lib.foo.bar.file = /path/to/file
-        $objPathParts = Tx_Smarty_Utility_Array::trimExplode('.', $objPath);
+        $objPathParts = Tx_Smarty_Utility_Array::trimExplode($objPath, '.');
         $lastObjPathPart = array_pop($objPathParts);
 
         // The current global TypoScript setup array
@@ -168,7 +168,7 @@ class Tx_Smarty_Utility_TypoScript
         $typoscript = array();
 
         foreach ($parameters as $parameter => $value) {
-            $properties = Tx_Smarty_Utility_Array::trimExplode('.', $parameter);
+            $properties = Tx_Smarty_Utility_Array::trimExplode($parameter, '.');
             $setting    = self::convertParameterToTypoScript($value, $properties);
             $typoscript = t3lib_div::array_merge_recursive_overrule($typoscript, $setting);
         }

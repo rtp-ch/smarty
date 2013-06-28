@@ -49,7 +49,7 @@ class Tx_Smarty_Core_Configuration
 
         if (!is_null($value)) {
             if (strpos($value, ',')) {
-                $values = Tx_Smarty_Utility_Array::trimExplode(',', $value);
+                $values = Tx_Smarty_Utility_Array::trimExplode($value, ',');
                 foreach ($values as $v) {
                     $value = self::parseValue($v);
                 }
@@ -81,7 +81,7 @@ class Tx_Smarty_Core_Configuration
 
         if (!is_null($value)) {
             if (strpos($value, ',')) {
-                $values = Tx_Smarty_Utility_Array::trimExplode(',', $value);
+                $values = Tx_Smarty_Utility_Array::trimExplode($value, ',');
                 foreach ($values as $v) {
                     $value = self::parseValue($v);
                 }
@@ -134,7 +134,7 @@ class Tx_Smarty_Core_Configuration
         } elseif (strpos($value, '::')) {
 
             // Resolves constants or static properties in TypoScript settings, e.g. Smarty::PHP_PASSTHRU
-            $propertyParts = Tx_Smarty_Utility_Array::trimExplode('::', $value, true, 2);
+            $propertyParts = Tx_Smarty_Utility_Array::trimExplode($value, '::', true, 2);
             $class = $propertyParts[0];
             $property = $propertyParts[1];
 

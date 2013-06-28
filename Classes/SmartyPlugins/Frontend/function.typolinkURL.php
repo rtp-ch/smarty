@@ -1,14 +1,13 @@
 <?php
 
 /**
- *
  * Smarty plugin "typolinkURL"
  * -------------------------------------------------------------
  * File:    function.typolinkURL.php
  * Type:    function
  * Name:    Typolink URL
  * Version: 1.0
- * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
+ * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Return the URL of a typolink
  * Example: {url setup="lib.link" parameter="10"}
  * Note:    url and typolinkURL are identical (i.e. {url setup="lib.link"} and {typolinkURL setup="lib.link"}
@@ -34,6 +33,6 @@ function smarty_function_typolinkURL($params, Smarty_Internal_Template $template
 {
     Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_block_typolink');
     $params['returnLast'] = 'url';
-
-    return smarty_block_header($params, '', $template, false);
+    $repeat = 0;
+    return smarty_block_typolink($params, '', $template, $repeat);
 }

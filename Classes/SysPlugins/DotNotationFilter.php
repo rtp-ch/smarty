@@ -4,7 +4,7 @@
  *  Copyright notice
  *
  *
- *    Created by Simon Tuck <stu@rtpartner.ch>
+ *    Created by Simon Tuck <stu@rtp.ch>
  *    Copyright (c) 2006-2007, Rueegg Tuck Partner GmbH (wwww.rtpartner.ch)
  *  All rights reserved
  *
@@ -25,7 +25,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  *
  *    @copyright     2006, 2007 Rueegg Tuck Partner GmbH
- *    @author     Simon Tuck <stu@rtpartner.ch>
+ *    @author     Simon Tuck <stu@rtp.ch>
  *    @link         http://www.rtpartner.ch/
  *    @package     Smarty (smarty)
  *

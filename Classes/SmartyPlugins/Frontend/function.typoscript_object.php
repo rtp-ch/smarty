@@ -7,7 +7,7 @@
  * Type:    function
  * Name:    TypoScript Object
  * Version: 2.0
- * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
+ * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
  * Purpose:    Gets and displays an object from global TyposScript template scope
  * Example:    {object setup="lib.myImage" type="IMAGE"}
  * Example:    {object setup="lib.myMenu" type="HMENU" 1.NO.wrap="<li class='innermenu'>|</li>"}

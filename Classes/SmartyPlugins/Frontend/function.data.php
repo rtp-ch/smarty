@@ -7,7 +7,7 @@
  * Type:    function
  * Name:    Data
  * Version: 2.0
- * Author:  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
+ * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Implements the TypoScript data type "getText". For details check
  *          http://typo3.org/documentation/document-library/references/doc_core_tsref/current/view/2/2/
  * Example: {data source="page:title"} Gets the current page title

@@ -30,7 +30,7 @@ plugin.smarty {
     cache_locking = true
 
     // This tells Smarty whether or not to cache the output of the templates. A value of 0 or Smarty::CACHING_OFF
-    // will cause the cache to always regenerateA value of Smarty::CACHING_LIFETIME_CURRENT tells Smarty to use the
+    // will cause the cache to always regenerate. A value of Smarty::CACHING_LIFETIME_CURRENT tells Smarty to use the
     // current $cache_lifetime variable to determine if the cache has expired. A value of Smarty::CACHING_LIFETIME_SAVED
     // tells Smarty to use the $cache_lifetime value at the time the cache was generated. This way you can set the
     // $cache_lifetime just before fetching the template to have granular control over when that particular cache expires.

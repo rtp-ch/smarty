@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * Smarty plugin "format"
  * -------------------------------------------------------------
  * File:    modifier.format.php

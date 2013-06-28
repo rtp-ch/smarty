@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * Smarty plugin "lookup"
  * -------------------------------------------------------------
  * File:    function.lookup.php
@@ -11,12 +10,12 @@
  * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Returns DB result for a given table and value, usually from a get or post var
  * Example: {lookup GPvar="email" field="email" table="fe_users" alias="name"} Returns the name corresponding to
- *             the email address supplied in Post/Get
- * Example: {lookup data="GPvar:tx_myext|uid" field="uid" table="ty_mext" alias="title"} Returns the title corresponding to
- *             the uid supplied in Post/Get. For details on the "data" function check "getText" at:
- *             http://typo3.org/documentation/document-library/references/doc_core_tsref/current/view/2/2/
- * Example: {lookup data="GPvar:tx_myext|uid" field="uid" table="ty_mext" list="field1, field2, field3" delim=","} Returns the result
- *          as a list of fields seperated by delim
+ * the email address supplied in Post/Get
+ * Example: {lookup data="GPvar:tx_myext|uid" field="uid" table="ty_mext" alias="title"} Returns the title
+ * corresponding to the uid supplied in Post/Get. For details on the "data" function check "getText" at:
+ * http://typo3.org/documentation/document-library/references/doc_core_tsref/current/view/2/2/
+ * Example: {lookup data="GPvar:tx_myext|uid" field="uid" table="ty_mext" list="field1, field2, field3" delim=","}
+ * Returns the result as a list of fields seperated by delim
  * -------------------------------------------------------------
  *
  * @param $params
@@ -83,7 +82,9 @@ function smarty_function_lookup($params, Smarty_Internal_Template $template)
 
         $where  = mysql_real_escape_string($params['field']) . ' = ' . $lookupValue;
 
-        if ((t3lib_div::loadTCA($params['table']))) {
+        // Gets enable fields from TCA if it can be loaded
+        t3lib_div::loadTCA($params['table']);
+        if (isset($GLOBALS['TCA'][$params['table']]['ctrl'])) {
             $where .= $GLOBALS['TSFE']->sys_page->enableFields($params['table']);
         }
 

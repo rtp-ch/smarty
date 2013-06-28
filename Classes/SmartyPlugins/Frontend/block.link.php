@@ -7,7 +7,7 @@
  * Type:    block
  * Name:    Typolink
  * Version: 2.0
- * Author:    Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner GmbH
+ * Author:    Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Return a linked text using the typolink function
  * Example:    {link setup="lib.link" parameter="10"}click here{/link}
  * Note:    link is an alias for typolink

@@ -19,7 +19,7 @@ class Tx_Smarty_Utility_Environment
         if (is_null(self::$hasValid)) {
 
             self::$hasValid = false;
-            $contexts = Tx_Smarty_Utility_Array::trimExplode(',', $contexts);
+            $contexts = Tx_Smarty_Utility_Array::trimExplode($contexts, ',');
 
             if (Tx_Smarty_Utility_Array::notEmpty($contexts)) {
                 while ($context = array_shift($contexts)) {
@@ -65,7 +65,7 @@ class Tx_Smarty_Utility_Environment
         if (strstr($context, '=') !== false) {
 
             // Validates the value of an environment variable
-            $contextParts = Tx_Smarty_Utility_Array::trimExplode('=', $context, true, 2);
+            $contextParts = Tx_Smarty_Utility_Array::trimExplode($context, '=', true, 2);
             $envSetting   = getenv($contextParts[0]);
             $isValid      = strtolower($envSetting) === strtolower($contextParts[1]);
 
