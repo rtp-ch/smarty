@@ -3,24 +3,29 @@
 class Tx_Smarty_Service_Smarty
 {
     /**
+     * Loads a plugin (e.g. if it's functionality is needed by another plugin.)
+     *
      * @param Smarty_Internal_Template $template
      * @param $pluginName
      * @throws Tx_Smarty_Exception_PluginException
      * @throws Tx_Smarty_Exception_CoreException
+     * @see http://www.smarty.net/docs/en/plugins.writing.tpl
      */
     public static function loadPlugin(Smarty_Internal_Template $template, $pluginName)
     {
-        // Checks for a valid instance of Smarty_Internal_Template
-        if (!($template instanceof Smarty_Internal_Template)) {
-            $msg = 'Method "loadPlugin" requires a valid instance of Smarty_Internal_Template!';
-            throw new Tx_Smarty_Exception_CoreException($msg, 1322296914);
-        }
+        if (!function_exists($pluginName)) {
 
-        // Attempts to load the function corresponding to the plugin,
-        // throws an exception if the plugin can't be found.
-        if (!function_exists($pluginName) && !$template->loadPlugin($pluginName)) {
-            $msg = 'Couldn\'t find and load smarty plugin "' . $pluginName . '"!';
-            throw new Tx_Smarty_Exception_CoreException($msg, 1322296921);
+            // Checks for a valid instance of Smarty_Internal_Template
+            if (!($template instanceof Smarty_Internal_Template)) {
+                $msg = 'Method "loadPlugin" requires a valid instance of Smarty_Internal_Template!';
+                throw new Tx_Smarty_Exception_CoreException($msg, 1322296914);
+            }
+
+            $loaded = $template->smarty->loadPlugin($pluginName);
+            if (!$loaded) {
+                $msg = 'Couldn\'t find and load smarty plugin "' . $pluginName . '"!';
+                throw new Tx_Smarty_Exception_CoreException($msg, 1322296921);
+            }
         }
     }
 

@@ -22,9 +22,7 @@
  * @param Smarty_Internal_Template $template
  * @param $repeat
  * @return string
- * @todo Inneficient if each translate causes a seek, check extBase approach
- * @todo extBase compatibility
- * @todo run through string resource
+ * @todo Check performance, compare with extBase approach
  */
 function smarty_block_LLL($params, $content, Smarty_Internal_Template $template, &$repeat)
 {

@@ -18,5 +18,5 @@ require_once t3lib_extMgm::extPath('smarty') . 'Classes/Factory.php';
 require_once t3lib_extMgm::extPath('smarty') . 'vendor/autoload.php';
 
 // TODO: Hook for clearing smarty cache
-// $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][]
-//        = t3lib_extMgm::extPath($_EXTKEY) . 'Classes/Hooks/ClearCache.php:&Tx_Smarty_Hooks_ClearCache->clearSmartyCache';
+$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][]
+    = t3lib_extMgm::extPath('smarty') . 'Classes/Hooks/ClearCache.php:&Tx_Smarty_Hooks_ClearCache->clearSmartyCache';

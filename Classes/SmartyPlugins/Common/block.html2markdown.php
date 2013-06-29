@@ -5,7 +5,7 @@
  * -------------------------------------------------------------
  * File:    block.html2markdown.php
  * Type:    block
- * Name:    Plaintext
+ * Name:    HTML to Markdown
  * Version: 1.0
  * Author:  Simon Tuck <stu@rtp.ch>, Rueegg Tuck Partner GmbH
  * Purpose: Turns HTML into markdown using HTML_Parser::get_markdown by [@nickcernis](http://twitter.com/nickcernis)
