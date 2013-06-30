@@ -35,19 +35,15 @@
 class Tx_Smarty_SysPlugins_DotNotationFilter
 {
     /**
-     *
      * Creates a unique string from the id smarty has assigned
      * to the template.
      *
-     * @static
      * @param Smarty_Internal_Template $template
      * @return string
      */
     private static function getTemplateId(Smarty_Internal_Template $template)
     {
-        // TODO: What happens when there is no actual file, .e.g. the resource is a string.
         reset($template->properties['file_dependency']);
-
         return '___' . sha1(key($template->properties['file_dependency'])) . '___';
     }
 

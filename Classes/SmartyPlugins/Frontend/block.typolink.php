@@ -68,6 +68,20 @@ function smarty_block_typolink($params, $content, Smarty_Internal_Template $temp
 
         // Gets the link
         list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
+
+        // Apply htmlspecialchars to any alt/title text
+        if ($setup['title'] || $setup['title.']) {
+            $setup['title'] = $cObj->stdWrap($setup['title'], $setup['title.']);
+            $setup['title'] = htmlspecialchars(
+                trim($setup['title']),
+                ENT_COMPAT | ENT_HTML401,
+                SMARTY_RESOURCE_CHAR_SET,
+                false
+            );
+            unset($setup['title.']);
+        }
+
+        // Generate the link
         $link = $cObj->typolink($content, $setup);
 
         // Copy the original global absRefPrefix setting back into $GLOBALS['TSFE']->absRefPrefix
@@ -77,7 +91,7 @@ function smarty_block_typolink($params, $content, Smarty_Internal_Template $temp
 
         // Automatically set the "title" attribute from the content of the tag if undefined
         if (!preg_match('%<a[^>]*title=[^>]*>[^<]*</a>%i', $link)) {
-            $content = str_replace('"', '', $content);
+            $content = htmlspecialchars(trim($content), ENT_COMPAT | ENT_HTML401, SMARTY_RESOURCE_CHAR_SET, false);
             $link = preg_replace('%(<a[^>]*)(>)([^<]*</a>)%i', '\1 title="'.$content.'">\3', $link);
         }
 

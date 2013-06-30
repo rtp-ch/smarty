@@ -46,7 +46,6 @@ class Tx_Smarty_Utility_Array
      * Trims members of and optionally strips empty members from an array. An empty member is defined as
      * a zero length string, null or an empty array.
      *
-     * @static
      * @param array $arr
      * @param boolean $onlyNonEmptyValues
      *
@@ -91,8 +90,8 @@ class Tx_Smarty_Utility_Array
 
 
     /**
-     * Ensures that the values for the given fields of an array are themselves arrays. For example given the following
-     * array and the fields array('field_1', 'field_2')
+     * Explodes the given members of an array into arrays by a given delimiter (the default delimiter is a comma).
+     * For example given the following array and the fields array('field_1', 'field_2')
      *
      * myArray => array(
      *      'field_1' => 'value_1',
@@ -114,24 +113,27 @@ class Tx_Smarty_Utility_Array
      *      'field_3' => 'value_5,value_6'
      * )
      *
-     * @param $options
+     * @param $array
      * @param array $fields
+     * @param string $delimiter
+     * @throws BadMethodCallException
      * @return mixed
      */
-    public static function optionExplode($options, $fields = array())
+    public static function optionExplode($array, $fields = array(), $delimiter = ',')
     {
-        if (!is_array($fields)) {
-            $fields = t3lib_div::trimExplode(',', $fields, true);
+        if (!is_scalar($delimiter)) {
+            $msg = 'Invalid delimiter!';
+            throw new BadMethodCallException($msg, 1372579305);
         }
 
-        if (self::notEmpty($options) && self::notEmpty($fields)) {
-            foreach ($options as $key => $option) {
+        if (self::notEmpty($array) && self::notEmpty($fields)) {
+            foreach ($array as $key => $option) {
                 if (in_array($key, $fields) && !is_array($option)) {
-                    $options[$key] = t3lib_div::trimExplode(',', $option, true);
+                    $array[$key] = self::trimExplode($option, $delimiter, true);
                 }
             }
         }
 
-        return $options;
+        return $array;
     }
 }

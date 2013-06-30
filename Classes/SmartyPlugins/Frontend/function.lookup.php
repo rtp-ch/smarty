@@ -73,6 +73,7 @@ function smarty_function_lookup($params, Smarty_Internal_Template $template)
 
     // Find and return the matching value
     if (isset($lookupValue) && is_scalar($lookupValue) && strlen(trim($lookupValue))) {
+
         if (!is_numeric($lookupValue)) {
             $lookupValue = chr(39) . mysql_real_escape_string($lookupValue) . chr(39);
 
@@ -95,7 +96,7 @@ function smarty_function_lookup($params, Smarty_Internal_Template $template)
                 $returnValue = $result[0][$params['alias']];
 
             } else {
-                $items = array_unique(t3lib_div::trimExplode(',', $params['list'], 1));
+                $items = array_unique(t3lib_div::Tx_Smarty_Utility_Array($params['list']));
                 foreach ($items as $item) {
                     if (trim($result[0][$item])) {
                         $list[$item] = trim($result[0][$item]);

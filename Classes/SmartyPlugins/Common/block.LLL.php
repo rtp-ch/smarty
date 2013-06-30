@@ -40,7 +40,8 @@ function smarty_block_LLL($params, $content, Smarty_Internal_Template $template,
                 $key = substr($key, 4);
             }
 
-            if ($parts = Tx_Smarty_Utility_Array::trimExplode($key, ':')) {
+            $parts = Tx_Smarty_Utility_Array::trimExplode($key, ':');
+            if (count($parts) > 1) {
                 $key = array_pop($parts);
                 $languageFile = implode(':', $parts);
             }
