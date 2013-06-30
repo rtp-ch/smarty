@@ -41,7 +41,7 @@ class Factory
          * configuration options form typoscript setup and any number of arrays which are interpreted as
          * configuration options, e.g. array(plugins_dir => my/plugins/dir, templates_dir => my/templates/dir)
          */
-        list($options, $typoscriptKey) = self::getArguments(func_get_args());
+        list($options, $typoscriptKeys) = self::getArguments(func_get_args());
 
         /**
          * [1.] Initializes smarty and applies core settings
@@ -80,17 +80,20 @@ class Factory
         $setup = Tx_Smarty_Utility_Array::optionExplode($setup, array('plugins_dir'));
 
         // [b] The smarty configuration for the current extension key
-        if (!is_null($typoscriptKey)) {
-            if (strpos($typoscriptKey, '.') !== false) {
-                $typoscript = 'plugin.' . $typoscriptKey . '.smarty';
+        if (!Tx_Smarty_Utility_Array::notEmpty($typoscriptKeys)) {
 
-            } else {
-                $typoscript = $typoscriptKey;
+            foreach ($typoscriptKeys as $typoscriptKey) {
+                if (strpos($typoscriptKey, '.') !== false) {
+                    $typoscript = 'plugin.' . $typoscriptKey . '.smarty';
+
+                } else {
+                    $typoscript = $typoscriptKey;
+                }
+
+                list($extensionSetup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3($typoscript);
+                $extensionSetup = Tx_Smarty_Utility_Array::optionExplode($extensionSetup, array('plugins_dir'));
+                $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, (array) $extensionSetup);
             }
-
-            list($extensionSetup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3($typoscript);
-            $extensionSetup = Tx_Smarty_Utility_Array::optionExplode($extensionSetup, array('plugins_dir'));
-            $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, (array) $extensionSetup);
         }
 
         // [a] Configuration options passed directly to this builder
@@ -133,7 +136,7 @@ class Factory
      */
     private static function getArguments($arguments = array())
     {
-        $typoscriptKey = null;
+        $typoscriptKeys = array();
         $options = array();
 
         while ($argument = array_shift($arguments)) {
@@ -143,10 +146,10 @@ class Factory
                 }
 
             } elseif (is_string($argument)) {
-                $typoscriptKey = $argument;
+                $typoscriptKeys[] = $argument;
             }
         }
 
-        return array($options, $typoscriptKey);
+        return array($options, $typoscriptKeys);
     }
 }
