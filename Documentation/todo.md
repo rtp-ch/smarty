@@ -9,3 +9,4 @@
 * Document!
 * Use github for documentation, clone locally with gollum
 * Unit tests
+* TypoScript smarty object
