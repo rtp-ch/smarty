@@ -30,8 +30,7 @@
 function smarty_block_format($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
     if (!$repeat) {
-        list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
-        $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
-        return $cObj->parseFunc($content, $setup);
+        Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_modifier_format');
+        return smarty_modifier_format($content, $params['setup']);
     }
 }

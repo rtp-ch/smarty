@@ -22,11 +22,13 @@
  **/
 function smarty_modifier_format($content, $setup = false)
 {
+    $parameters = array();
     if ($setup) {
         $parameters['setup'] = $setup;
 
     } else {
-        $parameters = array();
+        // The default formatting rules are in lib.parseFunc_RTE
+        $parameters['setup'] = 'lib.parseFunc_RTE.';
     }
 
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($parameters);
