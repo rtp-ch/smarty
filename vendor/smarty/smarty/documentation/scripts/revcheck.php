@@ -113,7 +113,7 @@ if ("cli" === php_sapi_name()) {
 function get_tags($file, $val = "en-rev")
 {
     // Read the first 500 chars. The comment should be at
-    // the begining of the file
+    // the beginning of the file
     $fp = @fopen($file, "r") or die ("Unable to read $file.");
     $line = fread($fp, 500);
     fclose($fp);

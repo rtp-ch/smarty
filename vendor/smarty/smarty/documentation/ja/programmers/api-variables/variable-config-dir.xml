@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4716 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
     <sect1 id="variable.config.dir">
       <title>$config_dir</title>
@@ -19,6 +19,20 @@
        このディレクトリをwebサーバのドキュメントルート下に置く事は推奨されません。
       </para>
 	 </note>
+	 <note>
+      <title>ノート</title>
+      <para>
+       Smarty 3.1 以降、$config_dir 属性に直接アクセスすることはできなくなりました。かわりに
+       <link linkend="api.get.config.dir"><varname>getConfigDir()</varname></link> や
+       <link linkend="api.set.config.dir"><varname>setConfigDir()</varname></link> そして
+       <link linkend="api.add.config.dir"><varname>addConfigDir()</varname></link> を使いましょう。
+      </para>
+     </note>
+     <para>
+      <link linkend="api.get.config.dir"><varname>getConfigDir()</varname></link>、
+      <link linkend="api.set.config.dir"><varname>setConfigDir()</varname></link> および
+      <link linkend="api.add.config.dir"><varname>addConfigDir()</varname></link> も参照ください。
+     </para>
 </sect1>
 <!-- Keep this comment at the end of the file
 Local variables:

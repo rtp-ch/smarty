@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 4669 $ -->
+<!-- $Revision: 4740 $ -->
 <sect1 id="language.function.html.options">
  <title>{html_options}</title>
   <para>
@@ -145,7 +145,7 @@ $smarty->assign('mySelect', 9904);
 </example>
 
 <example>
-<title>Dropdown with seperate arrays for <varname>values</varname> and
+<title>Dropdown with separate arrays for <varname>values</varname> and
 <varname>ouptut</varname></title>
   <programlisting role="php">
 <![CDATA[

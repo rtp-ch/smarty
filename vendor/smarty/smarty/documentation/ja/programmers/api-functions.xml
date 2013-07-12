@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4709 $ -->
+<!-- EN-Revision: 4335 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
    <chapter id="api.functions">
      <title>Smarty クラスメソッド</title>
@@ -9,6 +9,9 @@
     <link linkend="advanced.features.template.settings"><varname>テンプレートによる設定の変更</varname></link>
     の節を参照ください。
  </para></note>
+&programmers.api-functions.api-add-config-dir;
+&programmers.api-functions.api-add-plugins-dir;
+&programmers.api-functions.api-add-template-dir;
 &programmers.api-functions.api-append;
 &programmers.api-functions.api-append-by-ref;
 &programmers.api-functions.api-assign;
@@ -28,18 +31,32 @@
 &programmers.api-functions.api-display;
 &programmers.api-functions.api-enable-security;
 &programmers.api-functions.api-fetch;
+&programmers.api-functions.api-get-cache-dir;
+&programmers.api-functions.api-get-compile-dir;
+&programmers.api-functions.api-get-config-dir;
 &programmers.api-functions.api-get-config-vars;
+&programmers.api-functions.api-get-plugins-dir;
 &programmers.api-functions.api-get-registered-object;
 &programmers.api-functions.api-get-tags;
+&programmers.api-functions.api-get-template-dir;
 &programmers.api-functions.api-get-template-vars;
 &programmers.api-functions.api-is-cached;
 &programmers.api-functions.api-load-filter;
+&programmers.api-functions.api-mute-expected-errors;
+&programmers.api-functions.api-register-cacheresource;
+&programmers.api-functions.api-register-class;
+&programmers.api-functions.api-register-default-plugin-handler;
 &programmers.api-functions.api-register-filter;
 &programmers.api-functions.api-register-plugin;
 &programmers.api-functions.api-register-object;
 &programmers.api-functions.api-register-resource;
-
+&programmers.api-functions.api-set-cache-dir;
+&programmers.api-functions.api-set-compile-dir;
+&programmers.api-functions.api-set-config-dir;
+&programmers.api-functions.api-set-plugins-dir;
+&programmers.api-functions.api-set-template-dir;
 &programmers.api-functions.api-template-exists;
+&programmers.api-functions.api-unregister-cacheresource;
 &programmers.api-functions.api-unregister-filter;
 &programmers.api-functions.api-unregister-plugin;
 &programmers.api-functions.api-unregister-object;

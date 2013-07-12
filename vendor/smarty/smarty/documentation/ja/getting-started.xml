@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3848 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4705 $ -->
+<!-- EN-Revision: 4314 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <part id="getting.started">
  <title>はじめに</title>
@@ -145,14 +145,7 @@
    </listitem>
    <listitem>
     <para>
-     任意の <link linkend="template.resources">テンプレート</link> ソース
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     カスタム <link
-     linkend="section.template.cache.handler.func">キャッシュハンドラ</link>
-     関数
+     任意の <link linkend="resources">テンプレート</link> ソース
     </para>
    </listitem>
    <listitem>
@@ -511,10 +504,10 @@ require_once(SMARTY_DIR . 'Smarty.class.php');
 
 $smarty = new Smarty();
 
-$smarty->template_dir = '/web/www.example.com/guestbook/templates/';
-$smarty->compile_dir  = '/web/www.example.com/guestbook/templates_c/';
-$smarty->config_dir   = '/web/www.example.com/guestbook/configs/';
-$smarty->cache_dir    = '/web/www.example.com/guestbook/cache/';
+$smarty->setTemplateDir('/web/www.example.com/guestbook/templates/');
+$smarty->setCompileDir('/web/www.example.com/guestbook/templates_c/');
+$smarty->setConfigDir('/web/www.example.com/guestbook/configs/');
+$smarty->setCacheDir('/web/www.example.com/guestbook/cache/');
 
 $smarty->assign('name','Ned');
 
@@ -599,10 +592,10 @@ class Smarty_GuestBook extends Smarty {
 
         parent::__construct();
 
-        $this->template_dir = '/web/www.example.com/guestbook/templates/';
-        $this->compile_dir  = '/web/www.example.com/guestbook/templates_c/';
-        $this->config_dir   = '/web/www.example.com/guestbook/configs/';
-        $this->cache_dir    = '/web/www.example.com/guestbook/cache/';
+        $this->setTemplateDir('/web/www.example.com/guestbook/templates/');
+        $this->setCompileDir('/web/www.example.com/guestbook/templates_c/');
+        $this->setConfigDir('/web/www.example.com/guestbook/configs/');
+        $this->setCacheDir('/web/www.example.com/guestbook/cache/');
 
         $this->caching = Smarty::CACHING_LIFETIME_CURRENT;
         $this->assign('app_name', 'Guest Book');

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4716 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
      <sect1 id="variable.plugins.dir">
       <title>$plugins_dir</title>
@@ -18,45 +18,27 @@
        <emphasis role="bold">与えられた順に</emphasis> 検索します。
       </para>
       <note>
-         <title>テクニカルノート</title>
-         <para>
-          パフォーマンスを確保するため、<parameter>$plugins_dir</parameter>
-          には PHP のインクルードパスを使用しないでください。絶対パスを使用するか、
-          <constant>SMARTY_DIR</constant> あるいはカレントディレクトリからの相対パスを使用してください。
-          </para>
-        </note>
-
-      <example>
-      <title>ローカルのプラグインディレクトリの追加</title>
-      <programlisting role="php">
-<![CDATA[
-<?php
-
-$smarty->plugins_dir[] = 'includes/my_smarty_plugins';
-
-?>
-
-]]>
-    </programlisting>
-    </example>
-      <example>
-      <title>複数の $plugins_dir</title>
-      <programlisting role="php">
-<![CDATA[
-<?php
-
-$smarty->plugins_dir = array(
-                       'plugins', // デフォルトは SMARTY_DIR の配下
-                       '/path/to/shared/plugins',
-                       '../../includes/my/plugins'
-                       );
-
-?>
-
-]]>
-    </programlisting>
-    </example>
-
+       <title>テクニカルノート</title>
+       <para>
+        パフォーマンスを確保するため、<parameter>$plugins_dir</parameter>
+        には PHP のインクルードパスを使用しないでください。絶対パスを使用するか、
+        <constant>SMARTY_DIR</constant> あるいはカレントディレクトリからの相対パスを使用してください。
+       </para>
+      </note>
+      <note>
+       <title>ノート</title>
+       <para>
+        Smarty 3.1 以降、$plugins_dir 属性に直接アクセスすることはできなくなりました。かわりに
+        <link linkend="api.get.plugins.dir"><varname>getPluginsDir()</varname></link> や
+        <link linkend="api.set.plugins.dir"><varname>setPluginsDir()</varname></link> そして
+        <link linkend="api.add.plugins.dir"><varname>addPluginsDir()</varname></link> を使いましょう。
+       </para>
+      </note>
+      <para>
+       <link linkend="api.get.plugins.dir"><varname>getPluginsDir()</varname></link>、
+       <link linkend="api.set.plugins.dir"><varname>setPluginsDir()</varname></link> および
+       <link linkend="api.add.plugins.dir"><varname>addPluginsDir()</varname></link> も参照ください。
+      </para>
 </sect1>
 <!-- Keep this comment at the end of the file
 Local variables:

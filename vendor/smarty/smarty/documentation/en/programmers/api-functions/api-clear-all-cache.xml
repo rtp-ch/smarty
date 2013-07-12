@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 3827 $ -->
+<!-- $Revision: 4742 $ -->
 <refentry id="api.clear.all.cache">
  <refnamediv>
   <refname>clearAllCache()</refname>
@@ -16,6 +16,11 @@
    parameter, you can supply a minimum age in seconds the cache
    files must be before they will get cleared.
   </para>
+  <note>
+   <para>
+    Since Smarty version 3.1.14 it is possible to delete cache files by their individual expiration time at creation by passing constant SMARTY::CLEAR_EXPIRED as <parameter>expire_time</parameter> parameter.
+   </para>
+  </note>
   <example>
    <title>clearAllCache</title>
    <programlisting role="php">

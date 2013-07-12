@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3829 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4711 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <sect1 id="language.function.foreach">
  <title>{foreach},{foreachelse}</title> 
@@ -38,7 +38,8 @@
    <varname>{foreachelse}</varname> が実行されます。
    </para></listitem>
     
-  <listitem><para>
+  <listitem>
+   <para>
     <varname>{foreach}</varname> のプロパティには
     <link linkend="foreach.property.index"><parameter>@index</parameter></link>、
     <link linkend="foreach.property.iteration"><parameter>@iteration</parameter></link>、
@@ -47,8 +48,16 @@
     <link linkend="foreach.property.show"><parameter>@show</parameter></link>、
     <link linkend="foreach.property.total"><parameter>@total</parameter></link>
     があります。
-  </para>
-    
+   </para>
+  </listitem>
+  
+  <listitem>
+   <para>
+    <varname>{foreach}</varname> では
+    <link linkend="foreach.construct.break"><varname>{break}</varname></link>、
+    <link linkend="foreach.construct.continue"><varname>{continue}</varname></link>
+    が使えます。
+   </para>
   </listitem>
         
     <listitem><para>
@@ -472,6 +481,56 @@ $smarty->assign('myPeople', $people);
    も参照ください。
   </para>
 
+ </sect2>
+ 
+ <sect2 id="foreach.construct.break">
+  <title>{break}</title>
+  <para>
+   <varname>{break}</varname> は、配列の処理を途中で止めます。
+  </para>
+  <example>
+   <title><varname>{break}</varname> の例</title>
+   <programlisting>
+ <![CDATA[
+  {$data = [1,2,3,4,5]}
+  {foreach $data as $value}
+    {if $value == 3}
+      {* 配列の処理を終了します *}
+      {break}
+    {/if}
+    {$value}
+  {/foreach}
+  {*
+    出力は、1 2
+  *}
+ ]]>
+   </programlisting>
+  </example>
+ </sect2>
+ 
+ <sect2 id="foreach.construct.continue">
+  <title>{continue}</title>
+  <para>
+   <varname>{continue}</varname> は、現在のループでその後の処理を省略して次のループに進みます。
+  </para>
+  <example>
+   <title><varname>{continue}</varname> の例</title>
+   <programlisting>
+ <![CDATA[
+  {$data = [1,2,3,4,5]}
+  {foreach $data as $value}
+    {if $value == 3}
+      {* この処理をスキップします *}
+      {continue}
+    {/if}
+    {$value}
+  {/foreach}
+  {*
+    出力は、1 2 4 5
+  *}
+ ]]>
+   </programlisting>
+  </example>
  </sect2>
  
 </sect1>

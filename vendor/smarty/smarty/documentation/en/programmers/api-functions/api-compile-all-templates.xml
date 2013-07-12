@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 3827 $ -->
+<!-- $Revision: 4740 $ -->
 <refentry id="api.compile.all.templates">
  <refnamediv>
   <refname>compileAllTemplates()</refname>
@@ -20,7 +20,7 @@
     <itemizedlist>
      <listitem>
       <para>
-       <parameter>extension</parameter> is an optional string which defines the file extention for the template files. 
+       <parameter>extension</parameter> is an optional string which defines the file extension for the template files. 
        The default is ".tpl".
       </para>
      </listitem>

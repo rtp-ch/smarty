@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4713 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <sect1 id="language.function.html.select.time">
  <title>{html_select_time}</title>
@@ -42,10 +42,19 @@
     </row>
     <row>
      <entry>time</entry>
-     <entry>timestamp</entry>
+     <entry>
+      <ulink url="&url.php-manual;function.time">timestamp</ulink>、
+      <ulink url="&url.php-manual;class.DateTime">DateTime</ulink>、
+      mysql timestamp あるいは
+      <ulink url="&url.php-manual;strtotime"><varname>strtotime()</varname></ulink>
+      が解釈できる任意の文字列。field_array が設定されている場合は、この関数が作る配列。
+     </entry>
      <entry>No</entry>
-     <entry>現在の時間</entry>
-     <entry>使用する日付/時間</entry>
+     <entry>現在の <ulink url="&url.php-manual;function.time">timestamp</ulink></entry>
+     <entry>
+      どの日付/時刻を初期選択状態にするか。配列を指定した場合は、属性 field_array と prefix
+      を使って配列の要素を特定し、時・分・秒・午前/午後を取り出します。
+     </entry>
     </row>
     <row>
      <entry>display_hours</entry>
@@ -96,6 +105,48 @@
      <entry>1</entry>
      <entry>ドロップダウンリストの秒間隔</entry>
     </row>
+	<row>
+     <entry>hour_format</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>%02d</entry>
+     <entry>時間のラベルのフォーマット (sprintf)</entry>
+    </row>
+    <row>
+     <entry>hour_value_format</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>%20d</entry>
+     <entry>時間の値のフォーマット (sprintf)</entry>
+    </row>
+	<row>
+     <entry>minute_format</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>%02d</entry>
+     <entry>分のラベルのフォーマット (sprintf)</entry>
+    </row>
+    <row>
+     <entry>minute_value_format</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>%20d</entry>
+     <entry>分の値のフォーマット (sprintf)</entry>
+    </row>
+	<row>
+     <entry>second_format</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>%02d</entry>
+     <entry>秒のラベルのフォーマット (sprintf)</entry>
+    </row>
+    <row>
+     <entry>second_value_format</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>%20d</entry>
+     <entry>秒の値のフォーマット (sprintf)</entry>
+    </row>
     <row>
      <entry>field_array</entry>
      <entry>string</entry>
@@ -137,6 +188,100 @@
      <entry>No</entry>
      <entry>null</entry>
      <entry>am/pmのselect/inputタグに拡張属性を追加</entry>
+    </row>
+	<row>
+     <entry>field_separator</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>\n</entry>
+     <entry>フィールド間に表示する文字列</entry>
+    </row>
+	<row>
+     <entry>option_separator</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>\n</entry>
+     <entry>フィールドのオプション間に表示する文字列</entry>
+    </row>
+	<row>
+     <entry>all_id</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>すべての select タグと input タグに id 属性を追加する</entry>
+    </row>
+    <row>
+     <entry>hour_id</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>select タグと input タグに id 属性を追加する</entry>
+    </row>
+    <row>
+     <entry>minute_id</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>select タグと input タグに id 属性を追加する</entry>
+    </row>
+    <row>
+     <entry>second_id</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>select タグと input タグに id 属性を追加する</entry>
+    </row>
+    <row>
+     <entry>meridian_id</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>select タグと input タグに id 属性を追加する</entry>
+    </row>
+	<row>
+     <entry>all_empty</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>すべてのセレクトボックスの最初の要素に、指定した文字列をlabelとして、
+     空文字 <quote></quote> のvalueを持たせます。
+     例えば、セレクトボックスに <quote>選択して下さい</quote> と表示させる時に便利です。</entry>
+    </row>
+    <row>
+     <entry>hour_empty</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>時間のセレクトボックスの最初の要素に、指定した文字列をlabelとして、
+     空文字 <quote></quote> のvalueを持たせます。
+     例えば、セレクトボックスに <quote>時間を選択して下さい</quote> と表示させる時に便利です。</entry>
+    </row>
+    <row>
+     <entry>minute_empty</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>分のセレクトボックスの最初の要素に、指定した文字列をlabelとして、
+     空文字 <quote></quote> のvalueを持たせます。
+     例えば、セレクトボックスに <quote>分を選択して下さい</quote> と表示させる時に便利です。</entry>
+    </row>
+    <row>
+     <entry>second_empty</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>秒のセレクトボックスの最初の要素に、指定した文字列をlabelとして、
+     空文字 <quote></quote> のvalueを持たせます。
+     例えば、セレクトボックスに <quote>秒を選択して下さい</quote> と表示させる時に便利です。</entry>
+    </row>
+    <row>
+     <entry>meridian_empty</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>午前/午後のセレクトボックスの最初の要素に、指定した文字列をlabelとして、
+     空文字 <quote></quote> のvalueを持たせます。
+     例えば、セレクトボックスに <quote>午前/午後を選択して下さい</quote> と表示させる時に便利です。</entry>
     </row>
    </tbody>
   </tgroup>

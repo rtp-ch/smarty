@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4716 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
      <sect1 id="variable.compile.check">
       <title>$compile_check</title>
@@ -19,12 +19,22 @@
        <parameter>$compile_check</parameter> を &false; に設定して下さい。
        また、この設定を &false; に変更した後にテンプレートファイルが変更された場合、
        そのテンプレートが再コンパイルされる事は「ない」ので変更は反映されない事に注意してください。
+	  </para>
+	  <para>
        <link linkend="variable.caching"><parameter>$caching</parameter></link> と
        <parameter>$compile_check</parameter> が共に有効ならば、
        テンプレートファイルが更新されるとキャッシュファイルが再生成されます。
+	  </para>
+	  <para>
+	   Smarty 3.1 以降、<parameter>$compile_check</parameter> に
+	   <literal>Smarty::COMPILECHECK_CACHEMISS</literal> を設定できるようになりました。
+	   これを指定すると、キャッシュファイルが再生成されたときに、Smarty がコンパイル済みのテンプレートを再検証できるようになります。
+	   キャッシュ済みのテンプレートが期限切れになった場合は、Smarty が一度 compile_check をしてからキャッシュを再生成するということです。
+	  </para>
+	  <para>
        詳細は、<link linkend="variable.force.compile">
        <parameter>$force_compile</parameter></link> および <link
-       linkend="api.clear.compiled.tpl"><varname>clear_compiled_tpl()</varname>
+       linkend="api.clear.compiled.tpl"><varname>clearCompiledTemplate()</varname>
        </link> を参照してください。
       </para>
 </sect1>

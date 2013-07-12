@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4712 $ -->
+<!-- EN-Revision: 4669 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <sect1 id="language.function.html.checkboxes">
  <title>{html_checkboxes}</title>
@@ -83,6 +83,27 @@
      <entry>No</entry>
      <entry><emphasis>&true;</emphasis></entry>
      <entry>出力に &lt;label&gt; タグを加える</entry>
+    </row>
+    <row>
+     <entry>label_ids</entry>
+     <entry>boolean</entry>
+     <entry>No</entry>
+     <entry><emphasis>&false;</emphasis></entry>
+     <entry>&lt;label&gt; と &lt;input&gt; に id 属性を追加して出力する</entry>
+    </row>
+    <row>
+     <entry>escape</entry>
+     <entry>boolean</entry>
+     <entry>No</entry>
+     <entry><emphasis>&true;</emphasis></entry>
+     <entry>出力やコンテンツをエスケープする (値は常にエスケープされます)</entry>
+    </row>
+    <row>
+     <entry>strict</entry>
+     <entry>boolean</entry>
+     <entry>No</entry>
+     <entry><emphasis>&false;</emphasis></entry>
+     <entry>booleanの <emphasis>&true;</emphasis> か、文字列 <emphasis>"disabled"</emphasis> や <emphasis>"readonly"</emphasis> が与えられたとき、"extra" 属性に <emphasis>disabled</emphasis> や <emphasis>readonly</emphasis> という文字列のみを追加します</entry>
     </row>
    </tbody>
   </tgroup>

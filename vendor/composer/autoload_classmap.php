@@ -11,6 +11,7 @@ return array(
     'SmartyBC' => $vendorDir . '/smarty/smarty/distribution/libs/SmartyBC.class.php',
     'SmartyCompilerException' => $vendorDir . '/smarty/smarty/distribution/libs/Smarty.class.php',
     'SmartyException' => $vendorDir . '/smarty/smarty/distribution/libs/Smarty.class.php',
+    'Smarty_Security' => $vendorDir . '/smarty/smarty/distribution/libs/sysplugins/smarty_security.php',
     'Tests\\AbstractTest' => $vendorDir . '/digitalnature/php-ref/tests/example.class.php',
     'Tests\\ClassTest' => $vendorDir . '/digitalnature/php-ref/tests/example.class.php',
     'Tests\\Testable' => $vendorDir . '/digitalnature/php-ref/tests/example.class.php',

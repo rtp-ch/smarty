@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4711 $ -->
+<!-- EN-Revision: 4483 Maintainer: takagi Status: ready -->
 <sect1 id="language.function.function">
  <title>{function}</title>
  <para>
@@ -29,6 +29,7 @@
    <listitem><para>
   <link linkend="language.syntax.attributes">属性</link>
   を使って、テンプレート関数に変数のデフォルト値を渡すことができます。
+  PHP の関数宣言と同様に、デフォルト値に使えるのはスカラー値だけです。
   デフォルト値は、テンプレート関数をコールするときに上書きすることができます。
  </para></listitem>
 
@@ -75,6 +76,14 @@
   </tgroup>
  </informaltable>
 
+ <note><para>
+  任意の数のパラメータをテンプレート関数に渡せます。
+  パラメータ変数は <literal>{funcname ...}</literal> タグの中で宣言してはいけません。
+  ただし、デフォルト値を使いたい場合は別です。
+  デフォルト値はスカラーでないといけません。変数にはできません。
+  また、変数はテンプレートを呼ぶときに渡さないといけません。
+ </para></note>
+ 
  <example>
   <title>再帰的なメニュー {function} の例</title>
   <programlisting>

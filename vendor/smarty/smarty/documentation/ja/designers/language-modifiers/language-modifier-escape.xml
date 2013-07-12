@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4741 $ -->
+<!-- EN-Revision: 4740 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
  <sect1 id="language.modifier.escape">
   <title>escape</title>
@@ -56,6 +56,14 @@
       </entry>
       <entry><literal>UTF-8</literal></entry>
       <entry>htmlentities() へ渡す文字セットのエンコーディング</entry>
+     </row>
+     <row>
+      <entry>3</entry>
+      <entry>boolean</entry>
+      <entry>No</entry>
+      <entry>&false;</entry>
+      <entry>&true;</entry>
+      <entry>エンティティを二重エンコードして、&amp;amp; なら &amp;amp;amp; にする (<literal>html</literal> および <literal>htmlall</literal> 限定)</entry>
      </row>
     </tbody>
    </tgroup>

@@ -71,7 +71,7 @@ class SecurityTests extends PHPUnit_Framework_TestCase {
     }
 
     /**
-    * test trusted modifer
+    * test trusted modifier
     */
     public function testTrustedModifier()
     {
@@ -81,7 +81,7 @@ class SecurityTests extends PHPUnit_Framework_TestCase {
     /**
     * test not trusted modifier
     */
-    public function testNotTrustedModifer()
+    public function testNotTrustedModifier()
     {
         $this->smarty->security_policy->php_modifiers = array('null');
         try {
@@ -95,9 +95,9 @@ class SecurityTests extends PHPUnit_Framework_TestCase {
     }
 
     /**
-    * test not trusted modifer at disabled security
+    * test not trusted modifier at disabled security
     */
-    public function testDisabledTrustedMofifer()
+    public function testDisabledTrustedModifier()
     {
         $this->smarty->security_policy->php_modifiers = array('null');
         $this->smarty->disableSecurity();

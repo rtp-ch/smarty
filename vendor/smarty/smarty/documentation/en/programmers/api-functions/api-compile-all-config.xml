@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 4020 $ -->
+<!-- $Revision: 4740 $ -->
 <refentry id="api.compile.all.config">
  <refnamediv>
   <refname>compileAllConfig()</refname>
@@ -20,7 +20,7 @@
     <itemizedlist>
      <listitem>
       <para>
-       <parameter>extension</parameter> is an optional string which defines the file extention for the config files. 
+       <parameter>extension</parameter> is an optional string which defines the file extension for the config files. 
        The default is ".conf".
       </para>
      </listitem>

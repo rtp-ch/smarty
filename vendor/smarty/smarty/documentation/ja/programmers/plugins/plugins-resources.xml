@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4717 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
    <sect1 id="plugins.resources"><title>リソースプラグイン</title>
     <para>
@@ -9,118 +9,132 @@
      （例： データベース, LDAP, 共有メモリ, ソケット等）。
     </para>
 
-    <para>
-     各種リソースのために４つの関数を登録する必要があります。
-     これらの関数の最初のパラメータには要求されたリソースが渡され、
-     最後のパラメータには Smarty のオブジェクトが渡されます。
-     残りのパラメータは関数によって異なります。
-    </para>
-
-    <funcsynopsis>
-     <funcprototype>
-      <funcdef>bool <function>smarty_resource_<replaceable>name</replaceable>_source</function></funcdef>
-      <paramdef>string <parameter>$rsrc_name</parameter></paramdef>
-      <paramdef>string <parameter>&amp;$source</parameter></paramdef>
-      <paramdef>object <parameter>$smarty</parameter></paramdef>
-     </funcprototype>
-     <funcprototype>
-      <funcdef>bool <function>smarty_resource_<replaceable>name</replaceable>_timestamp</function></funcdef>
-      <paramdef>string <parameter>$rsrc_name</parameter></paramdef>
-      <paramdef>int <parameter>&amp;$timestamp</parameter></paramdef>
-      <paramdef>object <parameter>$smarty</parameter></paramdef>
-     </funcprototype>
-     <funcprototype>
-      <funcdef>bool <function>smarty_resource_<replaceable>name</replaceable>_secure</function></funcdef>
-      <paramdef>string <parameter>$rsrc_name</parameter></paramdef>
-      <paramdef>object <parameter>$smarty</parameter></paramdef>
-     </funcprototype>
-     <funcprototype>
-      <funcdef>bool <function>smarty_resource_<replaceable>name</replaceable>_trusted</function></funcdef>
-      <paramdef>string <parameter>$rsrc_name</parameter></paramdef>
-      <paramdef>object <parameter>$smarty</parameter></paramdef>
-     </funcprototype>
-    </funcsynopsis>
-
-	<itemizedlist>
-	<listitem><para>
-     １つめの関数 <literal>source()</literal> ではリソースを取得します。
-     第２パラメータ <parameter>$source</parameter>
-     は参照で渡され、ここに結果が格納されます。
-     戻り値は、リソースの取得に成功すれば &true;、
-     それ以外は &false; となります。
-    </para></listitem>
-
-    <listitem><para>
-     ２つめの関数 <literal>timestamp()</literal> は、
-     要求されたリソースが最後に修正された時間(UNIXタイムスタンプ)を取得します。
-     第２パラメータ <parameter>$timestamp</parameter> は参照で渡され、
-     ここにタイムスタンプが格納されます。タイムスタンプが取得できれば
-     &true;、それ以外は &false; を返します。
-    </para></listitem>
-
-    <listitem><para>
-     ３つめの関数 <literal>secure()</literal> は、
-     要求されたリソースがセキュアであるかどうかに応じて &true; 又は &false; を返します。
-     この関数はテンプレートリソースのためにだけ用いられますが、定義する必要があります。
-    </para></listitem>
-
-    <listitem><para>
-     ４つめの関数 <literal>trusted()</literal> は、
-     要求されたリソースが信用できるかどうかに応じて &true; 又は &false; を返します。
-     この関数を使用するのは、<link linkend="language.function.include.php">
-     <varname>{include_php}</varname></link> タグあるいは
-     <link linkend="language.function.insert"><varname>{insert}</varname></link>
-     タグで <parameter>src</parameter> 属性によって要求された PHP
-     スクリプトコンポーネントのみです。
-     しかし、テンプレートリソースであっても定義する必要があります。
-    </para></listitem>
-    </itemizedlist>
-
-
+	<para>
+	  カスタムリソースは、<literal>resource.foobarxyz.php</literal> 形式のファイル名で
+	  <link linkend="variable.plugins.dir"><varname>$plugins_dir</varname></link> に置くか、
+	  実行時に <link linkend="api.register.resource"><varname>registerResource()</varname></link> で登録します。
+	  どちらの場合も、リソースにアクセスするにはテンプレートの前にリソース名を付けて
+	  <literal>foobarxyz:yourtemplate.tpl</literal> のように指定します。
+	</para>
+	
+	<para>
+		リソースのテンプレートを Smarty のコンパイラにかけたくない場合は、
+		<literal>Smarty_Resource_Uncompiled</literal> を継承したカスタムリソースを作りましょう。
+ 		この場合、リソースハンドラは <literal>renderUncompiled(Smarty_Internal_Template $_template)</literal> を実装する必要があります。
+		<varname>$_template</varname> は現在のテンプレートへの参照で、すべての割り当てられた変数を含みます。
+		この変数にアクセスするには、<literal>$_template->smarty->getTemplateVars()</literal> を使います。
+		
+		このリソースは、レンダリング結果を単純に出力ストリームに流すだけです。
+		Smarty インスタンスを適切に設定しておけば、レンダリング結果を出力キャッシュすることもできあす。
+		
+		サンプルが <literal>libs/sysplugins/smarty_internal_resource_php.php</literal> にあります。
+	</para>
+	
+	<para>
+		リソースのコンパイル済みテンプレートをディスクにキャッシュしたくない場合は、
+		<literal>Smarty_Resource_Recompiled</literal> を継承したカスタムリソースを作りましょう。
+		このリソースは、アクセスのたびに毎回コンパイルされるようになります。オーバーヘッドが大きくなるかもしれません。
+		
+		サンプルが <literal>libs/sysplugins/smarty_internal_resource_eval.php</literal> にあります。
+	</para>
+	
     <example>
-     <title>リソースプラグイン</title>
+     <title>カスタムリソースの使用法</title>
      <programlisting role="php">
 <![CDATA[
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     resource.db.php
- * Type:     resource
- * Name:     db
- * Purpose:  データベースからテンプレートを取得する
- * -------------------------------------------------------------
+
+/**
+ * MySQL リソース
+ *
+ * カスタム API によるリソースの実装例。ストレージリソースとして
+ * MySQL を使い、Smarty のテンプレートや設定を格納します
+ *
+ * テーブル定義:
+ * <pre>CREATE TABLE IF NOT EXISTS `templates` (
+ *   `name` varchar(100) NOT NULL,
+ *   `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ *   `source` text,
+ *   PRIMARY KEY (`name`)
+ * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;</pre>
+ *
+ * デモデータ:
+ * <pre>INSERT INTO `templates` (`name`, `modified`, `source`) VALUES ('test.tpl', "2010-12-25 22:00:00", '{$x="hello world"}{$x}');</pre>
+ *
+ * @package Resource-examples
+ * @author Rodney Rehm
  */
-function smarty_resource_db_source($tpl_name, &$tpl_source, $smarty)
-{
-    // ここでデータベースを呼び出し、
-    // 失際のテンプレートの内容を $tpl_source に代入します
-    $tpl_source = "This is the template text";
-    // 成功した場合に true を返します。false を返すと失敗したことになります
-    return true;
+class Smarty_Resource_Mysql extends Smarty_Resource_Custom {
+    // PDO インスタンス
+    protected $db;
+    // 準備済みの fetch() ステートメント
+    protected $fetch;
+    // 準備済みの fetchTimestamp() ステートメント
+    protected $mtime;
+
+    public function __construct() {
+        try {
+            $this->db = new PDO("mysql:dbname=test;host=127.0.0.1", "smarty", "smarty");
+        } catch (PDOException $e) {
+            throw new SmartyException('Mysql Resource failed: ' . $e->getMessage());
+        }
+        $this->fetch = $this->db->prepare('SELECT modified, source FROM templates WHERE name = :name');
+        $this->mtime = $this->db->prepare('SELECT modified FROM templates WHERE name = :name');
+    }
+    
+    /**
+     * テンプレートとその更新時刻をデータベースから取得する
+     *
+     * @param string $name テンプレート名
+     * @param string $source テンプレートソース
+     * @param integer $mtime テンプレートの更新時刻を表すタイムスタンプ
+     * @return void
+     */
+    protected function fetch($name, &$source, &$mtime)
+    {
+        $this->fetch->execute(array('name' => $name));
+        $row = $this->fetch->fetch();
+        $this->fetch->closeCursor();
+        if ($row) {
+            $source = $row['source'];
+            $mtime = strtotime($row['modified']);
+        } else {
+            $source = null;
+            $mtime = null;
+        }
+    }
+    
+    /**
+     * テンプレートの更新時刻をデータベースから取得する
+     *
+     * @note このメソッドの実装は必須ではありません。コンパイルしたテンプレートから読み込むよりも早く更新時刻が取得できそうなときだけ実装しましょう。
+     * @param string $name テンプレート名
+     * @return integer テンプレートの更新時刻を表すタイムスタンプ
+     */
+    protected function fetchTimestamp($name) {
+        $this->mtime->execute(array('name' => $name));
+        $mtime = $this->mtime->fetchColumn();
+        $this->mtime->closeCursor();
+        return strtotime($mtime);
+    }
 }
 
-function smarty_resource_db_timestamp($tpl_name, &$tpl_timestamp, $smarty)
-{
-    // テンプレートの最終更新時刻の Unix タイムスタンプを
-    // $tpl_timestampに代入するためにデータベースを呼び出します
-    // これで、再コンパイルが必要かどうかを判断します
-    $tpl_timestamp = time(); // この例だと常に再コンパイルとなります!
-    // 成功した場合に true を返します。false を返すと失敗したことになります
-    return true;
-}
 
-function smarty_resource_db_secure($tpl_name, $smarty)
-{
-    // 全てのテンプレートがセキュアであるとみなします
-    return true;
-}
+require_once 'libs/Smarty.class.php';
+$smarty = new Smarty();
+$smarty->registerResource('mysql', new Smarty_Resource_Mysql());
 
-function smarty_resource_db_trusted($tpl_name, $smarty)
-{
-    // テンプレートでは使用しません
-}
+// PHP スクリプトのリソースを使います
+$smarty->display("mysql:index.tpl");
 ?>
+]]>
+     </programlisting>
+     <para>
+      Smarty テンプレートはこのようになります。
+     </para>
+     <programlisting>
+<![CDATA[
+{include file='mysql:extras/navigation.tpl'}
 ]]>
      </programlisting>
     </example>
@@ -129,7 +143,7 @@ function smarty_resource_db_trusted($tpl_name, $smarty)
  <link linkend="api.register.resource"><varname>registerResource()</varname></link>
  および
  <link linkend="api.unregister.resource"><varname>unregisterResource()</varname></link>
- も参照してください。
+ も参照ください。
 </para>
 
    </sect1>

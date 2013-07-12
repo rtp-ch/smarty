@@ -31,7 +31,8 @@
     "autoload": {
         "classmap": [
             "distribution/libs/Smarty.class.php", 
-            "distribution/libs/SmartyBC.class.php"
+            "distribution/libs/SmartyBC.class.php",
+            "distribution/libs/sysplugins/smarty_security.php"
         ]
     }
 }

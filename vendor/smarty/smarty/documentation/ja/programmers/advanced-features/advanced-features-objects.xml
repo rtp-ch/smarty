@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4715 $ -->
+<!-- EN-Revision: 4335 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <sect1 id="advanced.features.objects">
  <title>オブジェクト</title>
@@ -28,11 +28,13 @@
  し、<link linkend="language.custom.functions">カスタム関数</link>
  と似た構文を用いてアクセスする方法です。
  </para></listitem>
- <listitem><para>
- もう１つの方法は <link linkend="api.assign"><varname>assign()</varname></link>
- を用いてテンプレートにオブジェクトを割り当て、
- 他の割り当てられた変数のようにオブジェクトにアクセスする方法です。
- </para></listitem>
+ <listitem>
+  <para>
+   もう１つの方法は <link linkend="api.assign"><varname>assign()</varname></link>
+   を用いてテンプレートにオブジェクトを割り当て、
+   他の割り当てられた変数のようにオブジェクトにアクセスする方法です。
+  </para>
+ </listitem>
  </itemizedlist>
 
  <para>

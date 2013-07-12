@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4716 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
      <sect1 id="variable.cache.dir">
       <title>$cache_dir</title>
@@ -15,9 +15,8 @@
      </para>
      <para>
        この設定を使わずに、キャッシュファイルを操作するための
-       <link linkend="section.template.cache.handler.func">
-       自作のキャッシュハンドラ</link>
-       関数を使う事もできます。詳細は
+       <link linkend="caching.custom">自作のキャッシュ実装</link>
+       を使う事もできます。詳細は
        <link linkend="variable.use.sub.dirs"><parameter>$use_sub_dirs</parameter></link>
        も参照してください。
       </para>
@@ -34,12 +33,20 @@
         このディレクトリをwebサーバのドキュメントルート下に置く事は推奨しません。
        </para>
       </note>
-
+      <note>
+       <title>ノート</title>
+       <para>
+        Smarty 3.1 以降、$cache_dir 属性に直接アクセスすることはできなくなりました。かわりに
+        <link linkend="api.get.cache.dir"><varname>getCacheDir()</varname></link> と
+        <link linkend="api.set.cache.dir"><varname>setCacheDir()</varname></link> を使いましょう。
+       </para>
+      </note>
   <para>
+  <link linkend="api.get.cache.dir"><varname>getCacheDir()</varname></link>、
+  <link linkend="api.set.cache.dir"><varname>setCacheDir()</varname></link>、
   <link linkend="variable.caching"><parameter>$caching</parameter></link>、
   <link linkend="variable.use.sub.dirs"><parameter>$use_sub_dirs</parameter></link>、
   <link linkend="variable.cache.lifetime"><parameter>$cache_lifetime</parameter></link>、
-  <link linkend="variable.cache.handler.func"><parameter>$cache_handler_func</parameter></link>、
   <link linkend="variable.cache.modified.check"><parameter>$cache_modified_check</parameter></link>
   および
   <link linkend="caching">キャッシュの節</link>

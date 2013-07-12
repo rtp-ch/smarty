@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4716 $ -->
+<!-- EN-Revision: 3945 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
      <sect1 id="variable.default.modifiers">
       <title>$default_modifiers</title>
@@ -8,9 +8,8 @@
       テンプレート内のすべての変数に暗黙に適用される修飾子が格納された配列です。
       例えば、 デフォルトですべての変数にHTMLエスケープ処理を施したい場合は、
       <literal>array('escape:"htmlall"')</literal> となります。
-      この影響を受けない変数にするには、{$var|smarty:nodefaults}
-      のように <literal>nodefaults</literal> 修飾子をパラメータに持つ 
-      <literal>smarty</literal> 修飾子を指定します。
+      この影響を受けない変数にするには、
+      'nofilter' 属性を <literal>{$var nofilter}</literal> などの出力タグに渡します。
       </para>
 </sect1>
 <!-- Keep this comment at the end of the file

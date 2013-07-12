@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4715 $ -->
+<!-- EN-Revision: 4396 Maintainer: takagi Status: ready -->
 <refentry id="api.create.template">
  <refnamediv>
   <refname>createTemplate()</refname>
@@ -9,24 +9,24 @@
  <refsect1>
   <title>説明</title>
   <methodsynopsis>
-   <type>string</type><methodname>createTemplate</methodname>
+   <type>Smarty_Internal_Template</type><methodname>createTemplate</methodname>
    <methodparam><type>string</type><parameter>template</parameter></methodparam>
    <methodparam choice="opt"><type>object</type><parameter>parent</parameter></methodparam>
   </methodsynopsis>
   <methodsynopsis>
-    <type>string</type><methodname>createTemplate</methodname>
+    <type>Smarty_Internal_Template</type><methodname>createTemplate</methodname>
     <methodparam><type>string</type><parameter>template</parameter></methodparam>
     <methodparam choice="opt"><type>array</type><parameter>data</parameter></methodparam>
    </methodsynopsis>
    <methodsynopsis>
-    <type>string</type><methodname>createTemplate</methodname>
+    <type>Smarty_Internal_Template</type><methodname>createTemplate</methodname>
     <methodparam><type>string</type><parameter>template</parameter></methodparam>
     <methodparam choice="opt"><type>string</type><parameter>cache_id</parameter></methodparam>
     <methodparam choice="opt"><type>string</type><parameter>compile_id</parameter></methodparam>
     <methodparam choice="opt"><type>object</type><parameter>parent</parameter></methodparam>
    </methodsynopsis>
    <methodsynopsis>
-    <type>string</type><methodname>createTemplate</methodname>
+    <type>Smarty_Internal_Template</type><methodname>createTemplate</methodname>
     <methodparam><type>string</type><parameter>template</parameter></methodparam>
     <methodparam choice="opt"><type>string</type><parameter>cache_id</parameter></methodparam>
     <methodparam choice="opt"><type>string</type><parameter>compile_id</parameter></methodparam>
@@ -41,7 +41,7 @@
      <listitem>
       <para>
        <parameter>template</parameter> は、有効な
-       <link linkend="template.resources">テンプレートリソース</link> 型およびパスでなければなりません。
+       <link linkend="resources">テンプレートリソース</link> 型およびパスでなければなりません。
       </para>
      </listitem>
      &parameter.cacheid;

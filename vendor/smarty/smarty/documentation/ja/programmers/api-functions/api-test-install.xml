@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4715 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <refentry id="api.test.install">
  <refnamediv>
   <refname>testInstall()</refname>
@@ -22,6 +22,7 @@
 <![CDATA[
 <?php
 require_once('Smarty.class.php');
+$smarty  = new Smarty();
 $smarty->testInstall();
 ?>
 ]]>

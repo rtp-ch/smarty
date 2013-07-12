@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4711 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <sect1 id="language.function.config.load">
  <title>{config_load}</title>
@@ -150,9 +150,9 @@ pageTitle = "Customer Info"
   <link linkend="config.files">設定ファイル</link> のページ、
   <link linkend="language.config.variables">config 変数</link> のページ、
   <link linkend="variable.config.dir"><parameter>$config_dir</parameter></link>、
-  <link linkend="api.get.config.vars"><varname>get_config_vars()</varname></link>
+  <link linkend="api.get.config.vars"><varname>getConfigVars()</varname></link>
   および
-  <link linkend="api.config.load"><varname>config_load()</varname></link>
+  <link linkend="api.config.load"><varname>configLoad()</varname></link>.
   も参照してください。
  </para>
 </sect1>

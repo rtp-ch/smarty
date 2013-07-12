@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 3841 $ -->
+<!-- $Revision: 4740 $ -->
   <sect1 id="caching.setting.up">
    <title>Setting Up Caching</title>
    <para>
@@ -39,7 +39,7 @@ $smarty->display('index.tpl');
      The files in the
      <link linkend="variable.cache.dir"><parameter>$cache_dir</parameter></link>
      are named similar to the template name.
-     Although they end in the <filename>.php</filename> extention, they are not
+     Although they end in the <filename>.php</filename> extension, they are not
      intended to be directly executable. Do not edit these files!
     </para>
    </note>

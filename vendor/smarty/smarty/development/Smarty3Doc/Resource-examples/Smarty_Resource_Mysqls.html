@@ -23,7 +23,7 @@
 	<div class="info-box-body">
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">MySQL Resource</p>
-<p class="description"><p>Resource Implementation based on the Custom API to use  MySQL as the storage resource for Smarty's templates and configs.</p><p>Note that this MySQL implementation fetches the source and timestamps in  a single database query, instead of two seperate like resource.mysql.php does.</p><p>Table definition:  <pre>CREATE TABLE IF NOT EXISTS `templates` (
+<p class="description"><p>Resource Implementation based on the Custom API to use  MySQL as the storage resource for Smarty's templates and configs.</p><p>Note that this MySQL implementation fetches the source and timestamps in  a single database query, instead of two separate like resource.mysql.php does.</p><p>Table definition:  <pre>CREATE TABLE IF NOT EXISTS `templates` (
    `name` varchar(100) NOT NULL,
    `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    `source` text,

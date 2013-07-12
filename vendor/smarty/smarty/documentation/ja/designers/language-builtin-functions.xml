@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4707 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <chapter id="language.builtin.functions">
  <title>組み込み関数</title>
@@ -44,6 +44,7 @@
  &designers.language-builtin-functions.language-function-nocache;
  &designers.language-builtin-functions.language-function-php;
  &designers.language-builtin-functions.language-function-section;
+ &designers.language-builtin-functions.language-function-setfilter;
  &designers.language-builtin-functions.language-function-strip;
  &designers.language-builtin-functions.language-function-while;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4711 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <sect1 id="language.function.include.php">
  <title>{include_php}</title>
@@ -9,6 +9,7 @@
    <para>
     <varname>{include_php}</varname> は Smarty では非推奨になりました。
     プラグインを登録して使い、プレゼンテーションとアプリケーションのコードを適切に分離するようにしましょう。
+    Smarty 3.1 以降、<varname>{include_php}</varname> タグは <link linkend="bc">SmartyBC</link> からしか使えなくなりました。
    </para>
  </note>
 
@@ -133,7 +134,7 @@ $this->assign('navigation', $db->getRows());
 <link linkend="variable.trusted.dir"><parameter>$trusted_dir</parameter></link>、
   <link linkend="language.function.php"><varname>{php}</varname></link>、<link
   linkend="language.function.capture"><varname>{capture}</varname></link>、<link
-  linkend="template.resources">テンプレートリソース</link> および <link
+  linkend="resources">テンプレートリソース</link> および <link
   linkend="tips.componentized.templates">コンポーネント化したテンプレート</link> も参照ください。</para>
 </sect1>
 <!-- Keep this comment at the end of the file

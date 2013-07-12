@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3832 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4715 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <refentry id="api.register.resource">
  <refnamediv>
@@ -12,14 +12,14 @@
   <methodsynopsis>
    <type>void</type><methodname>registerResource</methodname>
    <methodparam><type>string</type><parameter>name</parameter></methodparam>
-   <methodparam><type>array</type><parameter>resource_callbacks</parameter></methodparam>
+   <methodparam><type>Smarty_resource</type><parameter>resource_handler</parameter></methodparam>
   </methodsynopsis>
   <para>
-   <link linkend="template.resources">リソースプラグイン</link>
-   を動的に登録します。パラメータとして、
-   リソース名および実行する PHP ユーザ定義関数の名前を格納した配列を渡します。
+   <link linkend="resources">リソースプラグイン</link>
+   を動的に登録します。パラメータとして渡すのは、
+   リソースの名前と Smarty_Resource を継承したオブジェクトです。
    テンプレートを取得するための関数の定義の仕方は、
-   <link linkend="template.resources">テンプレートリソース</link>
+   <link linkend="resources">テンプレートリソース</link>
    の項を参照してください。
      <note>
    <title>テクニカルノート</title>
@@ -29,63 +29,22 @@
     のようにファイルパスの一部として使用されます。
    </para>
   </note>
-
    </para>
 
-  <itemizedlist>
-  <listitem><para>
-   配列 <parameter>resource_callabcks</parameter>
-   には４つの要素が必要です。それぞれ
-   <literal>source</literal>、
-   <literal>timestamp</literal>、<literal>secure</literal> および
-   <literal>trusted</literal> がリソースの関数としてそれぞれコールバックされます。
-   </para></listitem>
-   <listitem><para>
-    各要素で PHP のコールバックを定義します。次のいずれかを指定できます。
-    <itemizedlist>
-     <listitem><para>
-      関数名を含む文字列
-     </para></listitem>
-     <listitem><para>
-      <literal>array($object, $method)</literal> 形式の配列。
-      <literal>&amp;$object</literal> はオブジェクトへの参照で、
-      <literal>$method</literal> はメソッド名を含む文字列。
-     </para></listitem>
-     <listitem><para>
-      <literal>array($class, $method)</literal> 形式の配列。
-      <literal>$class</literal> はクラス名で、
-      <literal>$method</literal> はクラスのメソッド名。
-     </para></listitem>
-    </itemizedlist>
-   </para></listitem>
-  </itemizedlist>
+  <note>
+   <para>
+	Smarty 3.1 より前のバージョンでは、<varname>registerResource()</varname> がコールバック関数の配列を受け取れるようになっていました。
+	過去との互換性のために今でもこれは使えますが、使わないようにしましょう。
+	コールバック関数は、Smarty 3.1 で非推奨になりました。
+   </para>
+  </note>
+
   <example>
    <title>registerResource()</title>
    <programlisting role="php">
 <![CDATA[
 <?php
-$smarty->registerResource('db', array(
-                                'db_get_template',
-                                'db_get_timestamp',
-                                'db_get_secure',
-                                'db_get_trusted')
-                                );
-?>
-]]>
-   </programlisting>
-  </example>
-  <example>
-   <title>registerResource() でのオブジェクトのメソッドの使用</title>
-   <programlisting role="php">
-<![CDATA[
-<?php
-$smarty->registerResource('db', array(
-                                array($obj,'db_get_template'),
-                                array($obj,'db_get_timestamp'),
-                                array($obj,'db_get_secure'),
-                                array($obj,'db_get_trusted')
-                                )
-                          );
+$smarty->registerResource('mysql', new Smarty_Resource_Mysql());
 ?>
 ]]>
    </programlisting>
@@ -94,7 +53,7 @@ $smarty->registerResource('db', array(
 <para>
   <link linkend="api.unregister.resource"><varname>unregisterResource()</varname></link>
   および
-  <link linkend="template.resources">テンプレートリソース</link>
+  <link linkend="resources">テンプレートリソース</link>
   も参照してください。
 </para>
 

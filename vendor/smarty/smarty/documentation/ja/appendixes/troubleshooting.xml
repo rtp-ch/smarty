@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4741 $ -->
+<!-- EN-Revision: 4740 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
  <chapter id="troubleshooting">
   <title>トラブルシューティング</title>
@@ -84,7 +84,7 @@ Warning: Smarty error: unable to read resource: "site.conf" in...
         <link linkend="language.function.config.load">
         <varname>{config_load}</varname></link>
         関数がテンプレート内にあり (もしくは
-        <link linkend="api.config.load"><varname>config_load()</varname></link>
+        <link linkend="api.config.load"><varname>configLoad()</varname></link>
         で呼び出されており)、その際の
         <link linkend="variable.config.dir"><parameter>$config_dir</parameter>
         </link> が存在しない不正なディレクトリか、もしくは存在しても
@@ -165,7 +165,26 @@ Fatal error: Smarty error: unable to write to $cache_dir '/...
     </para>
  </listitem>
  </itemizedlist>
- </example>
+   <screen>
+<![CDATA[
+Warning: filemtime(): stat failed for /path/to/smarty/cache/3ab50a623e65185c49bf17c63c90cc56070ea85c.one.tpl.php 
+in /path/to/smarty/libs/sysplugins/smarty_resource.php
+]]>
+   </screen>
+   <itemizedlist>
+    <listitem>
+     <para>
+      これは、<ulink url="&url.php-manual;set_error_handler">set_error_handler()</ulink>
+      を使ってアプリケーションに登録したカスタムエラーハンドラが、
+      本来参照するべき <literal>$errno</literal> を使っていないという意味です。
+      もし何らかの理由で敢えてそういう挙動にしているのなら、
+      カスタムエラーハンドラを登録した後に
+      <link linkend="api.mute.expected.errors"><varname>muteExpectedErrors()</varname></link>
+      を呼びましょう。
+     </para>
+     </listitem>
+    </itemizedlist>
+   </example>
 
    <para>
    <link linkend="chapter.debugging.console">デバッギング</link>

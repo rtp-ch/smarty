@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4744 $ -->
+<!-- EN-Revision: 4742 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <refentry id="api.clear.all.cache">
  <refnamediv>
@@ -17,6 +17,12 @@
    任意のパラメータとして、キャッシュファイルを削除する前にそのファイルが存在しなくてはならない
    最低限の時間（秒）を与える事が出来ます。
   </para>
+  <note>
+   <para>
+    Smarty バージョン 3.1.14 以降では、個々のファイルに有効期限を設定してキャッシュファイルを削除できるようになりました。
+    そのためには、<parameter>expire_time</parameter> パラメータに SMARTY::CLEAR_EXPIRED を渡します。
+   </para>
+  </note>
   <example>
    <title>clearAllCache</title>
    <programlisting role="php">

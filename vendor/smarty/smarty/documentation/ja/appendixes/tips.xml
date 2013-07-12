@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4707 $ -->
+<!-- EN-Revision: 4335 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
  <chapter id="tips">
   <title>ヒント &amp; 裏ワザ</title>
@@ -15,8 +15,8 @@
     そのために多くの人は
     <link linkend="language.function.if"><varname>{if}</varname></link>
     {if}ステートメントを使用すると思いますが、Smartyによる変数の修飾子
-    <link linkend="language.modifier.default"><varname>default</varname>
-    </link> を使った簡略な方法があります。
+    <link linkend="language.modifier.default"><varname>default</varname></link>
+    を使った簡略な方法があります。
     <note>
     <para><quote>Undefined variable</quote> というエラーが表示されるのは、
      PHP の <ulink url="&url.php-manual;error_reporting"><varname>error_reporting()</varname></ulink>

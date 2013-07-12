@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4716 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
   <sect1 id="variable.config.overwrite">
   <title>$config_overwrite</title>
@@ -47,9 +47,9 @@ rowColors = #0000FF
   </example>
     <para>
     <link linkend="language.function.config.load"><varname>{config_load}</varname></link>、
-    <link linkend="api.get.config.vars"><varname>get_config_vars()</varname></link>、
-    <link linkend="api.clear.config"><varname>clear_config()</varname></link>、
-    <link linkend="api.config.load"><varname>config_load()</varname></link>
+    <link linkend="api.get.config.vars"><varname>getConfigVars()</varname></link>、
+    <link linkend="api.clear.config"><varname>clearConfig()</varname></link>、
+    <link linkend="api.config.load"><varname>configLoad()</varname></link>
     および <link linkend="config.files">config files section</link>
     も参照してください。
   </para>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 4362 $ -->
+<!-- $Revision: 4740 $ -->
  <chapter id="troubleshooting">
   <title>Troubleshooting</title>
   <para></para>
@@ -25,7 +25,7 @@ Fatal error: Smarty: [in index.tpl line 28]: syntax error: missing section name
    <para>
     Smarty shows you the template name, the line number and the error.
     After that, the error consists of the actual line number in the Smarty
-    class that the error occured.
+    class that the error occurred.
    </para>
 
    <para>

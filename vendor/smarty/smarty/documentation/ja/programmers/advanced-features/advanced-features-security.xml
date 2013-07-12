@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4715 $ -->
+<!-- EN-Revision: 4525 Maintainer: takagi Status: ready -->
 <sect1 id="advanced.features.security">
  <title>セキュリティ</title>
  <para>
@@ -61,6 +61,33 @@
     </para>
   </listitem>
   <listitem>
+      <para>
+        <parameter>$trusted_uri</parameter> は、信頼済みとみなされる URI にマッチする正規表現の配列です。
+        このセキュリティディレクティブを使うのは、<link linkend="language.function.fetch"><varname>{fetch}</varname></link> と
+        <link linkend="language.function.html.image"><varname>{html_image}</varname></link> です。
+        これらの関数に渡す URI は <literal>{$PROTOCOL}://{$HOSTNAME}</literal> 形式に切り詰められるので、シンプルな正規表現にできます
+        (認証トークンなどのエッジケースは気にしなくてもかまいません)。
+      </para>
+      <para>
+        たとえば <literal>'#https?://.*smarty.net$#i'</literal> は、次の URI へのアクセスを許可します。
+        <itemizedlist>
+          <listitem><para><literal>http://smarty.net/foo</literal></para></listitem>
+          <listitem><para><literal>http://smarty.net/foo</literal></para></listitem>
+          <listitem><para><literal>http://www.smarty.net/foo</literal></para></listitem>
+          <listitem><para><literal>http://smarty.net/foo</literal></para></listitem>
+          <listitem><para><literal>https://foo.bar.www.smarty.net/foo/bla?blubb=1</literal></para></listitem>
+        </itemizedlist>
+
+        しかし、これらの URI にはアクセスできません。
+
+        <itemizedlist>
+            <listitem><para><literal>http://smarty.com/foo</literal> (トップレベルドメイン "com" がマッチしない)</para></listitem>
+            <listitem><para><literal>ftp://www.smarty.net/foo</literal> (プロトコル "ftp" がマッチしない)</para></listitem>
+            <listitem><para><literal>http://www.smarty.net.otherdomain.com/foo</literal> (ドメインの最後が "smarty.net" にマッチしない)</para></listitem>
+          </itemizedlist>
+      </para>
+    </listitem>
+  <listitem>
     <para>
       <parameter>$static_classes</parameter> は、信頼済みとみなされるクラスの配列です。
       デフォルトは空の配列で、これはすべての static クラスへのアクセスを許可します。
@@ -97,11 +124,37 @@
   </listitem>
   <listitem>
     <para>
-      <parameter>$allow_constants</parameter> は boolean のフラグで、
-      テンプレートから定数にアクセスできるかどうかを指定します。
-      デフォルトは "true" です。
+     <parameter>$allowed_modifiers</parameter> は (登録済み / autoload された)
+     修飾子の配列で、テンプレートから使うことができるものです。配列が空でない場合は、
+     ここで指定した修飾子だけが使えるようになります。これはホワイトリストです。
     </para>
-  </listitem>
+   </listitem>
+   <listitem>
+    <para>
+     <parameter>$disabled_modifiers</parameter> は (登録済み / autoload された)
+     修飾子の配列で、テンプレートからは使えないものです。
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <parameter>$allowed_tags</parameter> は (登録済み / autoload された)
+     関数、ブロックプラグイン、フィルタプラグインの配列で、テンプレートから使うことができるものです。
+     配列が空でない場合は、ここで指定した修飾子だけが使えるようになります。これはホワイトリストです。
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <parameter>$disabled_tags</parameter> は (登録済み / autoload された)
+     関数、ブロックプラグイン、フィルタプラグインの配列で、テンプレートからは使えないものです。
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <parameter>$allow_constants</parameter> は boolean のフラグで、
+     テンプレートから定数にアクセスできるかどうかを指定します。
+     デフォルトは "true" です。
+    </para>
+   </listitem>
   <listitem>
     <para>
       <parameter>$allow_super_globals</parameter> は boolean のフラグで、

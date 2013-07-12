@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4707 $ -->
+<!-- EN-Revision: 4362 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <chapter id="language.modifiers">
  <title>変数の修飾子</title>
@@ -69,6 +69,18 @@
       テンプレート内で配列をループさせるか
       修飾子関数の中にその機能を組み込まなければなりません。
     </para></note>
+    <note>
+      <para>
+        また、Smarty 2.x では、<literal>{8+2}</literal> のような数式の場合は
+        その演算結果に対して修飾子が適用されていました。つまり、たとえば
+        <literal>{8+2|count_characters}</literal> の結果は
+        <literal>2</literal> になっていたということです。8+2=10 であり、10 は二文字だからです。
+        Smarty 3 では、修飾子を変数やアトミックな式に適用してから計算を行います。
+        つまり、2 は一文字なので <literal>{8+2|count_characters}</literal> の結果は 9 になるということです。
+        古いバージョンと同じ挙動にするには、括弧を使って <literal>{(8+2)|count_characters}</literal>
+        とします。
+      </para>
+    </note>
   </para>
  </listitem>
 
@@ -120,6 +132,7 @@
  &designers.language-modifiers.language-modifier-date-format;
  &designers.language-modifiers.language-modifier-default;
  &designers.language-modifiers.language-modifier-escape;
+ &designers.language-modifiers.language-modifier-from-charset;
  &designers.language-modifiers.language-modifier-indent;
  &designers.language-modifiers.language-modifier-lower;
  &designers.language-modifiers.language-modifier-nl2br;
@@ -129,7 +142,9 @@
  &designers.language-modifiers.language-modifier-string-format;
  &designers.language-modifiers.language-modifier-strip;
  &designers.language-modifiers.language-modifier-strip-tags;
+ &designers.language-modifiers.language-modifier-to-charset;
  &designers.language-modifiers.language-modifier-truncate;
+ &designers.language-modifiers.language-modifier-unescape;
  &designers.language-modifiers.language-modifier-upper;
  &designers.language-modifiers.language-modifier-wordwrap;
 

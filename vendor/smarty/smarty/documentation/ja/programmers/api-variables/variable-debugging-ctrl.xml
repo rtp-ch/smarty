@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4716 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
      <sect1 id="variable.debugging.ctrl">
       <title>$debugging_ctrl</title>
@@ -30,12 +30,13 @@ $smarty->debugging_ctrl = ($_SERVER['SERVER_NAME'] == 'localhost') ? 'URL' : 'NO
 </programlisting>
  </example>
 
-      <para>
-      <link linkend="chapter.debugging.console">デバッギングコンソール</link>
-     および
+   <para>
+     <link linkend="chapter.debugging.console">デバッギングコンソール</link>、
      <link linkend="variable.debugging"><parameter>$debugging</parameter></link>
+     および
+    <link linkend="variable.smarty.debug.id"><parameter>$smarty_debug_id</parameter></link>
      も参照してください。
-      </para>
+   </para>
 </sect1>
 <!-- Keep this comment at the end of the file
 Local variables:

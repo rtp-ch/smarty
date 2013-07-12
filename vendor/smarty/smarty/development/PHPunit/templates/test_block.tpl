@@ -1,7 +1,7 @@
 {extends file='test_block_section.tpl'}
-{block name=blockpassedbysection}--block passed by section ok--{/block}<br>
-{block name=blockroot}--block root ok--{/block}<br>
-{block name="blockassigned"}--assigned {$foo}--{/block}<br>
-{block name='parentbase'}--parent from {$smarty.block.parent} block--{/block}<br>
-{block name='parentsection'}--parent from {$smarty.block.parent} block--{/block}<br>
-{block name='blockinclude'}--block include ok--{/block}<br>
+{block name=blockpassedbysection}--blockpassedbysection passed by section ok /blockpassedbysection--{/block}<br>
+{block name=blockroot}--blockroot root ok /blockroot--{/block}<br>
+{block name="blockassigned"}--blockassigned assigned {$foo} /blockassigned--{/block}<br>
+{block name='parentbase'}--blockparentbase parent from {$smarty.block.parent} /blockparentbase--{/block}<br>
+{block name='parentsection'}--blockparentsection parent from {$smarty.block.parent} /blockparentsection--{/block}<br>
+{block name='blockinclude'}--blockinclude include ok /blockinclude--{/block}<br>

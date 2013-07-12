@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4716 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
    <sect1 id="variable.compile.dir">
     <title>$compile_dir</title>
@@ -28,7 +28,17 @@
        このディレクトリをwebサーバのドキュメントルート下に置く事は推奨されません。
       </para>
      </note>
+    <note>
+     <title>ノート</title>
      <para>
+      Smarty 3.1 以降、$compile_dir 属性に直接アクセスすることはできなくなりました。かわりに
+      <link linkend="api.get.compile.dir"><varname>getCompileDir()</varname></link> と
+      <link linkend="api.set.compile.dir"><varname>setCompileDir()</varname></link> を使いましょう。
+     </para>
+    </note>
+     <para>
+     <link linkend="api.get.compile.dir"><varname>getCompileDir()</varname></link>、
+     <link linkend="api.set.compile.dir"><varname>setCompileDir()</varname></link>、
      <link linkend="variable.compile.id"><parameter>$compile_id</parameter></link>
      および
      <link linkend="variable.use.sub.dirs"><parameter>$use_sub_dirs</parameter></link>

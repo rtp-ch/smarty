@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4741 $ -->
+<!-- EN-Revision: 4740 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
  <sect1 id="language.modifier.date.format">
   <title>date_format</title>
@@ -8,8 +8,9 @@
      日付と時間を
      <ulink url="&url.php-manual;strftime"><varname>strftime()</varname></ulink>
      のフォーマットに基づいて整形します。日付を Unix
-     <ulink url="&url.php-manual;function.time">タイムスタンプ</ulink>
-     や MySQL タイムスタンプ、そして月・日・年で構成された
+     <ulink url="&url.php-manual;function.time">タイムスタンプ</ulink> や
+     <ulink url="&url.php-manual;class.DateTime">DateTime オブジェクト</ulink>、
+     MySQL タイムスタンプ、そして月・日・年で構成された
      (PHP の <ulink url="&url.php-manual;strtotime"><varname>strtotime()</varname></ulink>
      でパース可能な) 文字列として変数に割り当てる事ができます。デザイナーは、
      <varname>date_format</varname> を使用することで日付の書式設定を自由にコントロールできます。

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3850 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4715 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <sect1 id="advanced.features.template.inheritance">
  <title>テンプレートの継承</title>
  <para>
@@ -69,7 +69,7 @@
 <html>
 <head>
   <title>{block name=title}Default Page Title{/block}</title>
-  <span style="color: blue">{block name=head}{/block}</span>
+  {block name=head}{/block}
 </head>
 <body>
 {block name=body}{/block}
@@ -88,10 +88,10 @@
 ]]>
 
   </programlisting>
-   <para>myproject.tpl (孫)</para>
+   <para>mypage.tpl (孫)</para>
    <programlisting>
 <![CDATA[
-{extends file='project.tpl'}
+{extends file='myproject.tpl'}
 {block name=title}My Page Title{/block}
 {block name=head}
   <link href="/css/mypage.css" rel="stylesheet" type="text/css"/>
@@ -126,7 +126,8 @@ My HTML Page Body goes here
     <title>テンプレートリソース <literal>extends:</literal> による継承</title>
     <para>
       テンプレートファイルで <link linkend="language.function.extends"><varname>{extends}</varname></link>
-      タグを使うかわりに、PHP スクリプトの中でリソース型 <literal>extends:</literal>
+      タグを使うかわりに、PHP スクリプトの中でリソース型
+      <link linkend="resources.extends"><literal>extends:</literal></link>
       を使って継承ツリーを定義することもできます。
     </para>
     <para>
@@ -144,7 +145,7 @@ $smarty->display('extends:layout.tpl|myproject.tpl|mypage.tpl');
   <link linkend="language.function.block"><varname>{block}</varname></link>、
    <link linkend="language.function.extends"><varname>{extends}</varname></link>
    および
-   <link linkend="extends.resource"><literal>extends:</literal> リソース</link>
+   <link linkend="resources.extends"><literal>extends:</literal> リソース</link>
    も参照ください。
  </para> 
 </sect1>

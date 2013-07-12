@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4717 $ -->
+<!-- EN-Revision: 4475 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
    <sect1 id="plugins.compiler.functions"><title>コンパイラ関数プラグイン</title>
     <para>
@@ -12,15 +12,15 @@
     <funcsynopsis>
      <funcprototype>
       <funcdef>mixed <function>smarty_compiler_<replaceable>name</replaceable></function></funcdef>
-      <paramdef>string <parameter>$tag_arg</parameter></paramdef>
+      <paramdef>array <parameter>$params</parameter></paramdef>
       <paramdef>object <parameter>$smarty</parameter></paramdef>
      </funcprototype>
     </funcsynopsis>
     <para>
-     コンパイラ関数には３つのパラメータを渡します。
-     これらのパラメータは、タグ内の文字列(基本的に関数名から終端デリミタまでの全ての文字列)と、
-     Smartyのオブジェクト、そしてテンプレートオブジェクトです。
-     戻り値には、コンパイルされたテンプレートに挿入されるPHPコードを返します。
+     コンパイラ関数には２つのパラメータを渡します。
+     パラメータの配列 (属性の値に使うコンパイル済み文字列を含むもの)、
+     そして Smarty オブジェクトです。
+     戻り値には、コンパイルされたテンプレートに挿入されるPHPコード (前後のPHPタグを含むもの) を返します。
     </para>
 
     <example>
@@ -38,9 +38,9 @@
  *           ヘッダを出力する
  * -------------------------------------------------------------
  */
-function smarty_compiler_tplheader($tag_arg, $smarty)
+function smarty_compiler_tplheader($params, Smarty $smarty)
 {
-    return "\necho '" . $smarty->_current_file . " compiled at " . date('Y-m-d H:M'). "';";
+    return "<?php\necho '" . $smarty->_current_file . " compiled at " . date('Y-m-d H:M'). "';\n?>";
 }
 ?>
 ]]>

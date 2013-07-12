@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 3927 $ -->
-<!-- EN-Revision: 3923 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4711 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <sect1 id="language.function.block">
  <title>{block}</title>
 
@@ -79,6 +79,10 @@
      <entry>prepend</entry>
      <entry><varname>{block}</varname> のコンテンツを親テンプレートの <varname>{block}</varname> の前に置く</entry>
     </row>    
+     <row>
+       <entry>hide</entry>
+       <entry>同じ名前の子ブロックが存在しないときに、ブロックのコンテンツを無視する</entry>
+     </row>    
      <row>
        <entry>nocache</entry>
        <entry><varname>{block}</varname> のコンテンツのキャッシュを無効にする</entry>
@@ -214,7 +218,7 @@ Child Title
 <![CDATA[
 <html>
   <head>
-    <title>The - Child Title - was inserted here</title>
+    <title>The Child Title was inserted here</title>
   </head>
 </html>
 ]]>

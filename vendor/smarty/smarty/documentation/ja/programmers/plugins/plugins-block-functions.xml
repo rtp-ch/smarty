@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4717 $ -->
+<!-- EN-Revision: 4278 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
    <sect1 id="plugins.block.functions"><title>ブロック関数プラグイン</title>
     <funcsynopsis>
@@ -28,6 +28,9 @@
      （１度目は開始タグ、２度目は終端タグによって）呼び出されます
      （この動作の変更方法は次の <literal>$repeat</literal> を参照）。
     </para></listitem>
+     <listitem><para>
+      Smarty 3.1 以降、開始タグの呼び出しの戻り値も表示されるようになります。
+     </para></listitem>
     <listitem><para>
      ブロック関数の開始タグのみ <link linkend="language.syntax.attributes">属性</link>
      を持つ場合があります。全ての属性はテンプレートからテンプレート関数に、
@@ -76,7 +79,7 @@
  * Purpose:  テキストブロックを変換する
  * -------------------------------------------------------------
  */
-function smarty_block_translate($params, $content, $template, &$repeat)
+function smarty_block_translate($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
     // 終了タグでのみ出力します
     if(!$repeat){

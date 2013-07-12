@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4711 $ -->
+<!-- EN-Revision: 4596 Maintainer: takagi Status: ready -->
 <sect1 id="language.function.extends">
  <title>{extends}</title>
  <para>
@@ -21,11 +21,20 @@
    </para></listitem>
    
   <listitem><para>
-  <link linkend="template.resources">テンプレートリソース</link> 構文を使うと、
+  <link linkend="resources">テンプレートリソース</link> 構文を使うと、
   <link linkend="variable.template.dir"><parameter>$template_dir</parameter></link>
   ディレクトリの外部にあるファイルを継承することができます。
   </para></listitem>
  </itemizedlist>
+
+ <note>
+   <para>
+     親の変数を <literal>{extends file=$parent_file}</literal> のように継承するときには、
+     <varname>$parent_file</varname> を
+     <link linkend="variable.compile.id"><varname>$compile_id</varname></link> でインクルードするのを忘れないようにしましょう。
+     そうしないと、Smarty が複数の <varname>$parent_file</varname> を区別できなくなります。
+   </para>
+  </note>
 
 <para><emphasis role="bold">属性</emphasis></para>
  <informaltable frame="all">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3856 $ -->
-<!-- EN-Revision: 3827 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4713 $ -->
+<!-- EN-Revision: 4631 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <sect1 id="language.function.html.select.date">
  <title>{html_select_date}</title>
@@ -39,10 +39,21 @@
     </row>
     <row>
      <entry>time</entry>
-     <entry>timestamp/ YYYY-MM-DD</entry>
+     <entry>
+      <ulink url="&url.php-manual;function.time">timestamp</ulink>、
+      <ulink url="&url.php-manual;class.DateTime">DateTime</ulink>、
+      mysql timestamp あるいは
+      <ulink url="&url.php-manual;strtotime"><varname>strtotime()</varname></ulink>
+      が解釈できる任意の文字列。field_array が設定されている場合は、この関数が作る配列。
+     </entry>
      <entry>No</entry>
-     <entry>UNIXタイムスタンプ又はYYYY-MM-DDフォーマットによる現在の時間</entry>
-     <entry>使用する日付/時間</entry>
+     <entry>現在の <ulink url="&url.php-manual;function.time">timestamp</ulink></entry>
+     <entry>
+      どの日付/時刻を初期選択状態にするか。配列を指定した場合は、属性 field_array と prefix
+      を使って配列の要素を特定し、年・月・日を取り出します。
+      このパラメータを省略したり false を渡したりすると、現在の日付を選択した状態にします。
+      何も選択していない状態にしたければ、 &null; を渡しましょう。
+     </entry>
     </row>
     <row>
      <entry>start_year</entry>
@@ -80,6 +91,13 @@
      <entry>No</entry>
      <entry>&true;</entry>
      <entry>年を表示するかどうか</entry>
+    </row>
+    <row>
+     <entry>month_names</entry>
+     <entry>array</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>月名を表す文字列の配列。たとえば array(1 => 'Jan', …, 12 => 'Dec')</entry>
     </row>
     <row>
      <entry>month_format</entry>
@@ -176,6 +194,34 @@
      <entry>年のselect/inputタグに拡張属性を追加</entry>
     </row>
     <row>
+     <entry>all_id</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>すべての select タグと input タグに id 属性を追加する</entry>
+    </row>
+    <row>
+     <entry>day_id</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>select タグと input タグに id 属性を追加する</entry>
+    </row>
+    <row>
+     <entry>month_id</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>select タグと input タグに id 属性を追加する</entry>
+    </row>
+    <row>
+     <entry>year_id</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>select タグと input タグに id 属性を追加する</entry>
+    </row>
+    <row>
      <entry>field_order</entry>
      <entry>string</entry>
      <entry>No</entry>
@@ -195,6 +241,15 @@
      <entry>No</entry>
      <entry>%m</entry>
      <entry>strftime() フォーマットによる月の値（デフォルトは%m）</entry>
+    </row>
+    <row>
+     <entry>all_empty</entry>
+     <entry>string</entry>
+     <entry>No</entry>
+     <entry>null</entry>
+     <entry>すべてのセレクトボックスの最初の要素に、指定した文字列をlabelとして、
+     空文字 <quote></quote> のvalueを持たせます。
+     例えば、セレクトボックスに <quote>選択して下さい</quote> と表示させる時に便利です。</entry>
     </row>
     <row>
      <entry>year_empty</entry>

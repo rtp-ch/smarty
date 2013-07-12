@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Revision: 3913 $ -->
-<!-- EN-Revision: 3894 Maintainer: takagi Status: ready -->
+<!-- $Revision: 4714 $ -->
+<!-- EN-Revision: 4562 Maintainer: takagi Status: ready -->
 <!-- CREDITS: mat-sh,daichi,joe -->
 <sect1 id="language.variables.smarty">
  <title>予約変数 {$smarty}</title>
@@ -175,7 +175,14 @@ define('MY_CONST_VAL','CHERRIES');
   </para>
  </sect2>
 
-  <sect2 id="language.variables.smarty.current_dir">
+ <sect2 id="language.variables.smarty.template_object">
+  <title>{$smarty.template_object}</title>
+  <para>
+   現在処理中のテンプレートのテンプレートオブジェクトを返します。
+  </para>
+ </sect2>
+
+ <sect2 id="language.variables.smarty.current_dir">
    <title>{$smarty.current_dir}</title>
    <para>
     現在処理中のテンプレートのディレクトリ名を返します。
