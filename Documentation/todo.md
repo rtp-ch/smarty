@@ -9,4 +9,5 @@
 * Document!
 * Use github for documentation, clone locally with gollum
 * Unit tests
-* TypoScript smarty object
+* TypoScript smarty object (~FLUID)
+* Passing TypoScript setup to smarty config settings
