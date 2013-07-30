@@ -85,6 +85,7 @@ class Tx_Smarty_Utility_TypoScript
         $lastObjPathPart = array_pop($objPathParts);
 
         // The current global TypoScript setup array
+        // @TODO: What happens when setup is unavailable
         $setup = $GLOBALS['TSFE']->tmpl->setup;
 
         // Iterate through the global TypoScript scope
