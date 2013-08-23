@@ -1,26 +1,32 @@
 <?php
 
-	if (!defined ('TYPO3_MODE')) die ('Access denied.');
+if (!defined ('TYPO3_MODE')) {
+    die ('Access denied.');
+}
 
-	// Get default vars from extension configuration
-	$_EXTCONF = unserialize($_EXTCONF);
+if (!defined('SMARTY_RESOURCE_CHAR_SET')) {
+    if (!defined('SMARTY_MBSTRING')) {
+        define('SMARTY_MBSTRING', function_exists('mb_split'));
+    }
+    // @TODO: Explore options and effects
+    // UTF-8 can only be done properly when mbstring is available!
+    define('SMARTY_RESOURCE_CHAR_SET', SMARTY_MBSTRING ? 'UTF-8' : 'ISO-8859-1');
+}
 
-	// Set global extension configuration vars
-	$TYPO3_CONF_VARS['EXTCONF'][$_EXTKEY]['smarty_dir'] = preg_replace('%[\\\\|/]$%m', '', $_EXTCONF['smarty_dir']).'/';
-	$TYPO3_CONF_VARS['EXTCONF'][$_EXTKEY]['template_dir'] = t3lib_div::getFileAbsFileName(preg_replace('%[\\\\|/]$%m', '', $_EXTCONF['template_dir']));
+// PSR2 Compatibility
+if (!defined('PATH_site')) {
+    define('PATH_SITE', PATH_site);
+}
 
-	// autoinclude the main extension class
-	require_once(t3lib_extMgm::extPath($_EXTKEY).'class.tx_smarty.php');
+// PSR2 Compatibility
+if (defined('TYPO3_cliMode') && !defined('TYPO3_CLI_MODE')) {
+    define('TYPO3_CLI_MODE', TYPO3_cliMode);
+}
 
-	// autoinclude the smarty pagination class
-	// http://www.phpinsider.com/php/code/SmartyPaginate/
-	require_once(t3lib_extMgm::extPath($_EXTKEY).'lib/SmartyPaginate.class.php');
+// Include the autoloader for 3rd party libraries, including the smarty library
+require_once t3lib_extMgm::extPath('smarty') . 'Classes/Factory.php';
+require_once t3lib_extMgm::extPath('smarty') . 'vendor/autoload.php';
 
-	// XCLASS for smartyView (still references obsolete rtp_smarty)
-	if(t3lib_extMgm::isLoaded('lib') && t3lib_extMgm::isLoaded('div')) {
-		$TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/lib/class.tx_lib_smartyView.php'] = t3lib_extMgm::extPath($_EXTKEY).'lib/class.ux_tx_lib_smartyView.php';
-		require_once(t3lib_extMgm::extPath('smarty').'lib/class.ux_tx_lib_smartyView.php');
-	}
-
-	// Hook for clearing smarty cache
-	$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = t3lib_extMgm::extPath($_EXTKEY).'hook/class.tx_smarty_cache.php:&tx_smarty_cache->clearSmartyCache';
+// TODO: Hook for clearing smarty cache
+$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][]
+    = t3lib_extMgm::extPath('smarty') . 'Classes/Hooks/ClearCache.php:&Tx_Smarty_Hooks_ClearCache->clearSmartyCache';
