@@ -30,13 +30,15 @@ class Tx_Smarty_Core_CobjectProxy
     /**
      * Constructor creates a simulated frontend environment when
      *
+     * @param int $pageId
+     * @param bool $noCache
      * @param array $data
      * @param string $table
      */
-    public function __construct(array $data = array(), $table = '')
+    public function __construct($pageId = 0, $noCache = false, array $data = array(), $table = '')
     {
         if (!Tx_Smarty_Utility_Typo3::isFeInstance()) {
-            $this->simulateFrontendEnvironment($data, $table);
+            $this->simulateFrontendEnvironment($pageId, $noCache, $data, $table);
         }
     }
 
@@ -82,13 +84,15 @@ class Tx_Smarty_Core_CobjectProxy
     /**
      * Simulates a frontend environment.
      *
+     * @param int $pageId
+     * @param bool $noCache
      * @param array $data
      * @param string $table
      */
-    protected function simulateFrontendEnvironment(array $data = array(), $table = '')
+    protected function simulateFrontendEnvironment($pageId = 0, $noCache = false, array $data = array(), $table = '')
     {
         $this->setTimeTracker();
-        $this->setTsfe();
+        $this->setTsfe($pageId, $noCache);
         $this->setWorkingDir();
         $this->setCharSet();
         $this->setPageSelect();
@@ -190,7 +194,6 @@ class Tx_Smarty_Core_CobjectProxy
     /**
      * Sets $GLOBALS['TSFE']
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     * TODO: Implement page & cache
      */
     private function setTsfe($pageId = 0, $noCache = 0)
     {
