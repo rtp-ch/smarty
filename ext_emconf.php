@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "smarty".
  *
- * Auto generated 22-08-2013 14:08
+ * Auto generated 23-08-2013 07:56
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'A library for developers who want to use the Smarty templating engine for frontend extension templating. Includes Smarty and some custom Smarty tags for common TYPO3 functions.',
 	'category' => 'misc',
 	'shy' => 0,
-	'version' => '1.13.1',
+	'version' => '1.13.3',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
@@ -28,13 +28,14 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearcacheonload' => 0,
 	'lockType' => '',
 	'author' => 'Simon Tuck',
-	'author_email' => 'stu@rtpartner.ch',
+	'author_email' => 'stu@rtp.ch',
 	'author_company' => 'Rueegg Tuck Partner',
 	'CGLcompliance' => '',
 	'CGLcompliance_note' => '',
 	'constraints' => array(
 		'depends' => array(
 			'php' => '5.0.0-0.0.0',
+			'typo3' => '4.5.0-4.99.99',
 		),
 		'conflicts' => array(
 		),
