@@ -18,7 +18,9 @@
  * @param string $thousands_sep
  * @return string
  */
+//@codingStandardsIgnoreStart
 function smarty_modifier_number_format($string, $decimals = 2, $dec_point = '.', $thousands_sep = '')
 {
+//@codingStandardsIgnoreEnd
     return number_format($string, $decimals, $dec_point, $thousands_sep);
 }

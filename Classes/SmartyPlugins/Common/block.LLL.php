@@ -24,9 +24,13 @@
  * @return string
  * @todo Check performance, compare with extBase approach
  */
+//@codingStandardsIgnoreStart
 function smarty_block_LLL($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
+//@codingStandardsIgnoreEnd
+
     if (!$repeat) {
+
         // Make sure params are lowercase
         $params = array_change_key_case($params, CASE_LOWER);
 
@@ -35,57 +39,129 @@ function smarty_block_LLL($params, $content, Smarty_Internal_Template $template,
 
         if ($key) {
 
-            // Gets the language file and/or label information
-            if (t3lib_div::isFirstPartOfStr($key, 'LLL:')) {
-                $key = substr($key, 4);
-            }
+            // Gets the relevant translation files
+            list($key, $languageFiles) = getTranslationFiles($key, $template);
 
-            $parts = Tx_Smarty_Utility_Array::trimExplode($key, ':');
-            if (count($parts) > 1) {
-                $key = array_pop($parts);
-                $languageFile = implode(':', $parts);
-            }
+            // Finds the appropriate translation for the given key from the available translation files
+            $translation = getTranslation($key, $languageFiles, $params['alt']);
 
-            if (isset($languageFile)) {
-                $languageFiles = array($languageFile);
+            // Sets an alternate translation if no translation was found and the "alt" parameter is available.
+            if ($translation !== false) {
 
-            } else {
-                $languageFiles = $template->smarty->getLanguageFile();
-            }
+                // Evaluates the translation as a smarty template
+                $translation = renderTranslation($translation, $template);
 
-            // Calls the sL method from tslib_fe to translate the label
-            foreach ($languageFiles as $languageFile) {
-                // Makes sure only relative path is used for readLLfile
-                $languageFile = str_replace(t3lib_div::getIndpEnv('TYPO3_SITE_URL'), '', $languageFile);
+                // Runs the translated text through htmlspecialchars if set
+                $translation = (boolean) $params['hsc'] ? htmlspecialchars($translation) : $translation;
 
-                if (Tx_Smarty_Utility_Typo3::isFeInstance()) {
-                    $translation = $GLOBALS['TSFE']->sL('LLL:' . $languageFile . ':' . $key);
+                // Sets the original content if the translation is empty
+                $translation = trim($translation) ? $translation : $content;
 
-                } elseif (is_object($GLOBALS['LANG'])) {
-                    $translation = $GLOBALS['LANG']->sL('LLL:' . $languageFile . ':' . $key);
-                }
-            }
-
-            // Sets an alternate translation if no translation was found
-            // and the "alt" parameter is available.
-            if ((!isset($translation) || !$translation) && isset($params['alt'])) {
-                $translation = $params['alt'];
-            }
-
-            // If the translation contains Smarty template vars run it through Smarty as s string resource
-            $lDel = preg_quote($template->smarty->getLeftDelimiter(), '%');
-            $rDel = preg_quote($template->smarty->getRightDelimiter(), '%');
-            if (preg_match('%[' . $lDel . '[^' . $rDel . ']*' . $rDel . '%m', $translation)) {
-                $translation = $template->smarty->fetch('string:' . $translation);
-            }
-
-            // Runs the translated text through htmlspecialchars if set
-            if ((boolean) $params['hsc']) {
-                $translation = htmlspecialchars($translation);
+                return returnOrAssignResult($translation, $template, $params['assign']);
             }
         }
-
-        // Returns the original content if no translation was found
-        return trim($translation) ? $translation : $content;
     }
+}
+
+/**
+ * Returns or assigns the result
+ *
+ * @param $translation
+ * @param $template
+ * @param null $assign
+ * @return mixed
+ */
+function returnOrAssignResult($translation, $template, $assign = null)
+{
+    if (!is_null($assign)) {
+        $template->assign($assign, $translation);
+
+    } else {
+        return $translation;
+    }
+}
+
+/**
+ * @param $key
+ * @param Smarty_Internal_Template $template
+ * @return array
+ */
+function getTranslationFiles($key, Smarty_Internal_Template $template)
+{
+    // Gets the language file and/or label information
+    if (stripos($key, 'LLL:') === 0) {
+        $key = substr($key, 4);
+    }
+
+    $parts = Tx_Smarty_Utility_Array::trimExplode($key, ':');
+    if (count($parts) > 1) {
+        $key = array_pop($parts);
+        $languageFile = implode(':', $parts);
+    }
+
+    if (isset($languageFile)) {
+        $languageFiles = array($languageFile);
+
+    } else {
+        $languageFiles = $template->smarty->getLanguageFile();
+    }
+
+    return array($key, $languageFiles);
+}
+
+/**
+ * Find the translation for the given label
+ *
+ * @param $key
+ * @param $languageFiles
+ * @return mixed
+ * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+ */
+function getTranslation($key, $languageFiles, $alt = null)
+{
+    $translation = false;
+
+    // Calls the sL method from tslib_fe to translate the label
+    foreach ($languageFiles as $languageFile) {
+        // Makes sure only relative path is used for readLLfile
+        $languageFile = str_replace(
+            Tx_Smarty_Service_Compatibility::getIndpEnv('TYPO3_SITE_URL'),
+            '',
+            $languageFile
+        );
+
+        // TODO: Break when a translation has been found(?)
+        if (Tx_Smarty_Utility_Typo3::isFeInstance()) {
+            $translation = $GLOBALS['TSFE']->sL('LLL:' . $languageFile . ':' . $key);
+
+        } elseif (is_object($GLOBALS['LANG'])) {
+            $translation = $GLOBALS['LANG']->sL('LLL:' . $languageFile . ':' . $key);
+        }
+    }
+
+    if ($translation === false && !is_null($alt)) {
+        $translation = $alt;
+    }
+
+    return $translation;
+}
+
+/**
+ * Passes the given string through smarty's rendering engine. In other words translated text snippets can in themselves
+ * contain smarty variables
+ *
+ * @param $translation
+ * @param Smarty_Internal_Template $template
+ * @return string
+ */
+function renderTranslation($translation, Smarty_Internal_Template $template)
+{
+    // If the translation contains Smarty template vars run it through Smarty as s string resource
+    $lDel = preg_quote($template->smarty->getLeftDelimiter(), '%');
+    $rDel = preg_quote($template->smarty->getRightDelimiter(), '%');
+    if (preg_match('%[' . $lDel . '[^' . $rDel . ']*' . $rDel . '%m', $translation)) {
+        $translation = $template->smarty->fetch('string:' . $translation);
+    }
+
+    return $translation;
 }

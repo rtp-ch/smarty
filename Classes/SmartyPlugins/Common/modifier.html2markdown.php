@@ -14,8 +14,11 @@
  *
  * @param $content
  * @return mixed
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_modifier_html2markdown($content)
 {
+//@codingStandardsIgnoreEnd
     return html2markdown($content);
 }

@@ -14,14 +14,17 @@
  *
  * @param $string
  * @param string $format
- * @param string $default_date
+ * @param string $defaultDate
  * @param string $formatter
  * @return string
  */
-function smarty_modifier_gmdate_format($string, $format = null, $default_date = '', $formatter = 'auto')
+//@codingStandardsIgnoreStart
+function smarty_modifier_gmdate_format($string = '', $format = null, $defaultDate = '', $formatter = 'auto')
 {
-    /**
-    * Include the {@link shared.make_timestamp.php} plugin
+//@codingStandardsIgnoreEnd
+
+   /**
+    * Include the shared.make_timestamp.php plugin
     */
     require_once SMARTY_PLUGINS_DIR . 'shared.make_timestamp.php';
 
@@ -29,39 +32,17 @@ function smarty_modifier_gmdate_format($string, $format = null, $default_date = 
         $format = Smarty::$_DATE_FORMAT;
     }
 
-    if ($string !== '') {
-        $timestamp = smarty_make_timestamp($string);
-
-    } elseif ($default_date !== '') {
-        $timestamp = smarty_make_timestamp($default_date);
-
-    } else {
-        return null;
-    }
+    $string = trim($string) ? $string : $defaultDate;
+    $timestamp = smarty_make_timestamp($string);
 
     if ($formatter === 'strftime' || ($formatter === 'auto' && strpos($format, '%') !== false)) {
-
-        if (DS == '\\') {
-
-            $_win_from = array('%D', '%h', '%n', '%r', '%R', '%t', '%T');
-            $_win_to = array('%m/%d/%y', '%b', "\n", '%I:%M:%S %p', '%H:%M', "\t", '%H:%M:%S');
-
-            if (strpos($format, '%e') !== false) {
-                $_win_from[] = '%e';
-                $_win_to[] = sprintf('%\' 2d', date('j', $timestamp));
-            }
-
-            if (strpos($format, '%l') !== false) {
-                $_win_from[] = '%l';
-                $_win_to[] = sprintf('%\' 2d', date('h', $timestamp));
-            }
-
-            $format = str_replace($_win_from, $_win_to, $format);
-        }
-
-        return gmstrftime($format, $timestamp);
+        $gmdate = gmstrftime($format, $timestamp);
 
     } else {
-        return gmdate($format, $timestamp);
+
+        $gmdate = gmdate($format, $timestamp);
     }
+
+
+    return $gmdate;
 }

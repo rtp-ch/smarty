@@ -39,7 +39,7 @@ class Tx_Smarty_Core_Configuration
     final public function set($key, $value = null)
     {
         //
-        $method = 'set' . t3lib_div::underscoredToUpperCamelCase($key);
+        $method = 'set' . Tx_Smarty_Service_Compatibility::underscoredToUpperCamelCase($key);
 
         // Halts execution with an exception if neither the method nor the property are available in smarty
         if (!$this->smartyClass->hasProperty($key) && !$this->smartyClass->hasMethod($method)) {
@@ -72,7 +72,7 @@ class Tx_Smarty_Core_Configuration
      */
     final public function add($key, $value)
     {
-        $method = 'add' . t3lib_div::underscoredToUpperCamelCase($key);
+        $method = 'add' . Tx_Smarty_Service_Compatibility::underscoredToUpperCamelCase($key);
 
         if (!$this->smartyClass->hasMethod($method)) {
             $msg = 'Unknown smarty adder "' . $method .'" for property "' . $key .'"!';
@@ -104,7 +104,7 @@ class Tx_Smarty_Core_Configuration
      */
     final public function get($key)
     {
-        $method = 'get' . t3lib_div::underscoredToUpperCamelCase($key);
+        $method = 'get' . Tx_Smarty_Service_Compatibility::underscoredToUpperCamelCase($key);
 
         if (!$this->smartyClass->hasProperty($key) && !$this->smartyClass->hasMethod($method)) {
             $msg = 'Unknown or inaccessible smarty property "' . $key .'"!';

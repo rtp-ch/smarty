@@ -3,7 +3,7 @@
 class Tx_Smarty_Utility_ExtConf
 {
     /**
-     * The system wide extension configuration is implemented as a singleton
+     * The system wide extension configuration is a global, static setting
      * 
      * @var array
      */
@@ -13,6 +13,7 @@ class Tx_Smarty_Utility_ExtConf
      * Gets the system wide extension configuration
      * 
      * @return array
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getExtConf()
     {

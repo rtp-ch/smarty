@@ -33,37 +33,29 @@
  * @param Smarty_Internal_Template $template
  * @param $repeat
  * @return mixed|string
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_block_typolink($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
+//@codingStandardsIgnoreEnd
 
     // Execute the block function on the closing tag
     if (!$repeat) {
 
         // Gets an instance of tslib_cobj
-        $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
+        $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
 
         // Catch the keyword _self to create a link to the current page
-        if ($params['parameter']) {
-            $params['parameter'] = preg_replace('/^_self\b/im', $GLOBALS['TSFE']->id, $params['parameter']);
-        }
+        $params['parameter'] = getLinkParameter($params['parameter']);
 
-        // Prefix the url with the base url or a defined path
-        if ($params['absRefPrefix']) {
-            if (parse_url($params['absRefPrefix'], PHP_URL_SCHEME)) {
-                $prefix = trim($params['absRefPrefix']);
-
-            } else {
-                $prefix = trim($GLOBALS['TSFE']->baseUrl);
-            }
-
-            if (substr($prefix, -1, 1) !== '/') {
-                $prefix .= '/';
-            }
-
+        // Deprecated means of forcing an absolute URL
+        if (isset($params['absRefPrefix'])) {
             // Save a copy of the current global $GLOBALS['TSFE']->absRefPrefix setting
-            $tempAbsRefPrefix = $GLOBALS['TSFE']->absRefPrefix;
-            $GLOBALS['TSFE']->absRefPrefix = $prefix;
+            $originalAbsRefPrefix = $GLOBALS['TSFE']->absRefPrefix;
+
+            // Set the global absRefPrefix setting(!!!)
+            $GLOBALS['TSFE']->absRefPrefix = getTemporaryAbsRefPrefix($params['absRefPrefix']);
         }
 
         // Gets the link
@@ -72,29 +64,99 @@ function smarty_block_typolink($params, $content, Smarty_Internal_Template $temp
         // Apply htmlspecialchars to any alt/title text
         if ($setup['title'] || $setup['title.']) {
             $setup['title'] = $cObj->stdWrap($setup['title'], $setup['title.']);
-            $setup['title'] = htmlspecialchars(
-                trim($setup['title']),
-                ENT_COMPAT | ENT_HTML401,
-                SMARTY_RESOURCE_CHAR_SET,
-                false
-            );
+            $setup['title'] = sanitizeString($setup['title']);
             unset($setup['title.']);
         }
 
         // Generate the link
         $link = $cObj->typolink($content, $setup);
 
-        // Copy the original global absRefPrefix setting back into $GLOBALS['TSFE']->absRefPrefix
-        if ($params['absRefPrefix']) {
-            $GLOBALS['TSFE']->absRefPrefix = $tempAbsRefPrefix;
+        // Deprecated means of forcing an absolute URL
+        if (isset($params['absRefPrefix'])) {
+            $GLOBALS['TSFE']->absRefPrefix = $originalAbsRefPrefix;
         }
 
         // Automatically set the "title" attribute from the content of the tag if undefined
-        if (!preg_match('%<a[^>]*title=[^>]*>[^<]*</a>%i', $link)) {
-            $content = htmlspecialchars(trim($content), ENT_COMPAT | ENT_HTML401, SMARTY_RESOURCE_CHAR_SET, false);
-            $link = preg_replace('%(<a[^>]*)(>)([^<]*</a>)%i', '\1 title="'.$content.'">\3', $link);
-        }
+        $link = addTitleFromContent($link, $content);
 
-        return $link;
+        // Returns or assigns the result
+        if (isset($params['assign'])) {
+            $template->assign($params['assign'], $link);
+
+        } else {
+            return $link;
+        }
     }
+}
+
+/**
+ * Evaluates the _self setting which points to the current page id
+ *
+ * @param bool $parameter
+ * @return bool|mixed
+ */
+function getLinkParameter($parameter = false)
+{
+    if ($parameter) {
+        // Catch the keyword _self to create a link to the current page
+        $parameter = preg_replace('/^_self\b/im', $GLOBALS['TSFE']->id, $parameter);
+    }
+
+    return $parameter;
+}
+
+/**
+ * Applies the content of the link as the link title if no title is available
+ *
+ * @param $link
+ * @param $content
+ * @return mixed
+ */
+function addTitleFromContent($link, $content)
+{
+    // Automatically set the "title" attribute from the content of the tag if undefined
+    if (!preg_match('%<a[^>]*title=[^>]*>[^<]*</a>%i', $link)) {
+        $content = sanitizeString($content);
+        $link = preg_replace('%(<a[^>]*)(>)([^<]*</a>)%i', '\1 title="'.$content.'">\3', $link);
+    }
+
+    return $link;
+}
+
+/**
+ * Configured htmlspecialchars application
+ *
+ * @param $string
+ * @return string
+ */
+function sanitizeString($string)
+{
+    return htmlspecialchars(trim($string), ENT_COMPAT | ENT_HTML401, SMARTY_RESOURCE_CHAR_SET, false);
+}
+
+/**
+ * Gets an URL which is used to temporarily override $GLOBALS['TSFE']->absRefPrefix thereby forcing
+ * an absolute URL on the link which is being generated. This feature is deprecated and should be avoided!
+ * Instead use the TypoScript property "forceAbsoluteUrl" to force absolute URLs
+ *
+ * @param $absRefPrefix
+ * @return string
+ * @deprecated
+ */
+function getTemporaryAbsRefPrefix($absRefPrefix)
+{
+    Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
+
+    if (parse_url($absRefPrefix, PHP_URL_SCHEME)) {
+        $temporaryAbsRefPrefix = trim($absRefPrefix);
+
+    } else {
+        $temporaryAbsRefPrefix = trim($GLOBALS['TSFE']->baseUrl);
+    }
+
+    if (substr($temporaryAbsRefPrefix, -1, 1) !== '/') {
+        $temporaryAbsRefPrefix .= '/';
+    }
+
+    return $temporaryAbsRefPrefix;
 }

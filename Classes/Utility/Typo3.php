@@ -1,12 +1,10 @@
 <?php
 
-
-class Tx_Smarty_Utility_Typo3   
+class Tx_Smarty_Utility_Typo3
 {
     /**
-     *
-     *
      * @return bool
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function isFeInstance()
     {
@@ -14,9 +12,8 @@ class Tx_Smarty_Utility_Typo3
     }
 
     /**
-     *
-     *
      * @return bool
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function isBeInstance()
     {
@@ -24,12 +21,10 @@ class Tx_Smarty_Utility_Typo3
     }
 
     /**
-     *
-     *
      * @return bool
      */
     public static function isCliMode()
     {
-        return (defined('TYPO3_cliMode') && TYPO3_cliMode) ? true : false;
+        return (defined('TYPO3_CLI_MODE') && TYPO3_CLI_MODE) ? true : false;
     }
 }

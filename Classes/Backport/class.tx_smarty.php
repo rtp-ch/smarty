@@ -1,6 +1,5 @@
 <?php
 
-
 class tx_smarty
 {
     /**
@@ -9,7 +8,7 @@ class tx_smarty
      */
     public function smarty($options = array())
     {
-        t3lib_div::logDeprecatedFunction();
+        Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
         return self::backportSmarty((array) $options);
     }
 
@@ -19,7 +18,7 @@ class tx_smarty
      */
     public function newSmarty($options = array())
     {
-        t3lib_div::logDeprecatedFunction();
+        Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
         return self::backportSmarty((array) $options);
     }
 
@@ -29,7 +28,7 @@ class tx_smarty
      */
     public function newSmartyTemplate($options = array())
     {
-        t3lib_div::logDeprecatedFunction();
+        Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
         return self::backportSmarty((array) $options);
     }
 
@@ -51,15 +50,16 @@ class tx_smarty
     }
 
     /**
-     * Makes use of a little known quirk/wtf of PHP to get the instance of the calling class:
+     * Makes use of a little known quirk of PHP to get the instance of the calling class:
      * "$this" refers back to the instance of the calling class when a non-static method is
      * called statically.
      *
-     * This "feature" was used in the previous version of this extension to automagically read
+     * This "feature" was used in the previous version of this extension to "automagically" read
      * properties of the extension which was invoking smarty. Specifically it was used to identify
-     * and load the proper locallang file.
+     * and load the proper locallang file as well as any smarty configuration options from that extension
+     * (e.g. plugin.tx_myext.smarty).
      *
-     * As this behaviour throws an error in E_STRICT and is "wrong" it has been deprecated and
+     * As this behaviour throws an error in E_STRICT and is undocumented it has been deprecated and
      * is only employed here for the purpose of backwards compatibility.
      *
      * @return object|stdClass
@@ -120,7 +120,7 @@ class tx_smarty
         $scriptRelPath = self::getScriptRelPath($callingInstance);
 
         if (!is_null($scriptRelPath) && !is_null($extKey)) {
-            $langFileBase = t3lib_extMgm::extPath($extKey, dirname($scriptRelPath)) . '/locallang';
+            $langFileBase = Tx_Smarty_Service_Compatibility::extPath($extKey, dirname($scriptRelPath)) . '/locallang';
 
             if (is_file($langFileBase . '.xml')) {
                 $languageFile = $langFileBase . '.xml';

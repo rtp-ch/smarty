@@ -21,8 +21,10 @@
  * @param string $replace
  * @return string
  */
-function smarty_modifier_truncate_words($string, $noOfWords = 0, $delimiter = ' ', $glue = ' ', $replace = '') {
-
+//@codingStandardsIgnoreStart
+function smarty_modifier_truncate_words($string, $noOfWords = 0, $delimiter = ' ', $glue = ' ', $replace = '')
+{
+//@codingStandardsIgnoreEnd
     $words = Tx_Smarty_Utility_Array::trimExplode($string, $delimiter);
     if ($words) {
 
@@ -37,4 +39,3 @@ function smarty_modifier_truncate_words($string, $noOfWords = 0, $delimiter = ' 
 
     return $string;
 }
-

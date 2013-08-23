@@ -7,7 +7,7 @@
  * Type:    function
  * Name:    Multimedia
  * Version: 1.0
- * Author:  R. Alessandri <ral@rtp.ch>, Rueegg Tuck Partner GmbH
+ * Author:  R. Alessandri
  * Purpose: Displays any object from global TS (such as IMAGE, COA, TEXT, etc.)
  * Example:    {multimedia file="fileadmin/anim.swf" params.width="150" }
  * Example:    {multimedia setup="lib.myMultimedia" params.width="150" params.height="180c"}
@@ -31,11 +31,22 @@
  * @param $params
  * @param Smarty_Internal_Template $template
  * @return mixed
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_function_multimedia($params, Smarty_Internal_Template $template)
 {
+//@codingStandardsIgnoreEnd
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
-    $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
+    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
 
-    return $cObj->cObjGetSingle('MULTIMEDIA', $setup);
+    $multimedia = $cObj->cObjGetSingle('MULTIMEDIA', $setup);
+
+    // Returns or assigns the result
+    if (isset($params['assign'])) {
+        $template->assign($params['assign'], $multimedia);
+
+    } else {
+        return $multimedia;
+    }
 }

@@ -21,10 +21,23 @@
  * @param Smarty_Internal_Template $template
  * @param $repeat
  * @return string
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_block_markdown2html($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
+//@codingStandardsIgnoreEnd
     if (!$repeat) {
-        return \Michelf\Markdown::defaultTransform($content);
+
+        // Converts the markdown to html
+        $html =  \Michelf\Markdown::defaultTransform($content);
+
+        // Returns or assigns the result
+        if (isset($params['assign'])) {
+            $template->assign($params['assign'], $html);
+
+        } else {
+            return $html;
+        }
     }
 }

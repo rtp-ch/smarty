@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * Smarty plugin "typoscript"
  * -------------------------------------------------------------
  * File:    block.typoscript.php
@@ -21,13 +20,26 @@
  * @param Smarty_Internal_Template $template
  * @param $repeat
  * @return mixed
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_block_typoscript($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
+//@codingStandardsIgnoreEnd
     if (!$repeat) {
-        $ts = t3lib_div::makeInstance('t3lib_TSparser');
-        $ts->parse($content);
-        $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
-        return $cObj->cObjGet($ts->setup);
+
+        $tsParser = Tx_Smarty_Service_Compatibility::makeInstance('t3lib_TSparser');
+        $tsParser->parse($content);
+
+        $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
+        $tsObject = $cObj->cObjGet($tsParser->setup);
+
+        // Returns or assigns the result
+        if (isset($params['assign'])) {
+            $template->assign($params['assign'], $tsObject);
+
+        } else {
+            return $tsObject;
+        }
     }
 }

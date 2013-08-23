@@ -17,8 +17,10 @@
  * @param Smarty_Internal_Template $template
  * @return string
  */
+//@codingStandardsIgnoreStart
 function smarty_function_ref($params, Smarty_Internal_Template $template)
 {
+//@codingStandardsIgnoreEnd
     $params = array_change_key_case($params, CASE_LOWER);
     $format = isset($params['format']) && $params['format'] === 'text' ? 'text' : 'html';
     $expandDepth = isset($params['expanddepth']) && is_int($params['expanddepth']) ? $params['expanddepth'] : 1;

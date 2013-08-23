@@ -28,11 +28,22 @@
  * @param $params
  * @param Smarty_Internal_Template $template
  * @return mixed
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_function_img_resource($params, Smarty_Internal_Template $template)
 {
+//@codingStandardsIgnoreEnd
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
-    $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
+    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
 
-    return $cObj->cObjGetSingle('IMG_RESOURCE', $setup);
+    $imgResource = $cObj->cObjGetSingle('IMG_RESOURCE', $setup);
+
+    // Returns or assigns the result
+    if (isset($params['assign'])) {
+        $template->assign($params['assign'], $imgResource);
+
+    } else {
+        return $imgResource;
+    }
 }

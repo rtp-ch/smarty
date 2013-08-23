@@ -889,10 +889,10 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @param string|array $template_dir directory(s) of configuration sources
      * @return Smarty current Smarty instance for chaining
      */
-    public function setConfigDir($config_dir)
+    public function setConfigDir($configDir)
     {
         $this->config_dir = array();
-        foreach ((array) $config_dir as $k => $v) {
+        foreach ((array) $configDir as $k => $v) {
             $this->config_dir[$k] = rtrim($v, '/\\') . DS;
         }
 
@@ -903,17 +903,17 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * Add config directory(s)
      *
-     * @param string|array $config_dir directory(s) of config sources
+     * @param string|array $configDir directory(s) of config sources
      * @param string key of the array element to assign the config dir to
      * @return Smarty current Smarty instance for chaining
      */
-    public function addConfigDir($config_dir, $key=null)
+    public function addConfigDir($configDir, $key=null)
     {
         // make sure we're dealing with an array
         $this->config_dir = (array) $this->config_dir;
 
-        if (is_array($config_dir)) {
-            foreach ($config_dir as $k => $v) {
+        if (is_array($configDir)) {
+            foreach ($configDir as $k => $v) {
                 if (is_int($k)) {
                     // indexes are not merged but appended
                     $this->config_dir[] = rtrim($v, '/\\') . DS;
@@ -924,10 +924,10 @@ class Smarty extends Smarty_Internal_TemplateBase {
             }
         } elseif( $key !== null ) {
             // override directory at specified index
-            $this->config_dir[$key] = rtrim($config_dir, '/\\') . DS;
+            $this->config_dir[$key] = rtrim($configDir, '/\\') . DS;
         } else {
             // append new directory
-            $this->config_dir[] = rtrim($config_dir, '/\\') . DS;
+            $this->config_dir[] = rtrim($configDir, '/\\') . DS;
         }
 
         $this->joined_config_dir = join(DIRECTORY_SEPARATOR, $this->config_dir);
@@ -952,13 +952,13 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * Set plugins directory
      *
-     * @param string|array $plugins_dir directory(s) of plugins
+     * @param string|array $pluginsDir directory(s) of plugins
      * @return Smarty current Smarty instance for chaining
      */
-    public function setPluginsDir($plugins_dir)
+    public function setPluginsDir($pluginsDir)
     {
         $this->plugins_dir = array();
-        foreach ((array)$plugins_dir as $k => $v) {
+        foreach ((array)$pluginsDir as $k => $v) {
             $this->plugins_dir[$k] = rtrim($v, '/\\') . DS;
         }
 
@@ -972,13 +972,13 @@ class Smarty extends Smarty_Internal_TemplateBase {
      * @param string $ |array $ plugins folder
      * @return Smarty current Smarty instance for chaining
      */
-    public function addPluginsDir($plugins_dir)
+    public function addPluginsDir($pluginsDir)
     {
         // make sure we're dealing with an array
         $this->plugins_dir = (array) $this->plugins_dir;
 
-        if (is_array($plugins_dir)) {
-            foreach ($plugins_dir as $k => $v) {
+        if (is_array($pluginsDir)) {
+            foreach ($pluginsDir as $k => $v) {
                 if (is_int($k)) {
                     // indexes are not merged but appended
                     $this->plugins_dir[] = rtrim($v, '/\\') . DS;
@@ -989,7 +989,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
             }
         } else {
             // append new directory
-            $this->plugins_dir[] = rtrim($plugins_dir, '/\\') . DS;
+            $this->plugins_dir[] = rtrim($pluginsDir, '/\\') . DS;
         }
 
         $this->plugins_dir = array_unique($this->plugins_dir);
@@ -1009,12 +1009,12 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * Set compile directory
      *
-     * @param string $compile_dir directory to store compiled templates in
+     * @param string $compileDir directory to store compiled templates in
      * @return Smarty current Smarty instance for chaining
      */
-    public function setCompileDir($compile_dir)
+    public function setCompileDir($compileDir)
     {
-        $this->compile_dir = rtrim($compile_dir, '/\\') . DS;
+        $this->compile_dir = rtrim($compileDir, '/\\') . DS;
         if (!isset(Smarty::$_muted_directories[$this->compile_dir])) {
             Smarty::$_muted_directories[$this->compile_dir] = null;
         }
@@ -1034,12 +1034,12 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * Set cache directory
      *
-     * @param string $cache_dir directory to store cached templates in
+     * @param string $cacheDir directory to store cached templates in
      * @return Smarty current Smarty instance for chaining
      */
-    public function setCacheDir($cache_dir)
+    public function setCacheDir($cacheDir)
     {
-        $this->cache_dir = rtrim($cache_dir, '/\\') . DS;
+        $this->cache_dir = rtrim($cacheDir, '/\\') . DS;
         if (!isset(Smarty::$_muted_directories[$this->cache_dir])) {
             Smarty::$_muted_directories[$this->cache_dir] = null;
         }
@@ -1170,16 +1170,16 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * set the debug template
      *
-     * @param string $tpl_name
+     * @param string $tplName
      * @return Smarty current Smarty instance for chaining
      * @throws SmartyException if file is not readable
      */
-    public function setDebugTemplate($tpl_name)
+    public function setDebugTemplate($tplName)
     {
-        if (!is_readable($tpl_name)) {
-            throw new SmartyException("Unknown file '{$tpl_name}'");
+        if (!is_readable($tplName)) {
+            throw new SmartyException("Unknown file '{$tplName}'");
         }
-        $this->debug_tpl = $tpl_name;
+        $this->debug_tpl = $tplName;
 
         return $this;
     }

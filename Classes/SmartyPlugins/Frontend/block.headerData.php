@@ -20,8 +20,10 @@
  * @param $repeat
  * @return void
  */
+//@codingStandardsIgnoreStart
 function smarty_block_headerData($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
+//@codingStandardsIgnoreEnd
     Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_block_header');
     smarty_block_header($params, $content, $template, $repeat);
 }

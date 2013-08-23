@@ -17,8 +17,11 @@
  * @param Smarty_Internal_Template $template
  * @param $repeat
  * @return void
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_block_hide($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
+//@codingStandardsIgnoreEnd
     return null;
 }

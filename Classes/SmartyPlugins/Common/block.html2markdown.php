@@ -21,10 +21,23 @@
  * @param Smarty_Internal_Template $template
  * @param $repeat
  * @return string
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_block_html2markdown($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
+//@codingStandardsIgnoreEnd
     if (!$repeat) {
-        return html2markdown($content);
+
+        // Converts the content to markdown
+        $markdown = html2markdown($content);
+
+        // Returns or assigns the result
+        if (isset($params['assign'])) {
+            $template->assign($params['assign'], $markdown);
+
+        } else {
+            return $markdown;
+        }
     }
 }

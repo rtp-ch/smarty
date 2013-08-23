@@ -1,29 +1,10 @@
 <?php
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2011 Simon Tuck <stu@rtp.ch>
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
 
-class Tx_Smarty_Core_Wrapper
-    extends SmartyBC
+/**
+ * Class Tx_Smarty_Core_Wrapper
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
+class Tx_Smarty_Core_Wrapper extends SmartyBC
 {
     /**
      * @var Tx_Smarty_Core_Configuration
@@ -35,17 +16,17 @@ class Tx_Smarty_Core_Wrapper
      *
      * @var string|array
      */
-    private $language_file;
+    private $languageFile;
 
     /**
      * @var boolean
      */
-    private $mute_errors = false;
+    private $muteErrors = false;
 
     /**
      * @var boolean
      */
-    private $respect_no_cache = false;
+    private $respectNoCache = false;
 
     /**
      * @var
@@ -60,7 +41,7 @@ class Tx_Smarty_Core_Wrapper
     public function getConfiguration()
     {
         if (is_null($this->configuration)) {
-            $this->configuration = t3lib_div::makeInstance('Tx_Smarty_Core_Configuration', $this);
+            $this->configuration = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_Configuration', $this);
         }
 
         return $this->configuration;
@@ -76,19 +57,20 @@ class Tx_Smarty_Core_Wrapper
      */
     public function setRespectNoCache($respectNoCache = false)
     {
-        $this->respect_no_cache = (boolean) $respectNoCache;
+        $this->respectNoCache = (boolean) $respectNoCache;
     }
 
     /**
      * @return bool
      */
-    public function getRespectNoCache()
+    public function hasRespectNoCache()
     {
-        return $this->respect_no_cache;
+        return $this->respectNoCache;
     }
 
     /**
      * @param $value
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function setCacheLifetime($value)
     {
@@ -119,9 +101,9 @@ class Tx_Smarty_Core_Wrapper
      */
     public function setMuteErrors($muteErrors = false)
     {
-        $this->mute_errors = (boolean) $muteErrors;
+        $this->muteErrors = (boolean) $muteErrors;
 
-        if ($this->mute_errors) {
+        if ($this->muteErrors) {
             $this->muteExpectedErrors();
 
         } else {
@@ -136,7 +118,7 @@ class Tx_Smarty_Core_Wrapper
      */
     public function getMuteErrors()
     {
-        return $this->mute_errors;
+        return $this->muteErrors;
     }
 
 
@@ -163,10 +145,10 @@ class Tx_Smarty_Core_Wrapper
     public function getLanguageFile($index = null)
     {
         if ($index !== null) {
-            return isset($this->language_file[$index]) ? $this->language_file[$index] : null;
+            return isset($this->languageFile[$index]) ? $this->languageFile[$index] : null;
         }
 
-        return (array) $this->language_file;
+        return (array) $this->languageFile;
     }
 
     /**
@@ -179,27 +161,27 @@ class Tx_Smarty_Core_Wrapper
     public function addLanguageFile($languageFile, $key = null)
     {
         // make sure we're dealing with an array
-        $this->language_file = (array) $this->language_file;
+        $this->languageFile = (array) $this->languageFile;
 
         if (is_array($languageFile)) {
             foreach ($languageFile as $k => $v) {
                 if (is_int($k)) {
                     // indexes are not merged but appended
-                    $this->language_file[] = $v;
+                    $this->languageFile[] = $v;
 
                 } else {
                     // string indexes are overridden
-                    $this->language_file[$k] = $v;
+                    $this->languageFile[$k] = $v;
                 }
             }
         } elseif (!is_null($key)) {
-            $this->language_file[$key] = $languageFile;
+            $this->languageFile[$key] = $languageFile;
 
         } else {
-            $this->language_file[] = $languageFile;
+            $this->languageFile[] = $languageFile;
         }
 
-        $this->language_file = array_unique($this->language_file);
+        $this->languageFile = array_unique($this->languageFile);
 
         return $this;
     }
@@ -237,85 +219,85 @@ class Tx_Smarty_Core_Wrapper
     /**
      * Set config directory
      *
-     * @param $config_dir
+     * @param $configDir
      * @return Smarty
      */
-    public function setConfigDir($config_dir)
+    public function setConfigDir($configDir)
     {
-        $config_dir = Tx_Smarty_Utility_Path::resolvePaths($config_dir);
-        return parent::setConfigDir($config_dir);
+        $configDir = Tx_Smarty_Utility_Path::resolvePaths($configDir);
+        return parent::setConfigDir($configDir);
     }
 
     /**
      * Add config directory(s)
      *
-     * @param array|string $config_dir
+     * @param array|string $configDir
      * @param null $key
      * @return Smarty
      */
-    public function addConfigDir($config_dir, $key = null)
+    public function addConfigDir($configDir, $key = null)
     {
-        $config_dir = Tx_Smarty_Utility_Path::resolvePaths($config_dir);
-        return parent::addConfigDir($config_dir, $key);
+        $configDir = Tx_Smarty_Utility_Path::resolvePaths($configDir);
+        return parent::addConfigDir($configDir, $key);
     }
 
     /**
      * Set plugins directory
      *
-     * @param array|string $plugins_dir
+     * @param array|string $pluginsDir
      * @return Smarty
      */
-    public function setPluginsDir($plugins_dir)
+    public function setPluginsDir($pluginsDir)
     {
-        $plugins_dir = Tx_Smarty_Utility_Path::resolvePaths($plugins_dir);
+        $pluginsDir = Tx_Smarty_Utility_Path::resolvePaths($pluginsDir);
         // Never overwrite plugins_dir! Always translate the plugins_dir setter to an adder.
-        return parent::addPluginsDir($plugins_dir);
+        return parent::addPluginsDir($pluginsDir);
     }
 
     /**
-     * @param $plugins_dir
+     * @param $pluginsDir
      * @return Smarty
      */
-    public function addPluginsDir($plugins_dir)
+    public function addPluginsDir($pluginsDir)
     {
-        $plugins_dir = Tx_Smarty_Utility_Path::resolvePaths($plugins_dir);
-        return parent::addPluginsDir($plugins_dir);
+        $pluginsDir = Tx_Smarty_Utility_Path::resolvePaths($pluginsDir);
+        return parent::addPluginsDir($pluginsDir);
     }
 
     /**
      * Set compile directory
      *
-     * @param string $compile_dir
+     * @param string $compileDir
      * @return Smarty
      */
-    public function setCompileDir($compile_dir)
+    public function setCompileDir($compileDir)
     {
-        $compile_dir = Tx_Smarty_Utility_Path::resolvePaths($compile_dir);
-        return parent::setCompileDir($compile_dir);
+        $compileDir = Tx_Smarty_Utility_Path::resolvePaths($compileDir);
+        return parent::setCompileDir($compileDir);
     }
 
     /**
      * Set cache directory
      *
-     * @param string $cache_dir
+     * @param string $cacheDir
      * @return Smarty
      */
-    public function setCacheDir($cache_dir)
+    public function setCacheDir($cacheDir)
     {
-        $cache_dir = Tx_Smarty_Utility_Path::resolvePaths($cache_dir);
-        return parent::setCacheDir($cache_dir);
+        $cacheDir = Tx_Smarty_Utility_Path::resolvePaths($cacheDir);
+        return parent::setCacheDir($cacheDir);
     }
 
     /**
      * Set the debug template
      *
-     * @param string $tpl_name
+     * @param string $tplName
      * @return Smarty
      */
-    public function setDebugTemplate($tpl_name)
+    public function setDebugTemplate($tplName)
     {
-        $tpl_name = Tx_Smarty_Utility_Path::resolvePaths($tpl_name);
-        return parent::setDebugTemplate($tpl_name);
+        $tplName = Tx_Smarty_Utility_Path::resolvePaths($tplName);
+        return parent::setDebugTemplate($tplName);
     }
 
 
@@ -328,21 +310,22 @@ class Tx_Smarty_Core_Wrapper
      * template instead of displaying it.
      *
      * @param string $template   the resource handle of the template file or template object
-     * @param mixed  $cache_id   cache id to be used with this template
-     * @param mixed  $compile_id compile id to be used with this template
+     * @param mixed  $cacheId   cache id to be used with this template
+     * @param mixed  $compileId compile id to be used with this template
      * @param object $parent     next higher level of Smarty variables
      * @return string|void       rendered template
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null)
+    public function display($template = null, $cacheId = null, $compileId = null, $parent = null)
     {
         // Disables caching if it is globally disabled or has been pegged to TSFE->no_cache
-        if (($this->respect_no_cache === true && isset($GLOBALS['TSFE']->no_cache) && $GLOBALS['TSFE']->no_cache)
+        if (($this->respectNoCache === true && isset($GLOBALS['TSFE']->no_cache) && $GLOBALS['TSFE']->no_cache)
             || (boolean) Tx_Smarty_Utility_ExtConf::getExtConfValue('disable_caching')) {
 
             $this->set('caching', false);
         }
 
-        return $this->fetch($template, $cache_id, $compile_id, $parent, false);
+        return $this->fetch($template, $cacheId, $compileId, $parent, false);
     }
 
 
@@ -362,6 +345,7 @@ class Tx_Smarty_Core_Wrapper
     /**
      * @param string $property
      * @return array|mixed|null|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __get($property)
     {
@@ -383,23 +367,24 @@ class Tx_Smarty_Core_Wrapper
             return $this->getCacheDir();
 
         } elseif ($property === 't3_languageFile' ||
-                  $property === 'path_to_language_file' ||
-                  $property === 'relPathToLanguageFile') {
+            $property === 'path_to_language_file' ||
+            $property === 'relPathToLanguageFile' ||
+            $property === 'language_file') {
 
             return $this->getLanguageFile($property);
 
         } elseif ($property === 'respect_no_cache') {
-            return $this->getRespectNoCache();
+            return $this->hasRespectNoCache();
 
         } elseif ($property === 't3_extVars' ||
-                  $property === 'pObj' ||
-                  $property === 'cObj' ||
-                  $property === 't3_confVars' ||
-                  $property === 't3_smartyVars' ||
-                  $property === 't3_conf' ||
-                  $property === '_debug_resource') {
+            $property === 'pObj' ||
+            $property === 'cObj' ||
+            $property === 't3_confVars' ||
+            $property === 't3_smartyVars' ||
+            $property === 't3_conf' ||
+            $property === '_debug_resource') {
 
-            t3lib_div::logDeprecatedFunction();
+            Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
             return null;
 
         } else {
@@ -433,6 +418,7 @@ class Tx_Smarty_Core_Wrapper
      *
      * @param string $property
      * @param mixed $value
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __set($property, $value)
     {
@@ -454,8 +440,9 @@ class Tx_Smarty_Core_Wrapper
             $this->setCacheDir($value);
 
         } elseif ($property === 't3_languageFile' ||
-                  $property === 'path_to_language_file' ||
-                  $property === 'relPathToLanguageFile') {
+            $property === 'path_to_language_file' ||
+            $property === 'relPathToLanguageFile' ||
+            $property === 'language_file') {
 
             $this->setLanguageFile($value);
 
@@ -463,14 +450,14 @@ class Tx_Smarty_Core_Wrapper
             $this->setRespectNoCache($value);
 
         } elseif ($property === 't3_extVars' ||
-                  $property === 'pObj' ||
-                  $property === 'cObj' ||
-                  $property === 't3_confVars' ||
-                  $property === 't3_smartyVars' ||
-                  $property === 't3_conf' ||
-                  $property === '_debug_resource') {
+            $property === 'pObj' ||
+            $property === 'cObj' ||
+            $property === 't3_confVars' ||
+            $property === 't3_smartyVars' ||
+            $property === 't3_conf' ||
+            $property === '_debug_resource') {
 
-            t3lib_div::logDeprecatedFunction();
+            Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
 
         } else {
             $this->set($property, $value);
@@ -485,13 +472,13 @@ class Tx_Smarty_Core_Wrapper
     /**
      * Sets the template directory
      *
-     * @param $path_to_template_directory
+     * @param $pathToTemplateDirectory
      * @deprecated Use setTemplateDir() instead
      */
-    public function setPathToTemplateDirectory($path_to_template_directory)
+    public function setPathToTemplateDirectory($pathToTemplateDirectory)
     {
-        t3lib_div::logDeprecatedFunction();
-        $this->setTemplateDir($path_to_template_directory);
+        Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
+        $this->setTemplateDir($pathToTemplateDirectory);
     }
 
     /**
@@ -502,20 +489,20 @@ class Tx_Smarty_Core_Wrapper
      */
     public function getPathToTemplateDirectory()
     {
-        t3lib_div::logDeprecatedFunction();
+        Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
         return $this->getTemplateDir();
     }
 
     /**
      * Set the language file
      *
-     * @param $path_to_language_file
+     * @param $pathToLanguageFile
      * @deprecated use setLanguageFile() instead
      */
-    public function setRelPathToLanguageFile($path_to_language_file)
+    public function setRelPathToLanguageFile($pathToLanguageFile)
     {
-        t3lib_div::logDeprecatedFunction();
-        $this->setLanguageFile($path_to_language_file);
+        Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
+        $this->setLanguageFile($pathToLanguageFile);
     }
 
     /**
@@ -526,20 +513,20 @@ class Tx_Smarty_Core_Wrapper
      */
     public function getRelPathToLanguageFile()
     {
-        t3lib_div::logDeprecatedFunction();
+        Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
         return $this->getLanguageFile();
     }
 
     /**
      * Set the language file
      *
-     * @param $path_to_language_file
+     * @param $pathToLanguageFile
      * @deprecated use setLanguageFile() instead
      */
-    public function setPathToLanguageFile($path_to_language_file)
+    public function setPathToLanguageFile($pathToLanguageFile)
     {
-        t3lib_div::logDeprecatedFunction();
-        $this->setLanguageFile($path_to_language_file);
+        Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
+        $this->setLanguageFile($pathToLanguageFile);
     }
 
     /**
@@ -550,7 +537,7 @@ class Tx_Smarty_Core_Wrapper
      */
     public function getPathToLanguageFile()
     {
-        t3lib_div::logDeprecatedFunction();
+        Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
         return $this->getLanguageFile();
     }
 
@@ -563,7 +550,7 @@ class Tx_Smarty_Core_Wrapper
      */
     public function setSmartyVar($property, $value)
     {
-        t3lib_div::logDeprecatedFunction();
+        Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
         $this->set($property, $value);
     }
 }

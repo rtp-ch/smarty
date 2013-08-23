@@ -29,10 +29,20 @@
  * @param Smarty_Internal_Template $template
  * @return string
  */
+//@codingStandardsIgnoreStart
 function smarty_function_url($params, Smarty_Internal_Template $template)
 {
+//@codingStandardsIgnoreEnd
     Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_block_typolink');
     $params['returnLast'] = 'url';
     $repeat = 0;
-    return smarty_block_typolink($params, '', $template, $repeat);
+    $url = smarty_block_typolink($params, '', $template, $repeat);
+
+    // Returns or assigns the result
+    if (isset($params['assign'])) {
+        $template->assign($params['assign'], $url);
+
+    } else {
+        return $url;
+    }
 }

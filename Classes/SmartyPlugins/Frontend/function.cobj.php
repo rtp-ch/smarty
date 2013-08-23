@@ -25,8 +25,10 @@
  * @param Smarty_Internal_Template $template
  * @return mixed
  */
+//@codingStandardsIgnoreStart
 function smarty_function_cobj($params, Smarty_Internal_Template $template)
 {
+//@codingStandardsIgnoreEnd
     Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_function_object');
     return smarty_function_object($params, $template);
 }

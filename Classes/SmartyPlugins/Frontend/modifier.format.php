@@ -20,8 +20,10 @@
  * @param bool $setup
  * @return string
  **/
+//@codingStandardsIgnoreStart
 function smarty_modifier_format($content, $setup = false)
 {
+//@codingStandardsIgnoreEnd
     $parameters = array();
     if ($setup) {
         $parameters['setup'] = $setup;
@@ -32,7 +34,7 @@ function smarty_modifier_format($content, $setup = false)
     }
 
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($parameters);
-    $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
+    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
 
     return $cObj->parseFunc($content, $setup);
 }

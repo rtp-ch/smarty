@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * Smarty plugin "image"
  * -------------------------------------------------------------
  * File:    function.image.php
@@ -30,11 +29,14 @@
  * @param array $params The TypoScript settings passed to the image function
  * @param Smarty_Internal_Template $template Current instance of smarty
  * @return string
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_function_image($params, Smarty_Internal_Template $template)
 {
+//@codingStandardsIgnoreEnd
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
-    $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
+    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
 
     // Apply htmlspecialchars to any altText
     if ($setup['altText'] || $setup['altText.']) {
@@ -60,5 +62,13 @@ function smarty_function_image($params, Smarty_Internal_Template $template)
         unset($setup['titleText.']);
     }
 
-    return $cObj->cObjGetSingle('IMAGE', $setup);
+    $image = $cObj->cObjGetSingle('IMAGE', $setup);
+
+    // Returns or assigns the result
+    if (isset($params['assign'])) {
+        $template->assign($params['assign'], $image);
+
+    } else {
+        return $image;
+    }
 }

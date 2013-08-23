@@ -17,13 +17,16 @@
  * @param $length
  * @return null|string
  */
+//@codingStandardsIgnoreStart
 function smarty_modifier_substr($string, $start, $length)
 {
+//@codingStandardsIgnoreEnd
     if (is_null($string)) {
         return null;
     }
 
-    $start = t3lib_div::intInRange((int) $start, -strlen($string), strlen($string));
+    $start = intval($start);
+    $start = $start <= strlen($string) && $start >= -strlen($string) ? $start : 0;
     $length = $length ? intval($length) : null;
 
     return substr($string, $start, $length);

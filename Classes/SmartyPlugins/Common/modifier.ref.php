@@ -18,8 +18,10 @@
  * @param string $format
  * @return string
  */
+//@codingStandardsIgnoreStart
 function smarty_modifier_ref($var, $expandDepth = 1, $format = 'html')
 {
+//@codingStandardsIgnoreEnd
     $format = $format === 'text' ? 'text' : 'html';
     $ref = new ref($format, $expandDepth);
 

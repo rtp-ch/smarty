@@ -20,20 +20,29 @@
  * @param Smarty_Internal_Template $template
  * @return mixed
  * @throws Tx_Smarty_Exception_PluginException
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_function_data($params, Smarty_Internal_Template $template)
 {
+//@codingStandardsIgnoreEnd
     //
     $params = array_change_key_case($params, CASE_LOWER);
 
-    //
-    if (isset($params['source'])) {
-        $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
-        return $cObj->getData($params['source'], null);
-
-    // Throws an exception if the source setting is missing
-    } else {
-        $msg = 'Missing required "source" setting for template function {data}!';
+    if (!isset($params['source'])) {
+        // Throws an exception if the source setting is missing
+        $msg = 'Missing required "source" setting for smarty function {data}!';
         throw new Tx_Smarty_Exception_PluginException($msg, 1324020249);
+    }
+
+    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
+    $data = $cObj->getData($params['source'], null);
+
+    // Returns or assigns the result
+    if (isset($params['assign'])) {
+        $template->assign($params['assign'], $data);
+
+    } else {
+        return $data;
     }
 }

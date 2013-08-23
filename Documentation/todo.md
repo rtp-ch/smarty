@@ -1,13 +1,21 @@
 
-* filelink plugin
-* custom cache resource
-* better integration of caching with TYPO3
+# TODOs
+
+##General
+* Move Documentation to github wiki
+* Add unit tests
+* Add Travis build instructions
+
+##Plugins
+* filelink
 * Backend plugins
-* Review translate plugin
-* Add tests
+* Review the translate plugin
+
+##Caching
+* Custom cache resource
+* Better integration of caching with TYPO3
 * cHash as cache_id
-* Document!
-* Use github for documentation, clone locally with gollum
-* Unit tests
-* TypoScript smarty object (~FLUID)
+
+##TYPO3 Integration
+* TypoScript smarty object
 * Passing TypoScript setup to smarty config settings

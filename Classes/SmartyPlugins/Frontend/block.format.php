@@ -27,10 +27,20 @@
  * @param $repeat
  * @return string
  */
+//@codingStandardsIgnoreStart
 function smarty_block_format($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
+//@codingStandardsIgnoreEnd
     if (!$repeat) {
         Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_modifier_format');
-        return smarty_modifier_format($content, $params['setup']);
+        $formattedContent = smarty_modifier_format($content, $params['setup']);
+
+        // Returns or assigns the result
+        if (isset($params['assign'])) {
+            $template->assign($params['assign'], $formattedContent);
+
+        } else {
+            return $formattedContent;
+        }
     }
 }

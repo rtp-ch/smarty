@@ -14,17 +14,30 @@
  *
  * @param $params
  * @param Smarty_Internal_Template $template
- * @throws Tx_Smarty_Exception_InvalidArgumentException
+ * @throws Tx_Smarty_Exception_PluginException
  * @return mixed
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_function_file($params, Smarty_Internal_Template $template)
 {
-    //
+//@codingStandardsIgnoreEnd
+
     $params = array_change_key_case($params, CASE_LOWER);
-    if(!isset($params['path'])) {
-        throw new Tx_Smarty_Exception_InvalidArgumentException('Missing required "path" setting for smarty plugin "file"!', 1324021795);
+
+    if (!isset($params['path'])) {
+        $msg = 'Missing required "path" setting for smarty plugin "file"!';
+        throw new Tx_Smarty_Exception_PluginException($msg, 1324021795);
     }
 
-    //
-    return str_replace(PATH_site, '', t3lib_div::getFileAbsFileName($params['path']));
+    // Gets the absolute path to the file
+    $pathToFile = str_replace(PATH_SITE, '', Tx_Smarty_Service_Compatibility::getFileAbsFileName($params['path']));
+
+    // Returns or assigns the result
+    if (isset($params['assign'])) {
+        $template->assign($params['assign'], $pathToFile);
+
+    } else {
+        return $pathToFile;
+    }
 }

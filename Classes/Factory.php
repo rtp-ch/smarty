@@ -1,7 +1,7 @@
 <?php
 namespace RTP\smarty;
 
-use t3lib_div;
+use Tx_Smarty_Service_Compatibility;
 use Tx_Smarty_SysPlugins_ExtResource;
 use Tx_Smarty_SysPlugins_PathResource;
 use Tx_Smarty_Utility_Array;
@@ -33,22 +33,106 @@ class Factory
      * Creates, configures and returns an instance of smarty.
      *
      * @return object Tx_Smarty_Core_Wrapper
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function get()
     {
-        /**
-         * [0.] Get the arguments passed to the factory. Arguments can be any a string which is used to fetch
-         * configuration options form typoscript setup and any number of arrays which are interpreted as
-         * configuration options, e.g. array(plugins_dir => my/plugins/dir, templates_dir => my/templates/dir)
-         */
+        // Creates an instance of smarty
+        $smartyInstance = self::initializeWithDefaults();
+
+        // Get and evaluate the passed arguments
         list($options, $typoscriptKeys) = self::getArguments(func_get_args());
 
-        /**
-         * [1.] Initializes smarty and applies core settings
-         */
+        // Get and evaluate the smarty configuration
+        $setup = self::getConfiguration($options, $typoscriptKeys);
 
+        // Applies alternate development settings to the configuration when a development context is available
+        if (isset($setup['development.'])
+            && Tx_Smarty_Utility_Array::notEmpty($setup['development.'])
+            && Tx_Smarty_Utility_Environment::hasDevelopmentMode()) {
+
+            // Overrides standard configuration settings
+            $developmentSetup = Tx_Smarty_Utility_Array::optionExplode($setup['development.'], array('plugins_dir'));
+            $setup = Tx_Smarty_Service_Compatibility::arrayMergeRecursiveOverrule($setup, $developmentSetup);
+        }
+
+        // Unsets development properties
+        if (isset($setup['development.'])) {
+            unset($setup['development.']);
+        }
+
+        // Apply the merged configuration options to the smarty instance
+        foreach ($setup as $key => $value) {
+            $smartyInstance->set($key, $value);
+        }
+
+        // Makes the typoscript array accessible from within smarty templates
+        // TODO: A better (more robust) way to handle this
+        if (isset($GLOBALS['TSFE']->tmpl->setup)) {
+            $smartyInstance->assign('typoscript', $GLOBALS['TSFE']->tmpl->setup);
+        }
+
+        // Return the configured smarty instance
+        return $smartyInstance;
+    }
+
+    /**
+     * 3. Configuration
+     * ================
+     *
+     * Gets and merges the smarty configuration in reverse order of priority ("c" being the
+     * lowest, "a" being the highest) from the following sources:
+     *
+     * [c] The global smarty TypoScript configuration
+     * [b] TypoScript settings for the current extension key (e.g. "lib.my_smarty_config")
+     * [a] Configuration options passed directly to the factory
+     *
+     * @param array $options
+     * @param array $typoscriptKeys
+     * @return array
+     */
+    private static function getConfiguration($options = array(), $typoscriptKeys = array())
+    {
+        // First, Get any global smarty configuration options
+        list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3('plugin.smarty');
+        $setup = Tx_Smarty_Utility_Array::optionExplode($setup, array('plugins_dir'));
+
+        // Second, apply the smarty configuration for any given typoscript keys
+        if (!Tx_Smarty_Utility_Array::notEmpty($typoscriptKeys)) {
+
+            foreach ($typoscriptKeys as $typoscriptKey) {
+                if (strpos($typoscriptKey, '.') !== false) {
+                    $typoscript = 'plugin.' . $typoscriptKey . '.smarty';
+
+                } else {
+                    $typoscript = $typoscriptKey;
+                }
+
+                list($extensionSetup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3($typoscript);
+                $extensionSetup = Tx_Smarty_Utility_Array::optionExplode($extensionSetup, array('plugins_dir'));
+                $setup = Tx_Smarty_Service_Compatibility::arrayMergeRecursiveOverrule(
+                    (array) $setup,
+                    (array) $extensionSetup
+                );
+            }
+        }
+
+        // Lastly, merge in any configuration options passed directly to the factory
+        return Tx_Smarty_Service_Compatibility::arrayMergeRecursiveOverrule((array) $setup, (array) $options);
+    }
+
+    /**
+     * Initializes smarty and applies core settings:
+     * - Default plugin dirs
+     * - Required system filters (pre & post dot notation filter)
+     * - Custom resources for TYPO3 (EXT and getData:path)
+     *
+     * @return object Tx_Smarty_Core_Wrapper
+     */
+    private static function initializeWithDefaults()
+    {
         // Creates an instance of smarty
-        $smartyInstance = t3lib_div::makeInstance('Tx_Smarty_Core_Wrapper');
+        $smartyInstance = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_Wrapper');
 
         // Sets plugin dirs
         $smartyInstance->addPluginsDir(self::$pluginDirs);
@@ -66,76 +150,15 @@ class Factory
         // from the resource-list. @see t3lib_TStemplate::getFileName()
         $smartyInstance->registerResource('path', new Tx_Smarty_SysPlugins_PathResource());
 
-        /**
-         * [2.] Gets and merges the smarty configuration in reverse order of priority ("c" being the
-         * lowest, "a" being the highest) from the following sources:
-         *
-         * [c] The global smarty TypoScript configuration
-         * [b] TypoScript settings for the current extension key (if supplied)
-         * [a] Configuration options passed directly to this builder
-         */
-
-        // [c] The global smarty configuration
-        list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3('plugin.smarty');
-        $setup = Tx_Smarty_Utility_Array::optionExplode($setup, array('plugins_dir'));
-
-        // [b] The smarty configuration for the current extension key
-        if (!Tx_Smarty_Utility_Array::notEmpty($typoscriptKeys)) {
-
-            foreach ($typoscriptKeys as $typoscriptKey) {
-                if (strpos($typoscriptKey, '.') !== false) {
-                    $typoscript = 'plugin.' . $typoscriptKey . '.smarty';
-
-                } else {
-                    $typoscript = $typoscriptKey;
-                }
-
-                list($extensionSetup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3($typoscript);
-                $extensionSetup = Tx_Smarty_Utility_Array::optionExplode($extensionSetup, array('plugins_dir'));
-                $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, (array) $extensionSetup);
-            }
-        }
-
-        // [a] Configuration options passed directly to this builder
-        $setup = t3lib_div::array_merge_recursive_overrule((array) $setup, (array) $options);
-
-        /**
-         * [3.] Applies alternate development configuration settings to the configuration array
-         * when a development context is available
-         */
-
-        // Applies any development settings
-        if (isset($setup['development.'])
-            && Tx_Smarty_Utility_Array::notEmpty($setup['development.'])
-            && Tx_Smarty_Utility_Environment::hasDevelopmentMode()) {
-
-            // Overrides standard configuration settings
-            $developmentSetup = Tx_Smarty_Utility_Array::optionExplode($setup['development.'], array('plugins_dir'));
-            $setup = t3lib_div::array_merge_recursive_overrule($setup, $developmentSetup);
-        }
-
-        // Unsets development properties
-        if (isset($setup['development.'])) {
-            unset($setup['development.']);
-        }
-
-        /**
-         * [4.] Apply the configuration to the smarty instance and return it
-         */
-
-        foreach ($setup as $key => $value) {
-            $smartyInstance->set($key, $value);
-        }
-
-        // Makes the typoscript array accessible from within smarty templates
-        if (isset($GLOBALS['TSFE']->tmpl->setup)) {
-            $smartyInstance->assign('typoscript', $GLOBALS['TSFE']->tmpl->setup);
-        }
-
         return $smartyInstance;
     }
 
     /**
+     * Evaluate the arguments passed to the factory. Arguments can be any a string which is used to fetch
+     * configuration options from typoscript setup (e.g. lib.my_smarty_settings) and any number of arrays
+     * which will be interpreted as configuration options, e.g. array(plugins_dir => my/plugins/dir,
+     * templates_dir => my/templates/dir)
+     *
      * @param array $arguments
      * @return array
      */

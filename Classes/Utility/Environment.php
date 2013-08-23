@@ -85,8 +85,8 @@ class Tx_Smarty_Utility_Environment
 
             // Validates the value of an environment variable
             $contextParts = Tx_Smarty_Utility_Array::trimExplode($context, '=', true, 2);
-            $envSetting   = getenv($contextParts[0]);
-            $isValid      = strtolower($envSetting) === strtolower($contextParts[1]);
+            $envSetting = getenv($contextParts[0]);
+            $isValid = strtolower($envSetting) === strtolower($contextParts[1]);
 
         } else {
             // Validates that an environment variable exists and is "true"

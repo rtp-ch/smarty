@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * Smarty plugin "json_encode"
  * -------------------------------------------------------------
  * File:    modifier.json_encode.php
@@ -17,7 +16,9 @@
  * @return mixed
  * @see smarty_modifier_json
  */
+//@codingStandardsIgnoreStart
 function smarty_modifier_json_encode($content)
 {
-    return json_encode($content, JSON_NUMERIC_CHECK);
+//@codingStandardsIgnoreEnd
+    return json_encode($content);
 }

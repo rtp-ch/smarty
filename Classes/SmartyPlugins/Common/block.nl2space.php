@@ -21,9 +21,12 @@
  * @param Smarty_Internal_Template $template
  * @param $repeat
  * @return string
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_block_nl2space($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
+//@codingStandardsIgnoreEnd
     if (!$repeat) {
         Tx_Smarty_Service_Smarty::loadPlugin($template, 'smarty_modifier_nl2space');
         return smarty_modifier_nl2space($content);

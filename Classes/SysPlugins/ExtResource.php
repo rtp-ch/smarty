@@ -1,7 +1,6 @@
 <?php
 
-class Tx_Smarty_SysPlugins_ExtResource
-    extends Smarty_Resource_Custom
+class Tx_Smarty_SysPlugins_ExtResource extends Smarty_Resource_Custom
 {
     /**
      * Resolves a file relative to the TYPO3 siteroot placed in an extension.
@@ -13,7 +12,7 @@ class Tx_Smarty_SysPlugins_ExtResource
      */
     protected function fetch($name, &$source, &$mtime)
     {
-        $file = t3lib_div::getFileAbsFileName('EXT' . $name);
+        $file = Tx_Smarty_Service_Compatibility::getFileAbsFileName('EXT' . $name);
 
         if (is_file($file) && is_readable($file)) {
             $mtime  = filemtime($file);

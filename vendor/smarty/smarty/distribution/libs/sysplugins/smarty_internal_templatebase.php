@@ -364,14 +364,14 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      * displays a Smarty template
      *
      * @param string $template   the resource handle of the template file or template object
-     * @param mixed  $cache_id   cache id to be used with this template
-     * @param mixed  $compile_id compile id to be used with this template
+     * @param mixed  $cacheId   cache id to be used with this template
+     * @param mixed  $compileId compile id to be used with this template
      * @param object $parent     next higher level of Smarty variables
      */
-    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null)
+    public function display($template = null, $cacheId = null, $compileId = null, $parent = null)
     {
         // display template
-        $this->fetch($template, $cache_id, $compile_id, $parent, true);
+        $this->fetch($template, $cacheId, $compileId, $parent, true);
     }
 
     /**

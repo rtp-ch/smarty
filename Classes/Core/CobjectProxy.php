@@ -1,7 +1,15 @@
 <?php
 
 /**
- * A proxy object for plugins which rely on frontend tslib_cobj methods.
+ * A proxy object for plugins which rely on frontend tslib_cobj methods. Inspired by various similar approaches in:
+ *
+ * - Tx_Fluid_ViewHelpers_CObjectViewHelper
+ * - Tx_Fluid_ViewHelpers_ImageViewHelper
+ * - Tx_Fluid_ViewHelpers_Format_CropViewHelper
+ * - Tx_Fluid_ViewHelpers_Format_HtmlViewHelper and
+ * - Tx_Extbase_Utility_FrontendSimulator
+ * - Tx_Phpunit_Framework
+ * - and possibly others...
  */
 class Tx_Smarty_Core_CobjectProxy
 {
@@ -37,6 +45,7 @@ class Tx_Smarty_Core_CobjectProxy
      *
      * @return void
      * @see Tx_Extbase_Utility_FrontendSimulator::resetFrontendEnvironment
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function __destruct()
     {
@@ -56,6 +65,7 @@ class Tx_Smarty_Core_CobjectProxy
      * @param array $args
      * @return mixed
      * @throws BadMethodCallException|RuntimeException
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function __call($method, array $args = array())
     {
@@ -70,10 +80,7 @@ class Tx_Smarty_Core_CobjectProxy
     }
 
     /**
-     * Simulates a frontend environment. Inspired by various hacks for simulating the frontend in
-     * Tx_Fluid_ViewHelpers_CObjectViewHelper, Tx_Fluid_ViewHelpers_ImageViewHelper,
-     * Tx_Fluid_ViewHelpers_Format_CropViewHelper, Tx_Fluid_ViewHelpers_Format_HtmlViewHelper and
-     * Tx_Extbase_Utility_FrontendSimulator (and possibly others...)
+     * Simulates a frontend environment.
      *
      * @param array $data
      * @param string $table
@@ -91,42 +98,46 @@ class Tx_Smarty_Core_CobjectProxy
 
     /**
      * Sets a fake time tracker
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private static function setTimeTracker()
     {
         if (!is_object($GLOBALS['TT'])) {
-            $GLOBALS['TT'] = t3lib_div::makeInstance('t3lib_TimeTrackNull');    
-        }        
-    }    
+            $GLOBALS['TT'] = Tx_Smarty_Service_Compatibility::makeInstance('t3lib_TimeTrackNull');
+        }
+    }
 
     /**
      * @param array $data
      * @param string $table
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function setContentObject(array $data = array(), $table = '')
     {
 
-        $GLOBALS['TSFE']->cObj = t3lib_div::makeInstance('tslib_cObj');
+        $GLOBALS['TSFE']->cObj = Tx_Smarty_Service_Compatibility::makeInstance('tslib_cObj');
         $GLOBALS['TSFE']->cObj->start($data, $table);
     }
 
     /**
      * Creates an instance of t3lib_pageSelect
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function setPageSelect()
     {
-        $GLOBALS['TSFE']->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
+        $GLOBALS['TSFE']->sys_page = Tx_Smarty_Service_Compatibility::makeInstance('t3lib_pageSelect');
         $GLOBALS['TSFE']->sys_page->versioningPreview = false;
         $GLOBALS['TSFE']->sys_page->versioningWorkspaceId = false;
         $GLOBALS['TSFE']->where_hid_del = ' AND pages.deleted=0';
         $GLOBALS['TSFE']->sys_page->init(false);
         $GLOBALS['TSFE']->sys_page->where_hid_del .= ' AND pages.doktype<200';
-        $GLOBALS['TSFE']->sys_page->where_groupAccess 
+        $GLOBALS['TSFE']->sys_page->where_groupAccess
             = $GLOBALS['TSFE']->sys_page->getMultipleGroupsWhereClause('pages.fe_group', 'pages');
     }
 
     /**
      * Initializes TypoScript templating
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function setTypoScript()
     {
@@ -142,6 +153,7 @@ class Tx_Smarty_Core_CobjectProxy
 
     /**
      * Initializes global charset helpers
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function setCharSet()
     {
@@ -151,7 +163,7 @@ class Tx_Smarty_Core_CobjectProxy
                 $GLOBALS['TSFE']->csConvObj = $GLOBALS['LANG']->csConvObj;
 
             } else {
-                $GLOBALS['TSFE']->csConvObj = t3lib_div::makeInstance('t3lib_cs');
+                $GLOBALS['TSFE']->csConvObj = Tx_Smarty_Service_Compatibility::makeInstance('t3lib_cs');
             }
         }
 
@@ -172,17 +184,23 @@ class Tx_Smarty_Core_CobjectProxy
     private function setWorkingDir()
     {
         $this->workingDirBackup = getcwd();
-        chdir(PATH_site);
+        chdir(PATH_SITE);
     }
 
     /**
      * Sets $GLOBALS['TSFE']
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * TODO: Implement page & cache
      */
     private function setTsfe($pageId = 0, $noCache = 0)
     {
         $this->tsfeBackup = ($GLOBALS['TSFE'] instanceof tslib_fe) ? $GLOBALS['TSFE'] : false;
-        $GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], $pageId, $noCache);
-        // $GLOBALS['TSFE']  = new stdClass();
+        $GLOBALS['TSFE'] = Tx_Smarty_Service_Compatibility::makeInstance(
+            'tslib_fe',
+            $GLOBALS['TYPO3_CONF_VARS'],
+            $pageId,
+            $noCache
+        );
         $GLOBALS['TSFE']->beUserLogin = false;
         $GLOBALS['TSFE']->cObjectDepthCounter = 100;
         $GLOBALS['TSFE']->workspacePreview = '';
@@ -190,7 +208,7 @@ class Tx_Smarty_Core_CobjectProxy
         $GLOBALS['TSFE']->determineId();
         $GLOBALS['TSFE']->initTemplate();
         $GLOBALS['TSFE']->config = array();
-        $GLOBALS['TSFE']->tmpl->getFileName_backPath = PATH_site;
-        $GLOBALS['TSFE']->baseUrl = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
+        $GLOBALS['TSFE']->tmpl->getFileName_backPath = PATH_SITE;
+        $GLOBALS['TSFE']->baseUrl = Tx_Smarty_Service_Compatibility::getIndpEnv('TYPO3_SITE_URL');
     }
 }

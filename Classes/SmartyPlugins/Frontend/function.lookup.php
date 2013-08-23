@@ -16,98 +16,219 @@
  * http://typo3.org/documentation/document-library/references/doc_core_tsref/current/view/2/2/
  * Example: {lookup data="GPvar:tx_myext|uid" field="uid" table="ty_mext" list="field1, field2, field3" delim=","}
  * Returns the result as a list of fields seperated by delim
+ * Note: This plugin will only work in a frontend context!
  * -------------------------------------------------------------
  *
  * @param $params
  * @param Smarty_Internal_Template $template
  * @throws Tx_Smarty_Exception_PluginException
  * @return bool|string
+ * @deprecated Usage of this plugin is discouraged
  */
+//@codingStandardsIgnoreStart
 function smarty_function_lookup($params, Smarty_Internal_Template $template)
 {
+//@codingStandardsIgnoreEnd
+
+    Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
+
     // Make sure params are lowercase
     $params = array_change_key_case($params, CASE_LOWER);
 
     // Default table is pages
-    if (!$params['table']) {
-        $params['table'] = 'pages';
-    }
+    $table = $params['table'] = getLookupTable($params);
 
     // Get the lookup field, exit if unknown field
-    if (!$params['field']) {
-        $params['field'] = 'uid';
+    $lookupField = getLookupField($params);
 
-    } elseif (!array_key_exists($params['field'], $GLOBALS['TYPO3_DB']->admin_get_fields($params['table']))) {
-        $msg = 'Unknown field "' . $params['field'] . '" in table "' . $params['table'] . '"!';
-        throw new Tx_Smarty_Exception_PluginException($msg, 1323967959);
-    }
+    // Gets the fields to return, exit if unknown field
+    $returnFields = getReturnFields($params);
 
-    // Get the field value to return, exit if unknown field
-    if (!$params['alias'] && !$params['list']) {
-        t3lib_div::loadTCA($params['table']);
-        $params['alias'] = $GLOBALS['TCA'][$params['table']]['ctrl']['label']; // Default alias is the record label
-
-    } elseif ($params['alias']
-        && !array_key_exists($params['alias'], $GLOBALS['TYPO3_DB']->admin_get_fields($params['table']))) {
-
-        $msg = 'Unknown alias "'.$params['alias'].'" in table "'.$params['table'].'"!';
-        throw new Tx_Smarty_Exception_PluginException($msg, 1323968081);
-    }
-
-    // Get an instance of tslib_cObj
-    $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
-
-    // Get the value to lookup
-    if ($params['gpvar']) {
-        $lookupValue = $cObj->getData('GPVar:'.$params['gpvar']);
-
-    } elseif ($params['data']) {
-        $lookupValue = $cObj->getData($params['data']);
-
-    } elseif ($params['value']) {
-        $lookupValue = $params['value'];
-    }
+    // Gets the value to lookup
+    $lookupValue = getLookupValue($params);
 
     //
     $returnValue = null;
 
-    // Find and return the matching value
-    if (isset($lookupValue) && is_scalar($lookupValue) && strlen(trim($lookupValue))) {
+    // Perform the lookup
+    if (!is_null($lookupValue) && is_scalar($lookupValue) && strlen(trim($lookupValue))) {
 
-        if (!is_numeric($lookupValue)) {
-            $lookupValue = chr(39) . mysql_real_escape_string($lookupValue) . chr(39);
+        $lookupResult = executeQuery($lookupValue, $lookupField, $returnFields, $table);
 
-        } else {
-            $lookupValue = mysql_real_escape_string($lookupValue);
-        }
-
-        $where  = mysql_real_escape_string($params['field']) . ' = ' . $lookupValue;
-
-        // Gets enable fields from TCA if it can be loaded
-        t3lib_div::loadTCA($params['table']);
-        if (isset($GLOBALS['TCA'][$params['table']]['ctrl'])) {
-            $where .= $GLOBALS['TSFE']->sys_page->enableFields($params['table']);
-        }
-
-        $result = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $params['table'], $where);
-
-        if (is_array($result) && count($result) === 1) {
-            if ($params['alias'] && $result[0][$params['alias']]) {
-                $returnValue = $result[0][$params['alias']];
-
-            } else {
-                $items = array_unique(t3lib_div::Tx_Smarty_Utility_Array($params['list']));
-                foreach ($items as $item) {
-                    if (trim($result[0][$item])) {
-                        $list[$item] = trim($result[0][$item]);
-                    }
-                }
-
-                $delim = $params['delim'] ? $params['delim'] : ',';
-                $returnValue = !empty($list) ? implode($delim, $list) : false;
-            }
+        if ($lookupResult && count($lookupResult) > 1 && !$params['as_array']) {
+            $delim = $params['delim'] ? $params['delim'] : ',';
+            $returnValue = implode($delim, $lookupResult);
         }
     }
 
-    return $returnValue;
+    // Returns or assigns the result
+    if (isset($params['assign'])) {
+        $template->assign($params['assign'], $returnValue);
+
+    } else {
+        return $returnValue;
+    }
+}
+
+/**
+ * Gets the values for the return fields which are retrieved from the table where a value matching the lookup
+ * value is found in the lookup field.
+ *
+ * @param $lookupValue
+ * @param $lookupField
+ * @param $returnFields
+ * @param $table
+ * @return bool
+ */
+function executeQuery($lookupValue, $lookupField, $returnFields, $table)
+{
+    $lookupResult = false;
+
+    $where = mysql_real_escape_string($lookupField) . ' = :lookupValue';
+    if (isset($GLOBALS['TCA'][$table]['ctrl'])) {
+        $where .= $GLOBALS['TSFE']->sys_page->enableFields($table);
+    }
+
+    $statement = $GLOBALS['TYPO3_DB']->prepare_SELECTquery(
+        '*',
+        $table,
+        $where
+    );
+    $statement->execute(array(':lookupValue' => $lookupValue));
+
+    if ($statement->rowCount() === 1) {
+        $record = $statement->fetch();
+        while ($returnField = array_shift($returnFields)) {
+            $lookupResult[$returnField] = $record[$returnField];
+        }
+    }
+    $statement->free();
+
+    return $lookupResult;
+}
+
+/**
+ * Gets the table which the lookup refers to. Defaults to pages if undefined.
+ *
+ * @param $params
+ * @return string
+ */
+function getLookupTable($params)
+{
+    return !isset($params['table']) ? 'pages' : $params['table'];
+}
+
+/**
+ * Gets the field which will be looked up. Defaults to uid if undefined.
+ *
+ * @param $params
+ * @return string
+ * @throws Tx_Smarty_Exception_PluginException
+ */
+function getLookupField($params)
+{
+    $field = !isset($params['field']) ? 'uid' : $params['table'];
+
+    if (!fieldExists($field, $params['table'])) {
+        $msg = 'Unknown field "' . $field . '" in table "' . $params['table'] . '"!';
+        throw new Tx_Smarty_Exception_PluginException($msg, 1323967959);
+    }
+
+    return $field;
+}
+
+/**
+ * Checks if the given field exists in the table
+ *
+ * @param $field
+ * @param $table
+ * @return bool
+ */
+function fieldExists($field, $table)
+{
+    return array_key_exists($field, getFieldsOfTable($table));
+}
+
+/**
+ * Gets the fields of the given table
+ *
+ * @param $table
+ * @return mixed
+ */
+function getFieldsOfTable($table)
+{
+    static $fields = array();
+
+    if (!isset($fields[$table])) {
+        $fields[$table] = $GLOBALS['TYPO3_DB']->admin_get_fields($table);
+    }
+
+    return $fields[$table];
+}
+
+/**
+ * Gets the lookup value
+ *
+ * @param $params
+ * @return null
+ */
+function getLookupValue($params)
+{
+    $lookupValue = null;
+
+    if ($params['gpvar']) {
+        // Get the value from Get/Post variables
+        $lookupValue = $GLOBALS['TSFE']->cObj->getData('GPVar:' . $params['gpvar']);
+
+    } elseif ($params['data']) {
+        // Get the value from TYPO3 getData method
+        $lookupValue = $GLOBALS['TSFE']->cObj->getData($params['data']);
+
+    } elseif ($params['value']) {
+        // Fixed value has been defined
+        $lookupValue = $params['value'];
+    }
+
+    return $lookupValue;
+}
+
+/**
+ * Gets the fields to return. Either from "alias", "list" or the table's label field
+ *
+ * @param $params
+ * @return array
+ */
+function getReturnFields($params)
+{
+    $returnFields = null;
+
+    if (isset($params['alias']) || isset($params['list'])) {
+        $returnFields = isset($params['alias']) ? $params['alias'] : $params['list'];
+
+    } else {
+        // Default to the table's label field if there is no defined alias or list of fields to return
+        Tx_Smarty_Service_Compatibility::loadTca($params['table']);
+        $returnFields = $GLOBALS['TCA'][$params['table']]['ctrl']['label'];
+    }
+
+    // Checks that the fields are available in the table
+    $returnFields = Tx_Smarty_Utility_Array::trimExplode($returnFields);
+    foreach ($returnFields as $returnField) {
+        if (!fieldExists($returnField, $params['table'])) {
+            throwFieldException($returnField, $params['table']);
+        }
+    }
+
+    return $returnFields;
+}
+
+/**
+ * @param $field
+ * @param $table
+ * @throws Tx_Smarty_Exception_PluginException
+ */
+function throwFieldException($field, $table)
+{
+    $msg = 'Unknown field "' . $field . '" in table "' . $table . '"!';
+    throw new Tx_Smarty_Exception_PluginException($msg, 1323967959);
 }

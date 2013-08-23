@@ -15,7 +15,9 @@
  * @param $str
  * @return mixed
  */
+//@codingStandardsIgnoreStart
 function smarty_modifier_br2nl($str)
 {
+//@codingStandardsIgnoreEnd
     return preg_replace('/<br[^>]*>/i', PHP_EOL, $str);
 }

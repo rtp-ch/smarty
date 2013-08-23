@@ -16,8 +16,10 @@
  * @param null $charlist
  * @return string
  */
+//@codingStandardsIgnoreStart
 function smarty_modifier_trim($string, $charlist = null)
 {
+//@codingStandardsIgnoreEnd
     if (!is_null($charlist)) {
         $string = trim($string, $charlist);
 

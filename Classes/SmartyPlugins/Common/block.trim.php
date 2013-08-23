@@ -12,9 +12,17 @@
  * Example:	{trim}Some text{/trim}
  * -------------------------------------------------------------
  *
+ * @param $params
+ * @param $content
+ * @param Smarty_Internal_Template $template
+ * @param $repeat
+ * @return string
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  **/
+//@codingStandardsIgnoreStart
 function smarty_block_trim($params, $content, Smarty_Internal_Template $template, &$repeat)
 {
+//@codingStandardsIgnoreEnd
     if (!$repeat) {
 
         // Make sure params are lowercase
@@ -28,5 +36,11 @@ function smarty_block_trim($params, $content, Smarty_Internal_Template $template
         }
     }
 
-    return $content;
+    // Returns or assigns the result
+    if (isset($params['assign'])) {
+        $template->assign($params['assign'], $content);
+
+    } else {
+        return $content;
+    }
 }

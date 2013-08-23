@@ -10,12 +10,13 @@ class Tx_Smarty_Hooks_ClearCache
      * @param $params
      * @param $ref
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function clearSmartyCache($params, $ref)
     {
-        $deletePid  = t3lib_div::intval_positive($params['cacheCmd']);
-        $cachePath = PATH_site . 'typo3temp/smarty_cache/';
-        $compilePath = PATH_site . 'typo3temp/smarty_compile/';
+        $deletePid = intval($params['cacheCmd']) > 0 ? intval($params['cacheCmd']) : 0;
+        $cachePath = PATH_SITE . 'typo3temp/smarty_cache/';
+        $compilePath = PATH_SITE . 'typo3temp/smarty_compile/';
 
         if ($deletePid || $params['cacheCmd'] === 'all' || $params['cacheCmd'] === 'pages') {
             self::clearDir($cachePath);
@@ -30,14 +31,14 @@ class Tx_Smarty_Hooks_ClearCache
      */
     private static function clearDir($dir)
     {
-        $filesInPath = t3lib_div::getFilesInDir($dir);
+        $filesInPath = Tx_Smarty_Service_Compatibility::getFilesInDir($dir);
         while ($fileInPath = array_shift($filesInPath)) {
             @unlink($dir . $fileInPath);
         }
 
-        $dirsInPath = t3lib_div::get_dirs($dir);
+        $dirsInPath = Tx_Smarty_Service_Compatibility::getDirs($dir);
         while ($dirInPath = array_shift($dirsInPath)) {
-            t3lib_div::rmdir($dir . $dirInPath, true);
+            Tx_Smarty_Service_Compatibility::rmdir($dir . $dirInPath, true);
         }
     }
 }

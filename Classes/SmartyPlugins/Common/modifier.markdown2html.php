@@ -14,8 +14,11 @@
  *
  * @param $content
  * @return mixed
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_modifier_markdown2html($content)
 {
+//@codingStandardsIgnoreEnd
     return \Michelf\Markdown::defaultTransform($content);
 }

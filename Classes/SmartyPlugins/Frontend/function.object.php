@@ -27,9 +27,12 @@
  * @param $params
  * @param Smarty_Internal_Template $template
  * @return mixed
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+//@codingStandardsIgnoreStart
 function smarty_function_object($params, Smarty_Internal_Template $template)
 {
+//@codingStandardsIgnoreEnd
 
     // cObject Type is explicitly defined
     if (isset($params['type'])) {
@@ -38,11 +41,19 @@ function smarty_function_object($params, Smarty_Internal_Template $template)
 
         list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
 
-    // Otherwise get it from params
     } else {
+        // Otherwise get it from params
         list($setup, $type) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
     }
 
-    $cObj = t3lib_div::makeInstance('Tx_Smarty_Core_CobjectProxy');
-    return $cObj->cObjGetSingle($type, $setup);
+    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
+    $object = $cObj->cObjGetSingle($type, $setup);
+
+    // Returns or assigns the result
+    if (isset($params['assign'])) {
+        $template->assign($params['assign'], $object);
+
+    } else {
+        return $object;
+    }
 }
