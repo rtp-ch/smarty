@@ -328,6 +328,20 @@ class Tx_Smarty_Core_Wrapper extends SmartyBC
         return $this->fetch($template, $cacheId, $compileId, $parent, false);
     }
 
+    /**
+     * Alias for display
+     *
+     * @param null $template
+     * @param null $cacheId
+     * @param null $compileId
+     * @param null $parent
+     * @return string|void
+     */
+    public function render($template = null, $cacheId = null, $compileId = null, $parent = null)
+    {
+        return $this->display($template, $cacheId, $compileId, $parent);
+    }
+
 
     /************************************************************************
      * Accessors

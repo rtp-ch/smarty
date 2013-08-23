@@ -23,7 +23,7 @@ class Tx_Smarty_SysPlugins_DotNotationFilter
      * where XXXXXX is a unique string created from the template id.
      * This is a hack! In particular, collisions will occur if the same unique string is used in
      * a template. However, due to the fact that smarty cannot handle dots in parameters, this
-     * is a neccesary evil.
+     * is a necessary evil.
      *
      * @param $tplSource
      * @param Smarty_Internal_Template $template
