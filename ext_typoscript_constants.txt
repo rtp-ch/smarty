@@ -1,0 +1,3 @@
+
+// Include default TS configuration
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:smarty/Configuration/TypoScript/Constants.txt">

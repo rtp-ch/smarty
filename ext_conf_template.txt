@@ -1,20 +1,20 @@
-  # cat=basic/enable/01; type=boolean; label=ATTENTION, Upgrade the Smarty path!: Please check the location of your Smarty library. If you are upgrading from a previous version of this extension you may have to change the 'Path to your Smarty installation' setting. The default location of the Smarty library is currently 'EXT:smarty/Smarty' (The default location in previous versions of the extension was either 'EXT:smarty/Smarty-2.6.18' or 'EXT:smarty/Smarty-2.6.19').
-IMPORTANT = 0
 
-  # cat=basic; type=string; label= Path to your Smarty installation: The default Smarty installation is located in EXT:smarty/Smarty. If your smarty installation is located elsewhere on the server or if you have upgraded your Smarty version change the path to the Smarty installation here.
-smarty_dir = EXT:smarty/Smarty
+  # cat=basic/enable/10; type=boolean; label= Disable Smarty Caching: When set smarty caching is disabled. Note that this setting is applied globally, overriding any other settings.
+disable_caching = 0
 
-  # cat=basic; type=string; label= Path to your Smarty templates: Default location of your Smarty templates. You can modify the path to your Smarty templates directory in your extension if required.
-template_dir = fileadmin/admin/smarty
+  # cat=basic/enable/30; type=boolean; label = Escape all Template Variable Output: When set smarty will escape all template variable output by wrapping it in htmlspecialchars. This is a default setting which can overridden
+escape_html = 0
 
-  # cat=basic/enable/01; type=boolean; label=Enable Smarty caching: Tells Smarty whether or not to cache the output of the templates. This setting may improve performance with non-cached FE plugins (i.e. USER_INT). Use with care!
-caching = 
+  # cat=basic/enable/40; type=boolean; label = Enable Development Mode: When set smarty is configured for a development environment. For example, templates are recompiled on every hit and debugging is enabled. This setting is applied globally.
+enable_development_mode = 0
 
-# cat=basic/enable/01; type=boolean; label=Respect the no_cache parameter: If enabled Smarty wil respect the TYPO3 no_cache parameter and disable caching (if enabled) whenever no_cache is invoked or set in TSFE.
-respect_no_cache = 
+  # cat=basic/enable/50; type=string; label = Development Environment Definitions: Comma seperated list of server environment variables which, when detected, will trigger the development mode. Server environment variables which can be defined in the server configuration or in an .htaccess file.
+development_environment_definitions =
 
-  # cat=basic/enable/01; type=boolean; label=Enable compile checks: Smarty tests to see if the current template has changed (different time stamp) since the last time it was compiled. Can be enabled for development and debugging purposes, but should be disabled in productive environments.
-compile_check = 
+TSConstantEditor.basic {
+    header = Development Environment Configuration
+    description = <ul><li><span style="background:red; padding:1px 2px; color:#fff; font-weight:bold;">1</span> "Development Mode" can be used to define additional configuration options which are only active when devlopment mode has either been enabled or any of the defined server environment variables is detected.<br /> The development mode configuration can be defined in TypoScript. By default when smarty is in development mode error reporting is increased and compile as well as cache files are regenerated on every hit.<br /> Server environment variables can be defined via .htacess or in your server configuration. The following are examples of Development Environment Definitions: <dl> <dt><strong>TYPO3_MODE</strong> would match:</dt><dd>SetEnv TYPO3_MODE 1</dd><dd>SetEnv TYPO3_MODE true</dd><dd>SetEnv TYPO3_MODE on</dd> <dt><strong>TYPO3_MODE=development</strong> would match:</dt> <dd>SetEnv TYPO3_MODE development</dd> <dt><strong>TYPO3_MODE=development,DEV_MODE</strong> would match:</dt> <dd>SetEnv TYPO3_MODE development</dd><dd>SetEnv DEV_MODE 1</dd></dl></li></ul>
+    1=enable_development_mode,development_mode_contexts
+}
 
-  # cat=basic/enable/01; type=boolean; label=Enable the Smarty debugging console: Globally invokes the Smarty debugging console for included smarty templates. On a per template basis the debugging console can be invoked by including {debug} in the template.
-debugging = 
+

@@ -10,12 +10,13 @@
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
 
+$composer = json_decode(file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'composer.json'), true);
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'Smarty Templating Engine',
-	'description' => 'A library for developers who want to use the Smarty templating engine for frontend extension templating. Includes Smarty and some custom Smarty tags for common TYPO3 functions.',
+	'title' => str_ireplace('rtp/', '', $composer['name']),
+	'description' => $composer['description'],
 	'category' => 'misc',
 	'shy' => 0,
-	'version' => '1.13.3',
+	'version' => $composer['version'],
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
@@ -30,12 +31,13 @@ $EM_CONF[$_EXTKEY] = array(
 	'author' => 'Simon Tuck',
 	'author_email' => 'stu@rtp.ch',
 	'author_company' => 'Rueegg Tuck Partner',
+	'author_company' => 'www.rtp.ch',
 	'CGLcompliance' => '',
 	'CGLcompliance_note' => '',
 	'constraints' => array(
 		'depends' => array(
-			'php' => '5.0.0-0.0.0',
-			'typo3' => '4.5.0-4.99.99',
+			'php' => '5.3.2-0.0.0',
+            'typo3' => '4.5.0-6.1.99'
 		),
 		'conflicts' => array(
 		),
@@ -46,5 +48,3 @@ $EM_CONF[$_EXTKEY] = array(
 	'suggests' => array(
 	),
 );
-
-?>
