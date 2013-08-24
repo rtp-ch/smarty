@@ -3,7 +3,7 @@
 // This file was generated on 2013-08-23 09:16
 
 $extensionPath = t3lib_extMgm::extPath('smarty');
-$extensionClassesPath = $extensionPath . 'classes/';
+$extensionClassesPath = $extensionPath . 'Classes/';
 return array(
 	'tx_smarty' => $extensionClassesPath . 'Backport/class.tx_smarty.php',
 	'tx_smarty_core_cobjectproxy' => $extensionClassesPath . 'Core/CobjectProxy.php',

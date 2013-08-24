@@ -10,13 +10,12 @@
 # writing. "version" and "dependencies" must not be touched!
 ########################################################################
 
-$composer = json_decode(file_get_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'composer.json'), true);
 $EM_CONF[$_EXTKEY] = array(
-	'title' => str_ireplace('rtp/', '', $composer['name']),
-	'description' => $composer['description'],
+	'title' => 'smarty',
+	'description' => 'Smarty Templating Engine for TYPO3',
 	'category' => 'misc',
 	'shy' => 0,
-	'version' => $composer['version'],
+	'version' => '2.0.0',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
