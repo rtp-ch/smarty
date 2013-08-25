@@ -13,20 +13,24 @@ if (!defined('SMARTY_RESOURCE_CHAR_SET')) {
     define('SMARTY_RESOURCE_CHAR_SET', SMARTY_MBSTRING ? 'UTF-8' : 'ISO-8859-1');
 }
 
-// PSR2 Compatibility
-if (!defined('PATH_site')) {
+// PSR-2 Compatibility
+if (!defined('PATH_site') && !defined('PATH_SITE')) {
     define('PATH_SITE', PATH_site);
 }
 
-// PSR2 Compatibility
+// PSR-2 Compatibility
 if (defined('TYPO3_cliMode') && !defined('TYPO3_CLI_MODE')) {
     define('TYPO3_CLI_MODE', TYPO3_cliMode);
 }
 
-// Include the autoloader for 3rd party libraries, including the smarty library
-require_once t3lib_extMgm::extPath('smarty') . 'Classes/Factory.php';
-require_once t3lib_extMgm::extPath('smarty') . 'vendor/autoload.php';
+// Include the the smarty library if it hasn't already been loaded
+if (!defined('SMARTY_DIR')) {
+    require_once Tx_Smarty_Service_Compatibility::extPath('smarty') . 'vendor/autoload.php';
+}
 
-// TODO: Hook for clearing smarty cache
+// Include the smarty extension's factory class
+require_once Tx_Smarty_Service_Compatibility::extPath('smarty') . 'Classes/Factory.php';
+
+// Hook for clearing smarty cache
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][]
-    = t3lib_extMgm::extPath('smarty') . 'Classes/Hooks/ClearCache.php:&Tx_Smarty_Hooks_ClearCache->clearSmartyCache';
+    = 'EXT:smarty/Classes/Hooks/ClearCache.php:&Tx_Smarty_Hooks_ClearCache->clearSmartyCache';
