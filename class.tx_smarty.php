@@ -61,7 +61,9 @@ class tx_smarty {
 		 * 4. Any TypoScript passed directly to this function
 		 ****/
 
-		 $smarty->t3_confVars['extconf']['template_dir'] = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['smarty']['template_dir']; // The default template_dir is defined in the plugin configuration
+		 $smarty->t3_confVars['extconf'] = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['smarty'];
+		 unset($smarty->t3_confVars['extconf']['smarty_dir']);
+
 		 $smarty->t3_confVars['smarty'] = $GLOBALS['TSFE']->tmpl->setup['plugin.']['smarty.']; // Default Smarty configuration
 		 if(is_subclass_of($this,'tslib_pibase')) { // Traditional scenario
 			 $smarty->t3_confVars[$this->prefixId] = $GLOBALS['TSFE']->tmpl->setup['plugin.'][$this->prefixId.'.']['smarty.']; // Smarty configuration from the calling extension
@@ -91,7 +93,7 @@ class tx_smarty {
 		 if (!tx_smarty::_checkDir($smarty->compile_dir)) {
 			 t3lib_div::mkdir(t3lib_div::getFileAbsFileName($smarty->compile_dir,0));
 		 }
-		
+
 		 if (!tx_smarty::_checkDir($smarty->cache_dir)) {
 			 t3lib_div::mkdir(t3lib_div::getFileAbsFileName($smarty->cache_dir,0));
 		 }
