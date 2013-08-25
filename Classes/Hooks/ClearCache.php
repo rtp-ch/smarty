@@ -32,13 +32,17 @@ class Tx_Smarty_Hooks_ClearCache
     private static function clearDir($dir)
     {
         $filesInPath = Tx_Smarty_Service_Compatibility::getFilesInDir($dir);
-        while ($fileInPath = array_shift($filesInPath)) {
-            @unlink($dir . $fileInPath);
+        if (Tx_Smarty_Utility_Array::notEmpty($filesInPath)) {
+            while ($fileInPath = array_shift($filesInPath)) {
+                @unlink($dir . $fileInPath);
+            }
         }
 
         $dirsInPath = Tx_Smarty_Service_Compatibility::getDirs($dir);
-        while ($dirInPath = array_shift($dirsInPath)) {
-            Tx_Smarty_Service_Compatibility::rmdir($dir . $dirInPath, true);
+        if (Tx_Smarty_Utility_Array::notEmpty($filesInPath)) {
+            while ($dirInPath = array_shift($dirsInPath)) {
+                Tx_Smarty_Service_Compatibility::rmdir($dir . $dirInPath, true);
+            }
         }
     }
 }

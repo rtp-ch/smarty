@@ -12,7 +12,7 @@ class Tx_Smarty_Utility_Path
     public static function resolvePaths($dirs)
     {
         $paths = null;
-        if (is_array($dirs)) {
+        if (Tx_Smarty_Utility_Array::notEmpty($dirs)) {
             while ($dir = array_shift($dirs)) {
                 $paths[] =  self::resolvePath($dir);
             }
