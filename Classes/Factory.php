@@ -93,8 +93,13 @@ class Factory
      */
     private static function getConfiguration($options = array(), $typoscriptKeys = array())
     {
+        // protects plugins_dir in options and converts it into an array
+        $options = Tx_Smarty_Utility_Array::optionExplode($options, array('plugins_dir'));
+
         // First, Get any global smarty configuration options
         list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3('plugin.smarty');
+
+        // protects plugins_dir in global settings and converts it into an array
         $setup = Tx_Smarty_Utility_Array::optionExplode($setup, array('plugins_dir'));
 
         // Second, apply the smarty configuration for any given typoscript keys
@@ -110,15 +115,22 @@ class Factory
 
                 list($extensionSetup) = Tx_Smarty_Utility_TypoScript::getSetupFromTypo3($typoscript);
                 $extensionSetup = Tx_Smarty_Utility_Array::optionExplode($extensionSetup, array('plugins_dir'));
+                $pluginsDir = array_merge((array) $setup['plugins_dir'], (array) $extensionSetup['plugins_dir']);
                 $setup = Tx_Smarty_Service_Compatibility::arrayMergeRecursiveOverrule(
                     (array) $setup,
                     (array) $extensionSetup
                 );
+                $setup['plugins_dir'] = $pluginsDir;
             }
         }
 
-        // Lastly, merge in any configuration options passed directly to the factory
-        return Tx_Smarty_Service_Compatibility::arrayMergeRecursiveOverrule((array) $setup, (array) $options);
+        // Lastly, merge in any configuration options passed directly to the factory taking care not to override any
+        // configured plugin_dirs
+        $pluginsDir = array_merge((array) $setup['plugins_dir'], (array) $options['plugins_dir']);
+        $setup = Tx_Smarty_Service_Compatibility::arrayMergeRecursiveOverrule((array) $setup, (array) $options, false);
+        $setup['plugins_dir'] = $pluginsDir;
+
+        return $setup;
     }
 
     /**

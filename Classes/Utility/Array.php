@@ -150,6 +150,6 @@ class Tx_Smarty_Utility_Array
             }
         }
 
-        return $array;
+        return array_filter($array);
     }
 }
