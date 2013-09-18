@@ -66,12 +66,6 @@ class Factory
             $smartyInstance->set($key, $value);
         }
 
-        // Makes the typoscript array accessible from within smarty templates
-        // TODO: A better (more robust) way to handle this
-        if (isset($GLOBALS['TSFE']->tmpl->setup)) {
-            $smartyInstance->assign('typoscript', $GLOBALS['TSFE']->tmpl->setup);
-        }
-
         // Return the configured smarty instance
         return $smartyInstance;
     }
