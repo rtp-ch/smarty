@@ -39,7 +39,8 @@ function smarty_block_LLL($params, $content, Smarty_Internal_Template $template,
 
         if ($key) {
 
-            // Gets the relevant translation files
+            // Gets the relevant translation files (key must be included because it may
+            // contain the file reference.
             list($key, $languageFiles) = getTranslationFiles($key, $template);
 
             // Finds the appropriate translation for the given key from the available translation files
@@ -123,6 +124,7 @@ function getTranslation($key, $languageFiles, $alt = null)
 
     // Calls the sL method from tslib_fe to translate the label
     foreach ($languageFiles as $languageFile) {
+
         // Makes sure only relative path is used for readLLfile
         $languageFile = str_replace(
             Tx_Smarty_Service_Compatibility::getIndpEnv('TYPO3_SITE_URL'),
@@ -131,11 +133,16 @@ function getTranslation($key, $languageFiles, $alt = null)
         );
 
         // TODO: Break when a translation has been found(?)
-        if (Tx_Smarty_Utility_Typo3::isFeInstance()) {
-            $translation = $GLOBALS['TSFE']->sL('LLL:' . $languageFile . ':' . $key);
+        if (is_object($GLOBALS['LANG'])) {
+            $translation = getLang()->sL('LLL:' . $languageFile . ':' . $key);
 
-        } elseif (is_object($GLOBALS['LANG'])) {
-            $translation = $GLOBALS['LANG']->sL('LLL:' . $languageFile . ':' . $key);
+        } elseif (Tx_Smarty_Utility_Typo3::isFeInstance()) {
+            $translation = $GLOBALS['TSFE']->sL('LLL:' . $languageFile . ':' . $key);
+        }
+
+        // Exit as soon as we have a translation
+        if ($translation !== false || $translation !== '') {
+            break;
         }
     }
 
