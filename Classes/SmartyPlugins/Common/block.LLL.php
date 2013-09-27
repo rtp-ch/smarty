@@ -133,15 +133,15 @@ function getTranslation($key, $languageFiles, $alt = null)
         );
 
         // TODO: Break when a translation has been found(?)
-        if (is_object($GLOBALS['LANG'])) {
-            $translation = getLang()->sL('LLL:' . $languageFile . ':' . $key);
-
-        } elseif (Tx_Smarty_Utility_Typo3::isFeInstance()) {
+        if (Tx_Smarty_Utility_Typo3::isFeInstance()) {
             $translation = $GLOBALS['TSFE']->sL('LLL:' . $languageFile . ':' . $key);
+
+        } elseif (is_object($GLOBALS['LANG'])) {
+            $translation = $GLOBALS['LANG']->sL('LLL:' . $languageFile . ':' . $key);
         }
 
         // Exit as soon as we have a translation
-        if ($translation !== false || $translation !== '') {
+        if (!is_null($translation) && $translation !== false && $translation !== '') {
             break;
         }
     }
