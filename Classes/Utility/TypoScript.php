@@ -101,6 +101,14 @@ class Tx_Smarty_Utility_TypoScript
             }
         }
 
+        // Get the type from the last part of the object path if available
+        if (isset($setup[$lastObjPathPart])) {
+            $type = $setup[$lastObjPathPart];
+
+        } else {
+            $type = null;
+        }
+
         // The last part of the object path should get the configuration
         if (isset($setup[$lastObjPathPart . '.'])) {
             $setup = $setup[$lastObjPathPart . '.'];
@@ -108,14 +116,6 @@ class Tx_Smarty_Utility_TypoScript
         } else {
             // Exit if no configuration is available
             return array(array(), null);
-        }
-
-        // The last part of the object path might also point to the object type.
-        if (isset($setup[$lastObjPathPart])) {
-            $type = $setup[$lastObjPathPart];
-
-        } else {
-            $type = null;
         }
 
         // Return the object configuration and type
