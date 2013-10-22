@@ -6,11 +6,11 @@
 * @author Uwe Tews
 */
 
-
 /**
 * class for string resource tests
 */
-class StringResourceTests extends PHPUnit_Framework_TestCase {
+class StringResourceTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -19,7 +19,7 @@ class StringResourceTests extends PHPUnit_Framework_TestCase {
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -30,6 +30,7 @@ class StringResourceTests extends PHPUnit_Framework_TestCase {
         if (DS == "\\") {
             $path = str_replace( "\\", "/", $path );
         }
+
         return $path;
     }
 
@@ -165,5 +166,3 @@ class StringResourceTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foobar', $tpl->fetch());
     }
 }
-
-?>

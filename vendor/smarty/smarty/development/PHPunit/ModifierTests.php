@@ -9,14 +9,15 @@
 /**
 * class for modifier tests
 */
-class ModifierTests extends PHPUnit_Framework_TestCase {
+class ModifierTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -153,9 +154,9 @@ class ModifierTests extends PHPUnit_Framework_TestCase {
     {
         try {
             $this->smarty->fetch('eval:{"hello world"|unknown}');
-        }
-        catch (Exception $e) {
-            $this->assertContains(htmlentities('unknown modifier "unknown"'), $e->getMessage());
+        } catch (Exception $e) {
+            $this->assertContains('unknown modifier "unknown"', $e->getMessage());
+
             return;
         }
         $this->fail('Exception for unknown modifier has not been raised.');
@@ -176,7 +177,8 @@ function testmodifier($value)
 {
     return "mymodifier function $value";
 }
-class testmodifierclass {
+class testmodifierclass
+{
     static function staticcall($value)
     {
         return "mymodifier static $value";
@@ -186,5 +188,3 @@ class testmodifierclass {
         return "mymodifier method $value";
     }
 }
-
-?>

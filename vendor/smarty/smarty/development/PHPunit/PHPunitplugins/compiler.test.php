@@ -27,5 +27,3 @@ class smarty_compiler_testclose extends Smarty_Internal_CompileBase
     }
 
 }
-
-?>

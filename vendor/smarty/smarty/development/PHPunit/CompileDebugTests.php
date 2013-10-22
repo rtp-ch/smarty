@@ -1,9 +1,9 @@
 <?php
 /**
 * Smarty PHPunit tests compilation of {debug} tag
-* 
+*
 * @package PHPunit
-* @author Uwe Tews 
+* @author Uwe Tews
 */
 
 require_once SMARTY_DIR . 'Smarty.class.php';
@@ -11,17 +11,18 @@ require_once SMARTY_DIR . 'Smarty.class.php';
 /**
 * class for {debug} tag tests
 */
-class CompileDebugTests extends PHPUnit_Framework_TestCase {
+class CompileDebugTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
-    } 
+    }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
-    } 
+    }
 
     /**
     * test debug tag
@@ -31,7 +32,7 @@ class CompileDebugTests extends PHPUnit_Framework_TestCase {
         $tpl = $this->smarty->createTemplate("eval:{debug}");
         $_contents = $this->smarty->fetch($tpl);
         $this->assertContains("Smarty Debug Console", $_contents);
-    } 
+    }
     /**
     * test debug property
     */
@@ -43,7 +44,5 @@ class CompileDebugTests extends PHPUnit_Framework_TestCase {
         $this->smarty->display($tpl);
         $_contents = ob_get_clean();
         $this->assertContains("Smarty Debug Console", $_contents);
-    } 
-} 
-
-?>
+    }
+}

@@ -9,14 +9,15 @@
 /**
 * class for {setfilter} tag tests
 */
-class CompileSetfilterTests extends PHPUnit_Framework_TestCase {
+class CompileSetfilterTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -31,4 +32,3 @@ class CompileSetfilterTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals("<a@b.c> &lt;a@b.c&gt; <a [AT] b [DOT] c> &lt;a@b.c&gt; <a@b.c>", $this->smarty->fetch($tpl));
     }
 }
-?>

@@ -9,7 +9,8 @@
 /**
  * class for resource plugins tests
  */
-class ResourcePluginTests extends PHPUnit_Framework_TestCase {
+class ResourcePluginTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -18,7 +19,7 @@ class ResourcePluginTests extends PHPUnit_Framework_TestCase {
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -58,7 +59,8 @@ class ResourcePluginTests extends PHPUnit_Framework_TestCase {
         try {
             $this->assertEquals('hello world', $this->smarty->fetch('db3:test'));
         } catch (Exception $e) {
-            $this->assertContains(htmlentities('not return a destination'), $e->getMessage());
+            $this->assertContains('not return a destination', $e->getMessage());
+
             return;
         }
         $this->fail('Exception for empty filepath has not been thrown.');
@@ -135,7 +137,6 @@ class ResourcePluginTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals(10, strlen($tpl->source->timestamp));
     }
 
-
     public function testResourcePluginExtendsall()
     {
         $this->smarty->addPluginsDir( dirname(__FILE__)."/../../distribution/demo/plugins/");
@@ -187,5 +188,3 @@ class ResourcePluginTests extends PHPUnit_Framework_TestCase {
         $this->assertFalse($smarty->_resource_handlers['eval'] === $_smarty->_resource_handlers['eval']);
     }
 }
-
-?>

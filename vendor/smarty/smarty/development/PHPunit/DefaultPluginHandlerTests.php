@@ -6,11 +6,11 @@
 * @author Uwe Tews
 */
 
-
 /**
 * class for plugin handler tests
 */
-class DefaultPluginHandlerTests extends PHPUnit_Framework_TestCase {
+class DefaultPluginHandlerTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -20,7 +20,7 @@ class DefaultPluginHandlerTests extends PHPUnit_Framework_TestCase {
         $this->smarty->registerDefaultPluginHandler('my_plugin_handler');
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -87,14 +87,17 @@ function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cach
                 case 'scriptfunction':
                     $script = './scripts/script_function_tag.php';
                     $callback = 'default_script_function_tag';
+
                     return true;
                 case 'scriptfunctionnotcachable':
                     $script = './scripts/script_function_tag.php';
                     $callback = 'default_script_function_tag';
                     $cachable = false;
+
                     return true;
                 case 'localfunction':
                     $callback = 'default_local_function_tag';
+
                     return true;
                 default:
                 return false;
@@ -104,6 +107,7 @@ function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cach
                 case 'scriptcompilerfunction':
                     $script = './scripts/script_compiler_function_tag.php';
                     $callback = 'default_script_compiler_function_tag';
+
                     return true;
                 default:
                 return false;
@@ -113,6 +117,7 @@ function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cach
                 case 'scriptblock':
                     $script = './scripts/script_block_tag.php';
                     $callback = 'default_script_block_tag';
+
                     return true;
                 default:
                 return false;
@@ -122,13 +127,16 @@ function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cach
                 case 'scriptmodifier':
                     $script = './scripts/script_modifier.php';
                     $callback = 'default_script_modifier';
+
                     return true;
                 case 'mydefaultmodifier':
                     $callback = 'default_local_modifier';
+
                     return true;
                 case 'mydefaultstaticmodifier':
                     $script = './scripts/script_default_static_modifier.php';
                     $callback = array('DefModifier','default_static_modifier');
+
                     return true;
                 default:
                 return false;
@@ -137,10 +145,11 @@ function my_plugin_handler ($tag, $type, $template, &$callback, &$script, &$cach
         return false;
     }
  }
-function default_local_function_tag ($params, $template) {
+function default_local_function_tag ($params, $template)
+{
     return 'localfunction '.$params['value'];
 }
-function default_local_modifier ($input) {
+function default_local_modifier ($input)
+{
     return 'localmodifier '.$input;
 }
-?>

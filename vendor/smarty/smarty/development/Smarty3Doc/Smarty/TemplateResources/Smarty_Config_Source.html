@@ -58,7 +58,7 @@
 												<div class="method-definition">
 											<span class="method-result">Smarty_Config_Source</span>
 										<a href="#__construct" title="details" class="method-name">__construct</a>
-											(<span class="var-type"><a href="../../Smarty/TemplateResources/Smarty_Resource.html">Smarty_Resource</a></span>&nbsp;<span class="var-name">$handler</span>, <span class="var-type"><a href="../../Smarty/Template/Smarty.html">Smarty</a></span>&nbsp;<span class="var-name">$smarty</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$resource</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$type</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>)
+											(<span class="var-type"><a href="../../Smarty/TemplateResources/Smarty_Resource.html">Smarty_Resource</a></span>&nbsp;<span class="var-name">$handler</span>, <span class="var-type"><a href="../../Smarty/Template/Smarty.html">Smarty</a></span>&nbsp;<span class="var-name">$smarty</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$resource</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$type</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$unique_resource</span>)
 									</div>
 																<div class="method-definition">
 											<span class="method-result">void</span>
@@ -130,6 +130,9 @@
 													<span class="var-title">
 								<span class="var-name"><a href="../../Smarty/TemplateResources/Smarty_Template_Source.html#var$uncompiled">Smarty_Template_Source::$uncompiled</a></span><br>
 							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../../Smarty/TemplateResources/Smarty_Template_Source.html#var$unique_resource">Smarty_Template_Source::$unique_resource</a></span><br>
+							</span>
 											</blockquote> 
 										
 		</div>
@@ -148,10 +151,10 @@
 			<A NAME='method_detail'></A>
 
 <a name="method__construct" id="__construct"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">33</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">34</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -165,7 +168,7 @@
 		<span class="method-name">
 			__construct
 		</span>
-					(<span class="var-type"><a href="../../Smarty/TemplateResources/Smarty_Resource.html">Smarty_Resource</a></span>&nbsp;<span class="var-name">$handler</span>, <span class="var-type"><a href="../../Smarty/Template/Smarty.html">Smarty</a></span>&nbsp;<span class="var-name">$smarty</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$resource</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$type</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>)
+					(<span class="var-type"><a href="../../Smarty/TemplateResources/Smarty_Resource.html">Smarty_Resource</a></span>&nbsp;<span class="var-name">$handler</span>, <span class="var-type"><a href="../../Smarty/Template/Smarty.html">Smarty</a></span>&nbsp;<span class="var-name">$smarty</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$resource</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$type</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$unique_resource</span>)
 			</div>
 	
 			<ul class="parameters">
@@ -184,6 +187,9 @@
 					<li>
 				<span class="var-type">string</span>
 				<span class="var-name">$name</span><span class="var-description">: resource name</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$unique_resource</span><span class="var-description">: unqiue resource name</span>			</li>
 				</ul>
 		
 			<hr class="separator" />
@@ -195,14 +201,14 @@
 			
 	</div>
 <a name="method__get" id="__get"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">__get</span> (line <span class="line-number">89</span>)
+		<span class="method-title">__get</span> (line <span class="line-number">77</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">magic&gt;&gt; Generic getter.</p>
+<p class="short-description">&lt;&lt;magic&gt;&gt; Generic getter.</p>
 	<ul class="tags">
 				<li><span class="field">throws:</span> SmartyException when the given property name is not valid</li>
 				<li><span class="field">access:</span> public</li>
@@ -226,19 +232,19 @@
 		<div class="notes">Redefinition of:</div>
 		<dl>
 			<dt><a href="../../Smarty/TemplateResources/Smarty_Template_Source.html#method__get">Smarty_Template_Source::__get()</a></dt>
-						<dd>magic&gt;&gt; Generic getter.</dd>
+						<dd>&lt;&lt;magic&gt;&gt; Generic getter.</dd>
 					</dl>
 			
 	</div>
 <a name="method__set" id="__set"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">__set</span> (line <span class="line-number">69</span>)
+		<span class="method-title">__set</span> (line <span class="line-number">57</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">magic&gt;&gt; Generic setter.</p>
+<p class="short-description">&lt;&lt;magic&gt;&gt; Generic setter.</p>
 	<ul class="tags">
 				<li><span class="field">throws:</span> SmartyException when the given property name is not valid</li>
 				<li><span class="field">access:</span> public</li>
@@ -265,7 +271,7 @@
 		<div class="notes">Redefinition of:</div>
 		<dl>
 			<dt><a href="../../Smarty/TemplateResources/Smarty_Template_Source.html#method__set">Smarty_Template_Source::__set()</a></dt>
-						<dd>magic&gt;&gt; Generic Setter.</dd>
+						<dd>&lt;&lt;magic&gt;&gt; Generic Setter.</dd>
 					</dl>
 			
 	</div>
@@ -286,7 +292,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sat, 24 Sep 2011 20:23:35 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.1</a>
+		Documentation generated on Mon, 17 Jun 2013 21:06:45 +0000 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

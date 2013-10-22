@@ -9,14 +9,15 @@
 /**
 * class for modifier tests
 */
-class PluginChainedLoadTests extends PHPUnit_Framework_TestCase {
+class PluginChainedLoadTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -27,7 +28,4 @@ class PluginChainedLoadTests extends PHPUnit_Framework_TestCase {
         $this->assertContains('from chain3', $this->smarty->fetch('test_plugin_chained_load.tpl'));
     }
 
-
 }
-
-?>

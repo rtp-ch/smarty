@@ -1,5 +1,5 @@
 <phpunit stopOnFailure="false">
-  
+
   <filter>
     <whitelist>
         <directory suffix=".php">../../distribution/libs</directory>
@@ -11,5 +11,5 @@
         </exclude>
     </whitelist>
   </filter>
-    
+
 </phpunit>

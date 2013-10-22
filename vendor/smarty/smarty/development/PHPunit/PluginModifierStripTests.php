@@ -1,32 +1,33 @@
 <?php
 /**
 * Smarty PHPunit tests of modifier
-* 
+*
 * @package PHPunit
-* @author Rodney Rehm 
+* @author Rodney Rehm
 */
 
 /**
 * class for modifier tests
 */
-class PluginModifierStripTests extends PHPUnit_Framework_TestCase {
+class PluginModifierStripTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
-    } 
+    }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
-    } 
+    }
 
     public function testDefault()
     {
         $tpl = $this->smarty->createTemplate('eval:{" hello     spaced words  "|strip}');
         $this->assertEquals(" hello spaced words ", $this->smarty->fetch($tpl));
     }
-    
+
     public function testUnicodeSpaces()
     {
         // Some Unicode Spaces
@@ -35,13 +36,11 @@ class PluginModifierStripTests extends PHPUnit_Framework_TestCase {
         $tpl = $this->smarty->createTemplate('eval:{"' . $string . '"|strip}');
         $this->assertEquals(" hello spaced words ", $this->smarty->fetch($tpl));
     }
-    
+
     public function testLinebreak()
     {
-        $tpl = $this->smarty->createTemplate('eval:{" hello     
+        $tpl = $this->smarty->createTemplate('eval:{" hello
             spaced words  "|strip}');
         $this->assertEquals(" hello spaced words ", $this->smarty->fetch($tpl));
     }
-} 
-
-?>
+}

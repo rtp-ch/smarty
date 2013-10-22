@@ -6,11 +6,11 @@
 * @author Uwe Tews
 */
 
-
 /**
 * class for block plugin tests
 */
-class DefaultTemplateHandlerTests extends PHPUnit_Framework_TestCase {
+class DefaultTemplateHandlerTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -19,7 +19,7 @@ class DefaultTemplateHandlerTests extends PHPUnit_Framework_TestCase {
         $this->smarty->disableSecurity();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -31,9 +31,9 @@ class DefaultTemplateHandlerTests extends PHPUnit_Framework_TestCase {
     {
         try {
             $this->smarty->fetch('foo.tpl');
-        }
-        catch (Exception $e) {
-            $this->assertContains(htmlentities('Unable to load template'), $e->getMessage());
+        } catch (Exception $e) {
+            $this->assertContains('Unable to load template', $e->getMessage());
+
             return;
         }
         $this->fail('Exception for none existing template has not been raised.');
@@ -45,9 +45,9 @@ class DefaultTemplateHandlerTests extends PHPUnit_Framework_TestCase {
     {
         try {
             $this->smarty->registerDefaultTemplateHandler('foo');
-        }
-        catch (Exception $e) {
-            $this->assertContains(htmlentities("Default template handler 'foo' not callable"), $e->getMessage());
+        } catch (Exception $e) {
+            $this->assertContains("Default template handler 'foo' not callable", $e->getMessage());
+
             return;
         }
         $this->fail('Exception for none callable function has not been raised.');
@@ -75,9 +75,9 @@ class DefaultTemplateHandlerTests extends PHPUnit_Framework_TestCase {
         $this->smarty->registerDefaultTemplateHandler('my_false');
         try {
             $this->smarty->fetch('foo.tpl');
-        }
-        catch (Exception $e) {
-            $this->assertContains(htmlentities('Unable to load template'), $e->getMessage());
+        } catch (Exception $e) {
+            $this->assertContains('Unable to load template', $e->getMessage());
+
             return;
         }
         $this->fail('Exception for none existing template has not been raised.');
@@ -90,6 +90,7 @@ function my_template_handler ($resource_type, $resource_name, &$template_source,
     $output = "Recsource $resource_name of type $resource_type not found";
     $template_source = $output;
     $template_timestamp = time();
+
     return true;
 }
 function my_template_handler_file ($resource_type, $resource_name, &$template_source, &$template_timestamp, Smarty $smarty)
@@ -100,5 +101,3 @@ function my_false ($resource_type, $resource_name, &$template_source, &$template
 {
     return false;
 }
-
-?>

@@ -7,12 +7,11 @@
 * @author Rodney Rehm
 */
 
-
 /**
 * class for delete compiled template tests
 */
-class ClearCompiledTests extends PHPUnit_Framework_TestCase {
-
+class ClearCompiledTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -20,7 +19,7 @@ class ClearCompiledTests extends PHPUnit_Framework_TestCase {
         $this->smarty->addTemplateDir('./templates_2/');
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -48,11 +47,11 @@ class ClearCompiledTests extends PHPUnit_Framework_TestCase {
                 continue;
             }
 
-			if ($file->isDir()) {
-				rmdir($_file);
-			} else {
-				unlink($_file);
-			}
+            if ($file->isDir()) {
+                rmdir($_file);
+            } else {
+                unlink($_file);
+            }
 
         }
     }
@@ -93,7 +92,7 @@ class ClearCompiledTests extends PHPUnit_Framework_TestCase {
     /**
      * Transform $id to $path
      *
-     * @param array $keys IDs like "template#compile_id"
+     * @param  array $keys IDs like "template#compile_id"
      * @return array list of (sorted) compiled file paths
      */
     protected function expectFiles($keys)
@@ -105,13 +104,14 @@ class ClearCompiledTests extends PHPUnit_Framework_TestCase {
             }
         }
         sort($files);
+
         return $files;
     }
     /**
      * update mtime of compiled files
      *
-     * @param array $keys IDs like "template#compile_id"
-     * @param string $offset time offset added to time()
+     * @param  array  $keys   IDs like "template#compile_id"
+     * @param  string $offset time offset added to time()
      * @return void
      */
     protected function touchFiles($keys, $offset=0)
@@ -148,12 +148,12 @@ class ClearCompiledTests extends PHPUnit_Framework_TestCase {
                 continue;
             }
 
-			$files[] = substr($file->__toString(), $directory_length);
+            $files[] = substr($file->__toString(), $directory_length);
         }
         sort($files);
+
         return $files;
     }
-
 
     // Smarty::clearCompiledTemplate(null, null, null)
     public function testClearAll()
@@ -434,5 +434,3 @@ class ClearCompiledTests extends PHPUnit_Framework_TestCase {
     }
 
 }
-
-?>

@@ -9,7 +9,8 @@
 /**
  * class for filter tests
  */
-class MuteExpectedErrorsTests extends PHPUnit_Framework_TestCase {
+class MuteExpectedErrorsTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -17,7 +18,7 @@ class MuteExpectedErrorsTests extends PHPUnit_Framework_TestCase {
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }

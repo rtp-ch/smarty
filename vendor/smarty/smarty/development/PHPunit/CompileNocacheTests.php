@@ -1,25 +1,26 @@
 <?php
 /**
 * Smarty PHPunit tests compilation of {nocache} tag
-* 
+*
 * @package PHPunit
-* @author Uwe Tews 
+* @author Uwe Tews
 */
 
 /**
 * class for {nocache} tag tests
 */
-class CompileNocacheTests extends PHPUnit_Framework_TestCase {
+class CompileNocacheTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
-    } 
+    }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
-    } 
+    }
 
     /**
     * test nocache tag caching disabled
@@ -37,7 +38,7 @@ class CompileNocacheTests extends PHPUnit_Framework_TestCase {
         $content = $this->smarty->fetch('test_nocache_tag.tpl');
         $this->assertContains("root 4B", $content);
         $this->assertContains("include 6B", $content);
-    } 
+    }
     /**
     * test nocache tag caching enabled
     */
@@ -50,7 +51,7 @@ class CompileNocacheTests extends PHPUnit_Framework_TestCase {
         $content = $this->smarty->fetch('test_nocache_tag.tpl');
         $this->assertContains("root 2A", $content);
         $this->assertContains("include 4A", $content);
-    } 
+    }
     public function testNocacheCachingYes2()
     {
         $this->smarty->caching = 1;
@@ -61,7 +62,5 @@ class CompileNocacheTests extends PHPUnit_Framework_TestCase {
         $content = $this->smarty->fetch('test_nocache_tag.tpl');
         $this->assertContains("root 4A", $content);
         $this->assertContains("include 6A", $content);
-    } 
-} 
-
-?>
+    }
+}

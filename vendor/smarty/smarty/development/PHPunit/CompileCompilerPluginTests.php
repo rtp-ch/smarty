@@ -1,26 +1,27 @@
 <?php
 /**
 * Smarty PHPunit tests compilation of compiler plugins
-* 
+*
 * @package PHPunit
-* @author Uwe Tews 
+* @author Uwe Tews
 */
 
 /**
 * class for compiler plugin tests
 */
-class CompileCompilerPluginTests extends PHPUnit_Framework_TestCase {
+class CompileCompilerPluginTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
-    } 
+    }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
-    } 
+    }
 
     /**
     * test compiler plugin tag in template file
@@ -30,7 +31,7 @@ class CompileCompilerPluginTests extends PHPUnit_Framework_TestCase {
         $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'compilerplugin', 'mycompilerplugin');
         $tpl = $this->smarty->createTemplate('compilerplugintest.tpl');
         $this->assertEquals("Hello World", $this->smarty->fetch($tpl));
-    } 
+    }
     /**
     * test compiler plugin tag in compiled template file
     */
@@ -40,11 +41,9 @@ class CompileCompilerPluginTests extends PHPUnit_Framework_TestCase {
         $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER,'compilerplugin', 'mycompilerplugin');
         $tpl = $this->smarty->createTemplate('compilerplugintest.tpl');
         $this->assertEquals("Hello World", $this->smarty->fetch($tpl));
-    } 
-} 
+    }
+}
 function mycompilerplugin($params, $compiler)
 {
     return '<?php echo \'Hello World\';?>';
-} 
-
-?>
+}
