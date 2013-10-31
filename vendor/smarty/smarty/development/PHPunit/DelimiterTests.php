@@ -6,18 +6,18 @@
 * @author Uwe Tews
 */
 
-
 /**
 * class for delimiter tests
 */
-class DelimiterTests extends PHPUnit_Framework_TestCase {
+class DelimiterTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -73,5 +73,3 @@ class DelimiterTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
     }
 }
-
-?>

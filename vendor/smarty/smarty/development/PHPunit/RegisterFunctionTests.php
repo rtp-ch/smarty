@@ -9,14 +9,15 @@
 /**
  * class for register->templateFunction / unregister->templateFunction methods tests
  */
-class RegisterFunctionTests extends PHPUnit_Framework_TestCase {
+class RegisterFunctionTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
    }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -125,11 +126,10 @@ function myfunction($params, &$smarty)
 {
     return "hello world $params[value]";
 }
-class myfunctionclass {
+class myfunctionclass
+{
     static function execute($params, &$smarty)
     {
         return "hello world $params[value]";
     }
 }
-
-?>

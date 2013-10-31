@@ -6,18 +6,20 @@
 * @author Uwe Tews
 */
 
-
 /**
 * class for extends resource tests
 */
-class ExtendsResourceTests extends PHPUnit_Framework_TestCase {
+class ExtendsResourceTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
+        $this->smarty->setTemplateDir(array('./templates/extendsresource/','./templates/'));
+//        $this->smarty->registerFilter(Smarty::FILTER_PRE,'prefilterextends');
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -30,189 +32,71 @@ class ExtendsResourceTests extends PHPUnit_Framework_TestCase {
         $this->smarty->clearAllCache();
         $this->smarty->clearCompiledTemplate();
     }
-    /* Test compilation */
-    public function testExtendsResourceBlockBase()
+    /**
+     * test  child/parent template chain with prepend
+     */
+    public function testCompileBlockChildPrepend_003()
     {
-        $this->smarty->force_compile=true;
-        $result = $this->smarty->fetch('extends:test_block_base.tpl');
-        $this->assertContains('--block base ok--', $result);
-        $this->assertContains('--block section false--', $result);
-        $this->assertContains('--block passed by section false--', $result);
-        $this->assertContains('--block root false--', $result);
-        $this->assertContains('--block assigned false--', $result);
-        $this->assertContains('--parent from section false--', $result);
-        $this->assertContains('--base--', $result);
-        $this->assertContains('--block include false--', $result);
-    }
-    public function testExtendResourceBlockSection()
-    {
-        $this->smarty->force_compile=true;
-        $result = $this->smarty->fetch('extends:test_block_base.tpl|test_block_section.tpl');
-        $this->assertContains('--block base ok--', $result);
-        $this->assertContains('--block section ok--', $result);
-        $this->assertContains('--block passed by section false--', $result);
-        $this->assertContains('--block root false--', $result);
-        $this->assertContains('--block assigned false--', $result);
-        $this->assertContains('--section--', $result);
-        $this->assertContains('--base--', $result);
-        $this->assertContains('--block include false--', $result);
-    }
-    public function testExtendResourceBlockRoot()
-    {
-        $this->smarty->force_compile=true;
-        $this->smarty->assign('foo', 'hallo');
-        $result = $this->smarty->fetch('extends:test_block_base.tpl|test_block_section.tpl|test_block.tpl');
-        $this->assertContains('--block base ok--', $result);
-        $this->assertContains('--block section ok--', $result);
-        $this->assertContains('--block passed by section ok--', $result);
-        $this->assertContains('--block root ok--', $result);
-        $this->assertContains('--assigned hallo--', $result);
-        $this->assertContains('--parent from --section-- block--', $result);
-        $this->assertContains('--parent from --base-- block--', $result);
-        $this->assertContains('--block include ok--', $result);
-    }
-    public function testExtendsTagWithExtendsResource()
-    {
-        $this->smarty->force_compile=true;
-        $this->smarty->assign('foo', 'hallo');
-        $result = $this->smarty->fetch('test_block_extends.tpl');
-        $this->assertContains('--block base from extends--', $result);
-        $this->assertContains('--block section ok--', $result);
-        $this->assertContains('--block passed by section ok--', $result);
-        $this->assertContains('--block root ok--', $result);
-        $this->assertContains('--assigned hallo--', $result);
-        $this->assertContains('--parent from --section-- block--', $result);
-        $this->assertContains('--parent from --base-- block--', $result);
-        $this->assertContains('--block include ok--', $result);
+        $result = $this->smarty->fetch('extends:003_parent.tpl|003_child_prepend.tpl');
+        $this->assertContains("prepend - Default Title", $result);
     }
     /**
-    * test  grandchild/child/parent dependency test1
-    */
-    public function testCompileBlockGrandChildMustCompile1()
+     * test  child/parent template chain with apppend
+     */
+    public function testCompileBlockChildAppend_004()
     {
-        // FIXME: this tests fails when run with smartytestssingle.php
-        // $this->smarty->clearCache('extends:test_block_parent.tpl|test_block_child_resource.tpl|test_block_grandchild_resource.tpl');
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('extends:test_block_parent.tpl|test_block_child_resource.tpl|test_block_grandchild_resource.tpl');
-        $this->assertFalse($tpl->isCached());
-        $result = $this->smarty->fetch($tpl);
-        $this->assertContains('Grandchild Page Title', $result);
-        $this->smarty->template_objects = null;
-        $tpl2 = $this->smarty->createTemplate('extends:test_block_parent.tpl|test_block_child_resource.tpl|test_block_grandchild_resource.tpl');
-        $this->assertTrue($tpl2->isCached());
-        $result = $this->smarty->fetch($tpl2);
-        $this->assertContains('Grandchild Page Title', $result);
-    }
-    /**
-    * test  grandchild/child/parent dependency test2
-    */
-    public function testCompileBlockGrandChildMustCompile2()
+        $result = $this->smarty->fetch('extends:004_parent.tpl|004_child_append.tpl');
+        $this->assertContains("Default Title - append", $result);
+    }    /**
+ * test nocache on different levels
+ */
+    public function testNocacheBlock_030_1()
     {
-        touch($this->smarty->getTemplateDir(0) . 'test_block_grandchild_resource.tpl');
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('extends:test_block_parent.tpl|test_block_child_resource.tpl|test_block_grandchild_resource.tpl');
-        $this->assertFalse($tpl->isCached());
-        $result = $this->smarty->fetch($tpl);
-        $this->assertContains('Grandchild Page Title', $result);
-        $this->smarty->template_objects = null;
-        $tpl2 = $this->smarty->createTemplate('extends:test_block_parent.tpl|test_block_child_resource.tpl|test_block_grandchild_resource.tpl');
-        $this->assertTrue($tpl2->isCached());
-        $result = $this->smarty->fetch($tpl2);
-        $this->assertContains('Grandchild Page Title', $result);
-     }
-    /**
-    * test  grandchild/child/parent dependency test3
-    */
-    public function testCompileBlockGrandChildMustCompile3()
-    {
-        touch($this->smarty->getTemplateDir(0) . 'test_block_child_resource.tpl');
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('extends:test_block_parent.tpl|test_block_child_resource.tpl|test_block_grandchild_resource.tpl');
-        $this->assertFalse($tpl->isCached());
-        $result = $this->smarty->fetch($tpl);
-        $this->assertContains('Grandchild Page Title', $result);
-        $this->smarty->template_objects = null;
-        $tpl2 = $this->smarty->createTemplate('extends:test_block_parent.tpl|test_block_child_resource.tpl|test_block_grandchild_resource.tpl');
-        $this->assertTrue($tpl2->isCached());
-        $result = $this->smarty->fetch($tpl2);
-        $this->assertContains('Grandchild Page Title', $result);
-     }
-    /**
-    * test  grandchild/child/parent dependency test4
-    */
-    public function testCompileBlockGrandChildMustCompile4()
-    {
-        touch($this->smarty->getTemplateDir(0) . 'test_block_parent.tpl');
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->createTemplate('extends:test_block_parent.tpl|test_block_child_resource.tpl|test_block_grandchild_resource.tpl');
-        $this->assertFalse($tpl->isCached());
-        $result = $this->smarty->fetch($tpl);
-        $this->assertContains('Grandchild Page Title', $result);
-        $this->smarty->template_objects = null;
-        $tpl2 = $this->smarty->createTemplate('extends:test_block_parent.tpl|test_block_child_resource.tpl|test_block_grandchild_resource.tpl');
-        $this->assertTrue($tpl2->isCached());
-        $result = $this->smarty->fetch($tpl2);
-        $this->assertContains('Grandchild Page Title', $result);
-     }
-    /**
-    * test  nested child block with hide and auto_literal = false
-    */
-    public function testCompileBlockChildNestedHideAutoLiteralFalseResource()
-    {
-        $this->smarty->auto_literal = false;
-        $result = $this->smarty->fetch('extends:test_block_parent_nested2_space.tpl|test_block_child_nested_hide_space.tpl');
-        $this->assertContains('nested block', $result);
-        $this->assertNotContains('should be hidden', $result);
+        $this->smarty->caching = 1;
+        $this->smarty->assign('b1','b1_1');
+        $this->smarty->assign('b3','b3_1');
+        $this->smarty->assign('b4','b4_1');
+        $this->smarty->assign('b5','b5_1');
+        $this->smarty->assign('b6','b6_1');
+        $result = $this->smarty->fetch('extends:030_parent.tpl|030_child.tpl|030_grandchild.tpl');
+        $this->assertContains('parent b1 b1_1*parent b2*grandchild b3 b3_1*include b3 b6_1*grandchild b6 b6_1*', $result);
+        $this->assertContains('child b4 b4_1*grandchild b4 b4_1**', $result);
+        $this->assertContains('child b5 b5_1*grandchild b5 b5_1**', $result);
+        $this->assertContains('child b61 b6_1*include 61 b6_1*grandchild b6 b6_1*', $result);
+        $this->assertContains('child b62 b6_1*include 62 b6_1*grandchild b6 b6_1*', $result);
+        $this->assertContains('child b63 b6_1*grandchild b6 b6_1*', $result);
+        $this->assertContains('child b64 b6_1*include b64 b6_1*grandchild b6 b6_1*', $result);
+        $this->assertContains('parent include b6_1*grandchild b6 b6_1*', $result);
+        $this->assertContains('parent include2 grandchild b6 b6_1*', $result);
     }
 
-    /* Test create cache file */
-    public function testExtendResource1()
+    /**
+     * test nocache on different levels
+     */
+    public function testNocacheBlock_030_2()
     {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $this->smarty->assign('foo', 'hallo');
-        $result = $this->smarty->fetch('extends:test_block_base.tpl|test_block_section.tpl|test_block.tpl');
-        $this->assertContains('--block base ok--', $result);
-        $this->assertContains('--block section ok--', $result);
-        $this->assertContains('--block passed by section ok--', $result);
-        $this->assertContains('--block root ok--', $result);
-        $this->assertContains('--assigned hallo--', $result);
-        $this->assertContains('--parent from --section-- block--', $result);
-        $this->assertContains('--parent from --base-- block--', $result);
-        $this->assertContains('--block include ok--', $result);
-    }
-    /* Test access cache file */
-    public function testExtendResource2()
-    {
-        $this->smarty->caching = true;
-        $this->smarty->cache_lifetime = 1000;
-        $this->smarty->assign('foo', 'world');
-        $tpl = $this->smarty->createTemplate('extends:test_block_base.tpl|test_block_section.tpl|test_block.tpl');
-        $this->assertTrue($this->smarty->isCached($tpl));
-        $result = $this->smarty->fetch('extends:test_block_base.tpl|test_block_section.tpl|test_block.tpl');
-        $this->assertContains('--block base ok--', $result);
-        $this->assertContains('--block section ok--', $result);
-        $this->assertContains('--block passed by section ok--', $result);
-        $this->assertContains('--block root ok--', $result);
-        $this->assertContains('--assigned hallo--', $result);
-        $this->assertContains('--parent from --section-- block--', $result);
-        $this->assertContains('--parent from --base-- block--', $result);
-        $this->assertContains('--block include ok--', $result);
+        $this->smarty->caching = 1;
+        $this->smarty->assign('b1','b1_2');
+        $this->smarty->assign('b3','b3_2');
+        $this->smarty->assign('b4','b4_2');
+        $this->smarty->assign('b5','b5_2');
+        $this->smarty->assign('b6','b6_2');
+        $result = $this->smarty->fetch('extends:030_parent.tpl|030_child.tpl|030_grandchild.tpl');
+        $this->assertContains('parent b1 b1_2*parent b2*grandchild b3 b3_2*include b3 b6_2*grandchild b6 b6_2*', $result);
+        $this->assertContains('child b4 b4_1*grandchild b4 b4_2**', $result);
+        $this->assertContains('child b5 b5_2*grandchild b5 b5_2**', $result);
+        $this->assertContains('child b61 b6_1*include 61 b6_1*grandchild b6 b6_1*', $result);
+        $this->assertContains('child b62 b6_2*include 62 b6_2*grandchild b6 b6_2*', $result);
+        $this->assertContains('child b63 b6_1*grandchild b6 b6_2*', $result);
+        $this->assertContains('child b64 b6_1*include b64 b6_2*grandchild b6 b6_2*', $result);
+        $this->assertContains('parent include b6_2*grandchild b6 b6_2*', $result);
+        $this->assertContains('parent include2 grandchild b6 b6_2*', $result);
     }
 
-    public function testExtendExists()
-    {
-        $this->smarty->caching = false;
-        $tpl = $this->smarty->createTemplate('extends:test_block_base.tpl');
-        $this->assertTrue($tpl->source->exists);
+ }
 
-        $tpl = $this->smarty->createTemplate('extends:does-not-exists.tpl|this-neither.tpl');
-        $this->assertFalse($tpl->source->exists);
-    }
+function prefilterextends($input)
+{
+    return preg_replace('/{extends .*}/', '', $input);
 }
 
-?>

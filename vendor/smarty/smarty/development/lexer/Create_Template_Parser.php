@@ -28,5 +28,3 @@ $contents = '<?php
 '.substr($contents,6);
 file_put_contents('smarty_internal_templateparser.php', $contents."?>");
 copy('smarty_internal_templateparser.php','../../distribution/libs/sysplugins/smarty_internal_templateparser.php');
-
-?>

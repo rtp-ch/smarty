@@ -1,28 +1,29 @@
 <?php
 /**
 * Smarty PHPunit tests for cache resource file
-* 
+*
 * @package PHPunit
-* @author Uwe Tews 
+* @author Uwe Tews
 */
 
 /**
 * class for cache resource file tests
 */
-class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
+class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->caching_type = 'mysqltest';
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
-    } 
+    }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
-    } 
-    
+    }
+
     protected function doClearCacheAssertion($a, $b)
     {
         $this->assertEquals($a, $b);
@@ -36,9 +37,9 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
-	    $sha1 = sha1($tpl->source->filepath);
+        $sha1 = sha1($tpl->source->filepath);
         $this->assertEquals($sha1, $tpl->cached->filepath);
-    } 
+    }
     /**
     * test getCachedFilepath with cache_id
     */
@@ -49,7 +50,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $tpl = $this->smarty->createTemplate('helloworld.tpl', 'foo|bar');
         $sha1 = sha1($tpl->source->filepath . 'foo|bar' . null);
         $this->assertEquals($sha1, $tpl->cached->filepath);
-    } 
+    }
     /**
     * test getCachedFilepath with compile_id
     */
@@ -60,7 +61,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $tpl = $this->smarty->createTemplate('helloworld.tpl', null, 'blar');
         $sha1 = sha1($tpl->source->filepath . null . 'blar');
         $this->assertEquals($sha1, $tpl->cached->filepath);
-    } 
+    }
     /**
     * test getCachedFilepath with cache_id and compile_id
     */
@@ -71,7 +72,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $tpl = $this->smarty->createTemplate('helloworld.tpl', 'foo|bar', 'blar');
         $sha1 = sha1($tpl->source->filepath . 'foo|bar' . 'blar');
         $this->assertEquals($sha1, $tpl->cached->filepath);
-    } 
+    }
     /**
     * test cache->clear_all with cache_id and compile_id
     */
@@ -85,7 +86,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl));
         // Custom CacheResources may return -1 if they can't tell the number of deleted elements
         $this->assertEquals(-1, $this->smarty->clearAllCache());
-    } 
+    }
     /**
     * test cache->clear with cache_id and compile_id
     */
@@ -111,7 +112,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
        $this->assertNull($tpl->cached->handler->getCachedContent($tpl));
         $this->assertEquals('hello world 2', $tpl->cached->handler->getCachedContent($tpl2));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl3));
-    } 
+    }
 
     public function testClearCacheCacheIdCompileId2()
     {
@@ -135,7 +136,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl2));
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl3));
-    } 
+    }
 
     public function testClearCacheCacheIdCompileId2Sub()
     {
@@ -159,7 +160,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl2));
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl3));
-    } 
+    }
     public function testClearCacheCacheIdCompileId3()
     {
         $this->smarty->caching = true;
@@ -182,7 +183,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl2));
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl3));
-    } 
+    }
     public function testClearCacheCacheIdCompileId3Sub()
     {
         $this->smarty->caching = true;
@@ -205,7 +206,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl2));
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl3));
-    } 
+    }
     public function testClearCacheCacheIdCompileId4()
     {
         $this->smarty->caching = true;
@@ -228,7 +229,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl2));
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl3));
-    } 
+    }
     public function testClearCacheCacheIdCompileId4Sub()
     {
         $this->smarty->caching = true;
@@ -251,7 +252,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl2));
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl3));
-    } 
+    }
     public function testClearCacheCacheIdCompileId5()
     {
         $this->smarty->caching = true;
@@ -274,7 +275,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl));
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl2));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl3));
-    } 
+    }
     public function testClearCacheCacheIdCompileId5Sub()
     {
         $this->smarty->caching = true;
@@ -297,7 +298,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl));
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl2));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl3));
-    } 
+    }
     public function testClearCacheCacheFile()
     {
         $this->smarty->caching = true;
@@ -324,7 +325,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl2));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl3));
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl4));
-    } 
+    }
     public function testClearCacheCacheFileSub()
     {
         $this->smarty->caching = true;
@@ -351,7 +352,7 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl2));
         $this->assertNull($tpl->cached->handler->getCachedContent($tpl3));
         $this->assertEquals('hello world', $tpl->cached->handler->getCachedContent($tpl4));
-    } 
+    }
     /**
     * final cleanup
     */
@@ -359,7 +360,5 @@ class CacheResourceCustomMysqlTests extends PHPUnit_Framework_TestCase {
     {
         $this->smarty->clearCompiledTemplate();
         $this->smarty->clearAllCache();
-    } 
-} 
-
-?>
+    }
+}

@@ -9,7 +9,8 @@
 /**
 * class for cache resource file tests
 */
-class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
+class CacheResourceFileTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -19,7 +20,7 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -30,6 +31,7 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
         if (DS == "\\") {
             $path = str_replace( "\\", "/", $path );
         }
+
         return $path;
     }
 
@@ -42,13 +44,13 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
-	    $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
-	    $expected = sprintf('./cache/%s/%s/%s/%s.helloworld.tpl.php',
-		    substr($sha1, 0, 2),
-		    substr($sha1, 2, 2),
-		    substr($sha1, 4, 2),
-		    $sha1
-		);
+        $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
+        $expected = sprintf('./cache/%s/%s/%s/%s.helloworld.tpl.php',
+            substr($sha1, 0, 2),
+            substr($sha1, 2, 2),
+            substr($sha1, 4, 2),
+            $sha1
+        );
         $this->assertEquals($expected, $this->relative($tpl->cached->filepath));
     }
     /**
@@ -60,13 +62,13 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
         $tpl = $this->smarty->createTemplate('helloworld.tpl', 'foo|bar');
-	    $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
-	    $expected = sprintf('./cache/foo/bar/%s/%s/%s/%s.helloworld.tpl.php',
-		    substr($sha1, 0, 2),
-		    substr($sha1, 2, 2),
-		    substr($sha1, 4, 2),
-		    $sha1
-		);
+        $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
+        $expected = sprintf('./cache/foo/bar/%s/%s/%s/%s.helloworld.tpl.php',
+            substr($sha1, 0, 2),
+            substr($sha1, 2, 2),
+            substr($sha1, 4, 2),
+            $sha1
+        );
         $this->assertEquals($expected, $this->relative($tpl->cached->filepath));
     }
     /**
@@ -78,13 +80,13 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
         $tpl = $this->smarty->createTemplate('helloworld.tpl', null, 'blar');
-	    $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
-	    $expected = sprintf('./cache/blar/%s/%s/%s/%s.helloworld.tpl.php',
-		    substr($sha1, 0, 2),
-		    substr($sha1, 2, 2),
-		    substr($sha1, 4, 2),
-		    $sha1
-		);
+        $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
+        $expected = sprintf('./cache/blar/%s/%s/%s/%s.helloworld.tpl.php',
+            substr($sha1, 0, 2),
+            substr($sha1, 2, 2),
+            substr($sha1, 4, 2),
+            $sha1
+        );
         $this->assertEquals($expected, $this->relative($tpl->cached->filepath));
     }
     /**
@@ -96,13 +98,13 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->use_sub_dirs = true;
         $tpl = $this->smarty->createTemplate('helloworld.tpl', 'foo|bar', 'blar');
-    	$sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
-    	$expected = sprintf('./cache/foo/bar/blar/%s/%s/%s/%s.helloworld.tpl.php',
-		    substr($sha1, 0, 2),
-		    substr($sha1, 2, 2),
-		    substr($sha1, 4, 2),
-		    $sha1
-		);
+        $sha1 = sha1($this->smarty->getTemplateDir(0) . 'helloworld.tpl');
+        $expected = sprintf('./cache/foo/bar/blar/%s/%s/%s/%s.helloworld.tpl.php',
+            substr($sha1, 0, 2),
+            substr($sha1, 2, 2),
+            substr($sha1, 4, 2),
+            $sha1
+        );
         $this->assertEquals($expected, $this->relative($tpl->cached->filepath));
     }
     /**
@@ -413,7 +415,7 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
         $this->assertFalse(file_exists($tpl3->cached->filepath));
         $this->assertTrue(file_exists($tpl4->cached->filepath));
     }
-    
+
     public function testSharing()
     {
         $smarty = new Smarty();
@@ -421,10 +423,10 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
         $_smarty = clone $smarty;
         $smarty->fetch('string:foo');
         $_smarty->fetch('string:foo');
-        
+
         $this->assertTrue($smarty->_cacheresource_handlers['file'] === $_smarty->_cacheresource_handlers['file']);
     }
-    
+
     public function testExplicit()
     {
         $smarty = new Smarty();
@@ -436,7 +438,7 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
 
         $this->assertFalse($smarty->_cacheresource_handlers['file'] === $_smarty->_cacheresource_handlers['file']);
     }
-    
+
     /**
     * final cleanup
     */
@@ -446,5 +448,3 @@ class CacheResourceFileTests extends PHPUnit_Framework_TestCase {
         $this->smarty->clearAllCache();
     }
 }
-
-?>

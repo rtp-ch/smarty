@@ -9,14 +9,15 @@
 /**
  * class for register->compilerFunction / unregister->compilerFunction methods tests
  */
-class RegisterCompilerFunctionTests extends PHPUnit_Framework_TestCase {
+class RegisterCompilerFunctionTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -97,15 +98,14 @@ function mycompilerfunctionclose($params, $smarty)
 {
     return "<?php echo 'close tag'?>";
 }
-class mycompilerfunctionclass {
+class mycompilerfunctionclass
+{
     static function execute($params, $smarty)
     {
         return "<?php echo 'hello world {$params['var1']}'?>";
     }
-    function compile($params, $smarty)
+    public function compile($params, $smarty)
     {
         return "<?php echo 'hello world {$params['var2']}'?>";
     }
 }
-
-?>

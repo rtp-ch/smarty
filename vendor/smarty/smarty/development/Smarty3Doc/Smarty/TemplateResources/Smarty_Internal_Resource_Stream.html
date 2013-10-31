@@ -56,8 +56,13 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																				
+																												
 												<div class="method-definition">
+											<span class="method-result">string</span>
+										<a href="#buildUniqueResourceName" title="details" class="method-name">buildUniqueResourceName</a>
+											(<span class="var-type"><a href="../../Smarty/Template/Smarty.html">Smarty</a></span>&nbsp;<span class="var-name">$smarty</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$resource_name</span>)
+									</div>
+																<div class="method-definition">
 											<span class="method-result">string</span>
 										<a href="#getContent" title="details" class="method-name">getContent</a>
 											(<span class="var-type"><a href="../../Smarty/TemplateResources/Smarty_Template_Source.html">Smarty_Template_Source</a></span>&nbsp;<span class="var-name">$source</span>)
@@ -126,11 +131,50 @@
 		<div class="info-box-body">
 			<A NAME='method_detail'></A>
 
-<a name="methodgetContent" id="getContent"><!-- --></a>
+<a name="methodbuildUniqueResourceName" id="buildUniqueResourceName"><!-- --></a>
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">getContent</span> (line <span class="line-number">47</span>)
+		<span class="method-title">buildUniqueResourceName</span> (line <span class="line-number">74</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">modify resource_name according to resource handlers specifications</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> unique resource name</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			buildUniqueResourceName
+		</span>
+					(<span class="var-type"><a href="../../Smarty/Template/Smarty.html">Smarty</a></span>&nbsp;<span class="var-name">$smarty</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$resource_name</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../../Smarty/Template/Smarty.html">Smarty</a></span>
+				<span class="var-name">$smarty</span><span class="var-description">: Smarty instance</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$resource_name</span><span class="var-description">: resource_name to make unique</span>			</li>
+				</ul>
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodbuildUniqueResourceName">Smarty_Resource::buildUniqueResourceName()</a></dt>
+						<dd>modify resource_name according to resource handlers specifications</dd>
+					</dl>
+			
+	</div>
+<a name="methodgetContent" id="getContent"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">getContent</span> (line <span class="line-number">51</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -164,7 +208,7 @@
 			
 	</div>
 <a name="methodpopulate" id="populate"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<span class="method-title">populate</span> (line <span class="line-number">31</span>)
@@ -212,11 +256,15 @@
 					<p>Inherited From <span class="classname"><a href="../../Smarty/TemplateResources/Smarty_Resource.html">Smarty_Resource</a></span></p>
 					<blockquote>
 													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodbuildFilepath">Smarty_Resource::buildFilepath()</a></span><br>
+													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodbuildUniqueResourceName">Smarty_Resource::buildUniqueResourceName()</a></span><br>
 													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodconfig">Smarty_Resource::config()</a></span><br>
 													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodfileExists">Smarty_Resource::fileExists()</a></span><br>
 													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodgetBasename">Smarty_Resource::getBasename()</a></span><br>
 													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodgetContent">Smarty_Resource::getContent()</a></span><br>
+													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodgetUniqueTemplateName">Smarty_Resource::getUniqueTemplateName()</a></span><br>
 													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodload">Smarty_Resource::load()</a></span><br>
+													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodnormalizePath">Smarty_Resource::normalizePath()</a></span><br>
+													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodparseResourceName">Smarty_Resource::parseResourceName()</a></span><br>
 													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodpopulate">Smarty_Resource::populate()</a></span><br>
 													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodpopulateCompiledFilepath">Smarty_Resource::populateCompiledFilepath()</a></span><br>
 													<span class="method-name"><a href="../../Smarty/TemplateResources/Smarty_Resource.html#methodpopulateTimestamp">Smarty_Resource::populateTimestamp()</a></span><br>
@@ -228,7 +276,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sat, 24 Sep 2011 20:23:58 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.1</a>
+		Documentation generated on Mon, 17 Jun 2013 21:06:49 +0000 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

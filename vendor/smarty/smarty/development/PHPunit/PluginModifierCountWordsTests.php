@@ -1,25 +1,26 @@
 <?php
 /**
 * Smarty PHPunit tests of modifier
-* 
+*
 * @package PHPunit
-* @author Rodney Rehm 
+* @author Rodney Rehm
 */
 
 /**
 * class for modifier tests
 */
-class PluginModifierCountWordsTests extends PHPUnit_Framework_TestCase {
+class PluginModifierCountWordsTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
-    } 
+    }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
-    } 
+    }
 
     public function testDefault()
     {
@@ -27,7 +28,7 @@ class PluginModifierCountWordsTests extends PHPUnit_Framework_TestCase {
         $tpl = $this->smarty->createTemplate('eval:{"Dealers Will Hear Car Talk at Noon."|count_words}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
-    
+
     public function testDefaultWithoutMbstring()
     {
         Smarty::$_MBSTRING = false;
@@ -36,15 +37,14 @@ class PluginModifierCountWordsTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals($result, $this->smarty->fetch($tpl));
         Smarty::$_MBSTRING = true;
     }
-    
 
-	public function testDashes()
+    public function testDashes()
     {
         $result = "7";
         $tpl = $this->smarty->createTemplate('eval:{"Smalltime-Dealers Will Hear Car Talk at Noon."|count_words}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
-    
+
     public function testDashesWithoutMbstring()
     {
         Smarty::$_MBSTRING = false;
@@ -54,14 +54,13 @@ class PluginModifierCountWordsTests extends PHPUnit_Framework_TestCase {
         Smarty::$_MBSTRING = true;
     }
 
-
-	public function testUmlauts()
+    public function testUmlauts()
     {
         $result = "7";
         $tpl = $this->smarty->createTemplate('eval:{"Dealers Will Hear Cär Talk at Nöön."|count_words}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }
-    
+
     public function testUmlautsWithoutMbstring()
     {
         Smarty::$_MBSTRING = false;
@@ -71,6 +70,4 @@ class PluginModifierCountWordsTests extends PHPUnit_Framework_TestCase {
         Smarty::$_MBSTRING = true;
     }
 
-} 
-
-?>
+}

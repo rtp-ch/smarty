@@ -9,7 +9,8 @@
 /**
  * class for register->resource tests
  */
-class RegisteredResourceTests extends PHPUnit_Framework_TestCase {
+class RegisteredResourceTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -20,7 +21,7 @@ class RegisteredResourceTests extends PHPUnit_Framework_TestCase {
                 "rr_get_trusted"));
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -68,13 +69,15 @@ function rr_get_template ($tpl_name, &$tpl_source, $smarty_obj)
 {
     // populating $tpl_source
     $tpl_source = '{$x="hello world"}{$x}';
+
     return true;
 }
 
 function rr_get_timestamp($tpl_name, &$tpl_timestamp, $smarty_obj)
 {
     // $tpl_timestamp.
-    $tpl_timestamp = (int)floor(time() / 100) * 100;
+    $tpl_timestamp = (int) floor(time() / 100) * 100;
+
     return true;
 }
 
@@ -106,13 +109,13 @@ function getSource($name, &$source, $smarty)
 
     // construct a new source
     $source = "this is template $counter";
+
     return true;
 }
 function getTimestamp($name, &$timestamp, $smarty)
 {
     // always pretend the template is brand new
     $timestamp = time();
+
     return true;
 }
-
-?>

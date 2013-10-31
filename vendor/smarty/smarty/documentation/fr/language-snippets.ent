@@ -8,7 +8,7 @@
   Le paramètre <parameter>merge</parameter> respecte les clés du tableau,
   donc, si vous fusionnez deux tableaux indexés numériquement, ils peuvent
   se recouvrir les uns les autres ou aboutir à des clés non séquentielles. Ceci
-  est diférent de la fonction PHP <ulink url="&url.php-manual;array_merge">array_merge()</ulink> 
+  est différent de la fonction PHP <ulink url="&url.php-manual;array_merge">array_merge()</ulink> 
   qui élimine des clés numériques et les renumérote.
  </para>
 </note>'>

@@ -290,7 +290,7 @@ class Tx_Smarty_Service_Compatibility
      * For complete TCA use $GLOBALS['TSFE']->includeTCA() instead.
      *
      * @param string $table Table name for which to load the full TCA array part into $GLOBALS['TCA']
-     * @return void
+     * @return mixed
      */
     public static function loadTca($table)
     {
@@ -299,6 +299,22 @@ class Tx_Smarty_Service_Compatibility
 
         } else {
             return call_user_func(array('t3lib_div', 'loadTCA'), $table);
+        }
+    }
+
+    /**
+     * Checks if the $path is absolute or relative (detecting either '/' or 'x:/' as first part of string) and returns TRUE if so.
+     *
+     * @param string $path File path to evaluate
+     * @return boolean
+     */
+    public static function isAbsPath($path)
+    {
+        if (class_exists('\TYPO3\CMS\Core\Utility\GeneralUtility')) {
+            return call_user_func(array('\TYPO3\CMS\Core\Utility\GeneralUtility', 'isAbsPath'), $path);
+
+        } else {
+            return call_user_func(array('t3lib_div', 'isAbsPath'), $path);
         }
     }
 }

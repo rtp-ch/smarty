@@ -6,11 +6,11 @@
 * @author Uwe Tews
 */
 
-
 /**
 * class for variable scope test
 */
-class VariableScopeTests extends PHPUnit_Framework_TestCase {
+class VariableScopeTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -18,7 +18,7 @@ class VariableScopeTests extends PHPUnit_Framework_TestCase {
         $this->smarty->assign('foo', 'bar');
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -93,7 +93,7 @@ class VariableScopeTests extends PHPUnit_Framework_TestCase {
     */
     public function testVariableScope4()
     {
- 		$this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
+         $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $tpl = $this->smarty->createTemplate("eval:{\$foo2='localvar'}{\$foo2}", null, null, $this->smarty);
         // must see local value
         $this->assertEquals("localvar", $this->smarty->fetch($tpl));
@@ -103,7 +103,7 @@ class VariableScopeTests extends PHPUnit_Framework_TestCase {
     }
     public function testVariableScope42()
     {
- 		$this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
+         $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $tpl = $this->smarty->createTemplate("eval:{\$foo2='localvar'}{\$foo2}", null, null, $this->smarty);
         // must see local value
         $this->assertEquals("localvar", $this->smarty->fetch($tpl));
@@ -172,7 +172,7 @@ class VariableScopeTests extends PHPUnit_Framework_TestCase {
         // create global variable $foo2 in template
         $this->assertEquals("bar bar2", $this->smarty->fetch("eval:{\$foo} {\$foo2}",array('foo'=>'bar','foo2'=>'bar2')));
     }
-    
+
     public function testAssigns()
     {
         $expected = " local  local  local  parent root global parent root global parent root global";
@@ -180,5 +180,3 @@ class VariableScopeTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals($expected, $result);
     }
 }
-
-?>

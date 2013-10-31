@@ -1,14 +1,14 @@
 <?php
 /**
 * Smarty plugin for testing block plugins
-* 
+*
 * @package Smarty
 * @subpackage PHPunitPlugin
 */
 
 /**
 * Smarty {testblock}{/testblock} block plugin
-* 
+*
 * @param string $content contents of the block
 * @param object $smarty Smarty object
 * @param boolean $ &$repeat repeat flag
@@ -24,12 +24,10 @@ function smarty_block_testblock($params, $content, $template, &$repeat)
             $repeat = true;
         } else {
             $repeat = false;
-        } 
+        }
 
         return $loop;
     } else {
-    	$loop = 0;
+        $loop = 0;
     }
-} 
-
-?>
+}

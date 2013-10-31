@@ -9,7 +9,8 @@
 /**
 * class for stream resource tests
 */
-class StreamResourceTests extends PHPUnit_Framework_TestCase {
+class StreamResourceTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -28,7 +29,7 @@ class StreamResourceTests extends PHPUnit_Framework_TestCase {
         stream_wrapper_unregister("global");
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -125,9 +126,9 @@ class StreamResourceTests extends PHPUnit_Framework_TestCase {
     {
         try {
             $result = $this->smarty->fetch('global:notthere');
-        }
-        catch (Exception $e) {
-            $this->assertContains(htmlentities('Unable to load template global \'notthere\''), $e->getMessage());
+        } catch (Exception $e) {
+            $this->assertContains('Unable to load template global \'notthere\'', $e->getMessage());
+
             return;
         }
         $this->fail('Exception for not existing template is missing');
@@ -184,7 +185,8 @@ class StreamResourceTests extends PHPUnit_Framework_TestCase {
     }
 }
 
-class ResourceStream {
+class ResourceStream
+{
     private $position;
     private $varname;
     public function stream_open($path, $mode, $options, &$opened_path)
@@ -192,6 +194,7 @@ class ResourceStream {
         $url = parse_url($path);
         $this->varname = $url["host"];
         $this->position = 0;
+
         return true;
     }
     public function stream_read($count)
@@ -199,6 +202,7 @@ class ResourceStream {
         $p = &$this->position;
         $ret = substr($GLOBALS[$this->varname], $p, $count);
         $p += strlen($ret);
+
         return $ret;
     }
     public function stream_write($data)
@@ -207,6 +211,7 @@ class ResourceStream {
         $l = strlen($data);
         $p = &$this->position;
         $v = substr($v, 0, $p) . $data . substr($v, $p += $l);
+
         return $l;
     }
     public function stream_tell()
@@ -218,6 +223,7 @@ class ResourceStream {
         if (!isset($GLOBALS[$this->varname])) {
             return true;
         }
+
         return $this->position >= strlen($GLOBALS[$this->varname]);
     }
     public function stream_seek($offset, $whence)
@@ -238,5 +244,3 @@ class ResourceStream {
         return $ret;
     }
 }
-
-?>

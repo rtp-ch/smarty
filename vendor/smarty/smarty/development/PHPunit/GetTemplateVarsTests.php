@@ -1,26 +1,26 @@
 <?php
 /**
 * Smarty PHPunit tests getTemplateVars method
-* 
+*
 * @package PHPunit
-* @author Uwe Tews 
+* @author Uwe Tews
 */
-
 
 /**
 * class for getTemplateVars method test
 */
-class GetTemplateVarsTests extends PHPUnit_Framework_TestCase {
+class GetTemplateVarsTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
-    } 
+    }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
-    } 
+    }
 
     /**
     * test root getTemplateVars single value
@@ -30,7 +30,7 @@ class GetTemplateVarsTests extends PHPUnit_Framework_TestCase {
         $this->smarty->assign('foo', 'bar');
         $this->smarty->assign('blar', 'buh');
         $this->assertEquals("bar", $this->smarty->getTemplateVars('foo'));
-    } 
+    }
     /**
     * test root getTemplateVars all values
     */
@@ -42,7 +42,7 @@ class GetTemplateVarsTests extends PHPUnit_Framework_TestCase {
         $this->assertTrue(is_array($vars));
         $this->assertEquals("bar", $vars['foo']);
         $this->assertEquals("buh", $vars['blar']);
-    } 
+    }
 
     /**
     * test single variable with data object chain
@@ -54,7 +54,7 @@ class GetTemplateVarsTests extends PHPUnit_Framework_TestCase {
         $this->smarty->assign('foo', 'bar');
         $this->smarty->assign('blar', 'buh');
         $this->assertEquals("bar", $this->smarty->getTemplateVars('foo', $data2));
-    } 
+    }
     /**
     * test get all variables with data object chain
     */
@@ -70,7 +70,7 @@ class GetTemplateVarsTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals("bar", $vars['foo']);
         $this->assertEquals("bar2", $vars['foo2']);
         $this->assertEquals("buh", $vars['blar']);
-    } 
+    }
     /**
     * test get all variables with data object chain search parents disabled
     */
@@ -86,13 +86,13 @@ class GetTemplateVarsTests extends PHPUnit_Framework_TestCase {
         $this->assertFalse(isset($vars['foo']));
         $this->assertEquals("bar2", $vars['foo2']);
         $this->assertFalse(isset($vars['blar']));
-    } 
+    }
     /**
     * test get single variables with data object chain search parents disabled
     */
     public function testGetSingleTemplateVarsScopeAllNoParents()
     {
- 		error_reporting(error_reporting() & ~(E_NOTICE|E_USER_NOTICE));
+         error_reporting(error_reporting() & ~(E_NOTICE|E_USER_NOTICE));
         $data1 = new Smarty_Data($this->smarty);
         $data2 = new Smarty_Data($data1);
         $this->smarty->assign('foo', 'bar');
@@ -101,7 +101,5 @@ class GetTemplateVarsTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals("", $this->smarty->getTemplateVars('foo', $data2, false));
         $this->assertEquals("bar2", $this->smarty->getTemplateVars('foo2', $data2, false));
         $this->assertEquals("", $this->smarty->getTemplateVars('blar', $data2, false));
-    } 
-} 
-
-?>
+    }
+}

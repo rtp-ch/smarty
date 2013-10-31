@@ -9,7 +9,8 @@
 /**
 * class for assignByRef tests
 */
-class AssignByRefTests extends PHPUnit_Framework_TestCase {
+class AssignByRefTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -17,7 +18,7 @@ class AssignByRefTests extends PHPUnit_Framework_TestCase {
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -53,5 +54,3 @@ class AssignByRefTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('newbar', $bar);
     }
 }
-
-?>

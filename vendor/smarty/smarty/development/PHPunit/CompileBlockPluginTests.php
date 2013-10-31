@@ -1,28 +1,28 @@
 <?php
 /**
 * Smarty PHPunit tests compilation of block plugins
-* 
+*
 * @package PHPunit
-* @author Uwe Tews 
+* @author Uwe Tews
 */
-
 
 /**
 * class for block plugin tests
 */
-class CompileBlockPluginTests extends PHPUnit_Framework_TestCase {
+class CompileBlockPluginTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
         $this->smarty->force_compile = true;
         $this->smarty->disableSecurity();
-    } 
+    }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
-    } 
+    }
 
     /**
     * test block plugin tag
@@ -31,7 +31,7 @@ class CompileBlockPluginTests extends PHPUnit_Framework_TestCase {
     {
         $tpl = $this->smarty->createTemplate("eval:{textformat}hello world{/textformat}");
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
-    } 
+    }
     /**
     * test block plugin tag with assign attribute
     */
@@ -39,7 +39,7 @@ class CompileBlockPluginTests extends PHPUnit_Framework_TestCase {
     {
         $tpl = $this->smarty->createTemplate("eval:{textformat assign=foo}hello world{/textformat}{\$foo}");
         $this->assertEquals("hello world", $this->smarty->fetch($tpl));
-    } 
+    }
     /**
     * test block plugin tag in template file
     */
@@ -47,7 +47,7 @@ class CompileBlockPluginTests extends PHPUnit_Framework_TestCase {
     {
         $tpl = $this->smarty->createTemplate('blockplugintest.tpl');
         $this->assertEquals("abc", $this->smarty->fetch($tpl));
-    } 
+    }
     /**
     * test block plugin tag in compiled template file
     */
@@ -56,7 +56,7 @@ class CompileBlockPluginTests extends PHPUnit_Framework_TestCase {
         $this->smarty->force_compile = false;
         $tpl = $this->smarty->createTemplate('blockplugintest.tpl');
         $this->assertEquals("abc", $this->smarty->fetch($tpl));
-    } 
+    }
     /**
     * test block plugin tag in template file
     */
@@ -67,7 +67,7 @@ class CompileBlockPluginTests extends PHPUnit_Framework_TestCase {
         $this->smarty->cache_lifetime = 10;
         $tpl = $this->smarty->createTemplate('blockplugintest.tpl');
         $this->assertEquals("abc", $this->smarty->fetch($tpl));
-    } 
+    }
     /**
     * test block plugin function definition in script
     */
@@ -76,7 +76,7 @@ class CompileBlockPluginTests extends PHPUnit_Framework_TestCase {
         $this->smarty->registerPlugin(Smarty::PLUGIN_BLOCK,'blockplugintest', 'myblockplugintest');
         $tpl = $this->smarty->createTemplate('eval:{blockplugintest}hello world{/blockplugintest}');
         $this->assertEquals('block test', $this->smarty->fetch($tpl));
-    } 
+    }
     /**
     * test block plugin repeat function
     */
@@ -84,24 +84,23 @@ class CompileBlockPluginTests extends PHPUnit_Framework_TestCase {
     {
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $this->assertEquals('12345', $this->smarty->fetch('eval:{testblock}{/testblock}'));
-    } 
+    }
     public function testBlockPluginRepeatModidier1()
     {
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $this->assertEquals('11111', $this->smarty->fetch('eval:{testblock}{/testblock|strlen}'));
-    } 
+    }
     public function testBlockPluginRepeatModidier2()
     {
         $this->smarty->addPluginsDir(dirname(__FILE__)."/PHPunitplugins/");
         $this->assertEquals('11111', $this->smarty->fetch('eval:{testblock}{/testblock|strlen|default:""}'));
-    } 
-} 
+    }
+}
 function myblockplugintest($params, $content, &$smarty_tpl, &$repeat)
 {
     if (!$repeat) {
         $output = str_replace('hello world', 'block test', $content);
-        return $output;
-    } 
-} 
 
-?>
+        return $output;
+    }
+}

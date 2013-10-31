@@ -9,7 +9,8 @@
 /**
 * class for config variable tests
 */
-class ConfigVarTests extends PHPUnit_Framework_TestCase {
+class ConfigVarTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -18,7 +19,7 @@ class ConfigVarTests extends PHPUnit_Framework_TestCase {
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -51,7 +52,7 @@ class ConfigVarTests extends PHPUnit_Framework_TestCase {
     */
     public function testConfigVariableSection2()
     {
- 		$this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
+         $this->smarty->error_reporting  = error_reporting() & ~(E_NOTICE|E_USER_NOTICE);
         $this->smarty->configLoad('test.conf', 'section2');
         $this->assertEquals("Welcome to Smarty! Global Section1 Hello Section2", $this->smarty->fetch('eval:{#title#} {#sec1#} {#sec2#}'));
     }
@@ -206,9 +207,9 @@ class ConfigVarTests extends PHPUnit_Framework_TestCase {
     {
         try {
             $this->smarty->fetch('eval:{config_load file=\'test_error.conf\'}');
-        }
-        catch (Exception $e) {
-            $this->assertContains(htmlentities('Syntax error in config file'), $e->getMessage());
+        } catch (Exception $e) {
+            $this->assertContains('Syntax error in config file', $e->getMessage());
+
             return;
         }
         $this->fail('Exception for syntax errors in config files has not been raised.');
@@ -369,5 +370,3 @@ class ConfigVarTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals("123.4", $this->smarty->fetch('eval:{#Number#}'));
     }
 }
-
-?>

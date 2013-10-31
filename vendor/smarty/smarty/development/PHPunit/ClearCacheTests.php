@@ -6,11 +6,11 @@
 * @author Uwe Tews
 */
 
-
 /**
 * class for clearing the cache tests
 */
-class ClearCacheTests extends PHPUnit_Framework_TestCase {
+class ClearCacheTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -18,7 +18,7 @@ class ClearCacheTests extends PHPUnit_Framework_TestCase {
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -65,5 +65,3 @@ class ClearCacheTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $this->smartyBC->clearAllCache());
     }
 }
-
-?>

@@ -6,18 +6,18 @@
 * @author Uwe Tews
 */
 
-
 /**
 * class for file resource tests
 */
-class FileResourceTests extends PHPUnit_Framework_TestCase {
+class FileResourceTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -28,6 +28,7 @@ class FileResourceTests extends PHPUnit_Framework_TestCase {
         if (DS == "\\") {
             $path = str_replace( "\\", "/", $path );
         }
+
         return $path;
     }
 
@@ -60,9 +61,9 @@ class FileResourceTests extends PHPUnit_Framework_TestCase {
     {
         try {
             $result = $this->smarty->fetch('notthere.tpl');
-        }
-        catch (Exception $e) {
-            $this->assertContains(htmlentities('Unable to load template file \'notthere.tpl\''), $e->getMessage());
+        } catch (Exception $e) {
+            $this->assertContains('Unable to load template file \'notthere.tpl\'', $e->getMessage());
+
             return;
         }
         $this->fail('Exception for not existing template is missing');
@@ -287,9 +288,9 @@ class FileResourceTests extends PHPUnit_Framework_TestCase {
     {
         try {
             $this->smarty->fetch('relative_sub.tpl');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->assertContains(htmlentities("Unable to load template"), $e->getMessage());
+
             return;
         }
         $this->fail('Exception for unknown relative filepath has not been raised.');
@@ -300,9 +301,9 @@ class FileResourceTests extends PHPUnit_Framework_TestCase {
         $this->smarty->addTemplateDir('./templates_2');
         try {
             $this->smarty->fetch('relative_notexist.tpl');
-        }
-        catch (Exception $e) {
-            $this->assertContains(htmlentities("Unable to load template"), $e->getMessage());
+        } catch (Exception $e) {
+            $this->assertContains("Unable to load template", $e->getMessage());
+
             return;
         }
         $this->fail('Exception for unknown relative filepath has not been raised.');
@@ -332,7 +333,8 @@ class FileResourceTests extends PHPUnit_Framework_TestCase {
         chdir($cwd);
     }
 
-    protected function _relativeMap($map, $cwd=null) {
+    protected function _relativeMap($map, $cwd=null)
+    {
         foreach ($map as $file => $result) {
             $this->smarty->clearCompiledTemplate();
             $this->smarty->clearAllCache();
@@ -345,6 +347,7 @@ class FileResourceTests extends PHPUnit_Framework_TestCase {
                     }
 
                     $this->fail('Exception expected for ' . $file);
+
                     return;
                 } catch (SmartyException $e) {
                     // this was expected to fail
@@ -568,5 +571,3 @@ class FileResourceTests extends PHPUnit_Framework_TestCase {
         $this->smarty->clearAllCache();
     }
 }
-
-?>

@@ -6,18 +6,18 @@
 * @author Uwe Tews
 */
 
-
 /**
 * class for generic getter/setter tests
 */
-class GetterSetterTests extends PHPUnit_Framework_TestCase {
+class GetterSetterTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -67,5 +67,3 @@ class GetterSetterTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('}>', $tpl->getRightDelimiter());
     }
 }
-
-?>

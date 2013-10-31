@@ -9,7 +9,8 @@
 /**
 * class for registered object function tests
 */
-class CompileRegisteredObjectFunctionTests extends PHPUnit_Framework_TestCase {
+class CompileRegisteredObjectFunctionTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -18,9 +19,10 @@ class CompileRegisteredObjectFunctionTests extends PHPUnit_Framework_TestCase {
         $this->smarty->disableSecurity();
         $this->object = new RegObject;
         $this->smarty->registerObject('objecttest', $this->object, 'myhello', true, 'myblock');
+        $this->smarty->registerObject('objectprop', $this->object);
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -60,20 +62,31 @@ class CompileRegisteredObjectFunctionTests extends PHPUnit_Framework_TestCase {
         $tpl = $this->smarty->createTemplate('eval:{objecttest->myblock}hello world{/objecttest->myblock|default:""|strtoupper}');
         $this->assertEquals(strtoupper('block test'), $this->smarty->fetch($tpl));
     }
+    public function testRegisteredObjectProperty()
+    {
+        $tpl = $this->smarty->createTemplate('eval:{objectprop->prop}');          
+        $this->assertEquals('hello world', $this->smarty->fetch($tpl));
+    }
+    public function testRegisteredObjectPropertyAssign()
+    {
+        $tpl = $this->smarty->createTemplate('eval:{objectprop->prop assign="foo"}{$foo}');          
+        $this->assertEquals('hello world', $this->smarty->fetch($tpl));
+    }
 }
 
 Class RegObject {
-    function myhello($params)
+    public $prop = 'hello world' ;
+    
+    public function myhello($params)
     {
         return 'hello world';
     }
-    function myblock($params, $content, &$smarty_tpl, &$repeat)
+    public function myblock($params, $content, &$smarty_tpl, &$repeat)
     {
         if (isset($content)) {
             $output = str_replace('hello world', 'block test', $content);
+
             return $output;
         }
     }
 }
-
-?>

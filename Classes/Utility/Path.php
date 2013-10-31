@@ -37,8 +37,8 @@ class Tx_Smarty_Utility_Path
         $path = trim($path);
 
         // Resolves the path in relation to the TYPO3 directory if
-        // the path is not absolute (e.g. /absolute/path/to/somewehere)
-        if (substr($path, 0, 1) !== DIRECTORY_SEPARATOR) {
+        // the path is not absolute (e.g. /absolute/path/to/somewehere or C:/absolute/path/to/somewehere)
+        if (!Tx_Smarty_Service_Compatibility::isAbsPath($path)) {
             $path = Tx_Smarty_Service_Compatibility::getFileAbsFileName($path, false);
         }
 

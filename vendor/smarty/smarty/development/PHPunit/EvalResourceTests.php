@@ -6,18 +6,18 @@
 * @author Uwe Tews
 */
 
-
 /**
 * class for eval resource tests
 */
-class EvalResourceTests extends PHPUnit_Framework_TestCase {
+class EvalResourceTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
         SmartyTests::init();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -160,5 +160,3 @@ class EvalResourceTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foobar', $tpl->fetch());
     }
 }
-
-?>

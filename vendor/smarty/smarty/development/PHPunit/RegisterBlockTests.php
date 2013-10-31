@@ -9,7 +9,8 @@
 /**
  * class for register->block / unregister->block methods tests
  */
-class RegisterBlockTests extends PHPUnit_Framework_TestCase {
+class RegisterBlockTests extends PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -20,7 +21,7 @@ class RegisterBlockTests extends PHPUnit_Framework_TestCase {
         $this->smartyBC->disableSecurity();
     }
 
-    public static function isRunnable()
+    static function isRunnable()
     {
         return true;
     }
@@ -202,12 +203,14 @@ function myblock($params, $content, &$smarty_tpl, &$repeat)
 
     if ($content == null) {
         $loop = 0;
+
         return;
     }
     $loop ++;
     if ($loop < 3) {
         $repeat = true;
     }
+
     return "function $content $loop ";
 }
 function myblockcache($params, $content, &$smarty_tpl, &$repeat)
@@ -215,35 +218,38 @@ function myblockcache($params, $content, &$smarty_tpl, &$repeat)
     return $content;
 }
 
-class myblockclass {
+class myblockclass
+{
     static function static_method($params, $content, &$smarty_tpl, &$repeat)
     {
         static $loop = 0;
 
         if ($content == null) {
             $loop = 0;
+
             return;
         }
         $loop ++;
         if ($loop < 3) {
             $repeat = true;
         }
+
         return "static $content $loop ";
     }
-    function object_method($params, $content, &$smarty_tpl, &$repeat)
+    public function object_method($params, $content, &$smarty_tpl, &$repeat)
     {
         static $loop = 0;
 
         if ($content == null) {
             $loop = 0;
+
             return;
         }
         $loop ++;
         if ($loop < 3) {
             $repeat = true;
         }
+
         return "object $content $loop ";
     }
 }
-
-?>

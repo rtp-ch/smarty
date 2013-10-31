@@ -1,9 +1,9 @@
 <?php
 /**
 * Smarty PHPunit tests for cache resource file
-* 
+*
 * @package PHPunit
-* @author Uwe Tews 
+* @author Uwe Tews
 */
 
 require_once( dirname(__FILE__) . "/CacheResourceCustomMysqlTests.php" );
@@ -11,7 +11,8 @@ require_once( dirname(__FILE__) . "/CacheResourceCustomMysqlTests.php" );
 /**
 * class for cache resource file tests
 */
-class CacheResourceCustomRegisteredTests extends CacheResourceCustomMysqlTests {
+class CacheResourceCustomRegisteredTests extends CacheResourceCustomMysqlTests
+{
     public function setUp()
     {
         $this->smarty = SmartyTests::$smarty;
@@ -22,7 +23,5 @@ class CacheResourceCustomRegisteredTests extends CacheResourceCustomMysqlTests {
         }
         $this->smarty->caching_type = 'foobar';
         $this->smarty->registerCacheResource('foobar', new Smarty_CacheResource_Mysqltest());
-    } 
-} 
-
-?>
+    }
+}
