@@ -14,7 +14,7 @@ if (!defined('SMARTY_RESOURCE_CHAR_SET')) {
 }
 
 // PSR-2 Compatibility
-if (!defined('PATH_site') && !defined('PATH_SITE')) {
+if (defined('PATH_site') && !defined('PATH_SITE')) {
     define('PATH_SITE', PATH_site);
 }
 
