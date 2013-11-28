@@ -193,36 +193,39 @@ class Tx_Smarty_Service_Compatibility
     }
 
     /**
-     * Returns an array with the names of files in a specific path
+     * Recursively gather all files and folders of a path.
+     * Usage: 5
      *
-     * @param string $path Is the path to the file
-     * @param string $extList is the comma list of extensions to read only (blank = all)
-     * @param int $prefix If set, then the path is prepended the filenames. Otherwise only the filenames
-     * are returned in the array
-     * @param string $order is sorting: 1= sort alphabetically, 'mtime' = sort by modification time.
-     * @param string $exclPattern A comma seperated list of filenames to exclude, no wildcards
-     * @return array Array of the files found
+     * @param	array		$fileArr: Empty input array (will have files added to it)
+     * @param	string		$path: The path to read recursively from (absolute) (include trailing slash!)
+     * @param	string		$extList: Comma list of file extensions: Only files with extensions in this list (if applicable) will be selected.
+     * @param	boolean		$regDirs: If set, directories are also included in output.
+     * @param	integer		$recursivityLevels: The number of levels to dig down...
+     * @param string		$excludePattern: regex pattern of files/directories to exclude
+     * @return	array		An array with the found files/directories.
      */
-    public static function getFilesInDir($path, $extList = '', $prefix = 0, $order = '', $exclPattern = '')
+    public static function getAllFilesAndFoldersInPath(array $fileArr, $path, $extList = '', $regDirs = 0, $recursivityLevels = 99, $excludePattern = '')
     {
         if (class_exists('\TYPO3\CMS\Core\Utility\GeneralUtility')) {
             return call_user_func(
-                array('\TYPO3\CMS\Core\Utility\GeneralUtility', 'getFilesInDir'),
+                array('\TYPO3\CMS\Core\Utility\GeneralUtility', 'getAllFilesAndFoldersInPath'),
+                $fileArr,
                 $path,
                 $extList,
-                $prefix,
-                $order,
-                $exclPattern
+                $regDirs,
+                $recursivityLevels,
+                $excludePattern
             );
 
         } else {
             return call_user_func(
-                array('t3lib_div', 'getFilesInDir'),
+                array('t3lib_div', 'getAllFilesAndFoldersInPath'),
+                $fileArr,
                 $path,
                 $extList,
-                $prefix,
-                $order,
-                $exclPattern
+                $regDirs,
+                $recursivityLevels,
+                $excludePattern
             );
         }
     }

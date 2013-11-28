@@ -31,10 +31,10 @@ class Tx_Smarty_Hooks_ClearCache
      */
     private static function clearDir($dir)
     {
-        $filesInPath = Tx_Smarty_Service_Compatibility::getFilesInDir($dir);
+        $filesInPath = Tx_Smarty_Service_Compatibility::getAllFilesAndFoldersInPath(array(), $dir);
         if (Tx_Smarty_Utility_Array::notEmpty($filesInPath)) {
             while ($fileInPath = array_shift($filesInPath)) {
-                @unlink($dir . $fileInPath);
+                @unlink($fileInPath);
             }
         }
 
