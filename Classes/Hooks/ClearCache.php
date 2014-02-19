@@ -15,12 +15,10 @@ class Tx_Smarty_Hooks_ClearCache
     public function clearSmartyCache($params, $ref)
     {
         $deletePid = intval($params['cacheCmd']) > 0 ? intval($params['cacheCmd']) : 0;
-        $cachePath = PATH_SITE . 'typo3temp/smarty_cache/';
-        $compilePath = PATH_SITE . 'typo3temp/smarty_compile/';
+        $chDir = Tx_Smarty_Service_Compatibility::getFileAbsFileName(Tx_Smarty_Core_Configuration::DEFAULT_CACHE_DIR);
 
         if ($deletePid || $params['cacheCmd'] === 'all' || $params['cacheCmd'] === 'pages') {
-            self::clearDir($cachePath);
-            self::clearDir($compilePath);
+            self::clearDir($chDir);
         }
     }
 

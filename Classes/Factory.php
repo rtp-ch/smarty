@@ -140,6 +140,16 @@ class Factory
         // Creates an instance of smarty
         $smartyInstance = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_Wrapper');
 
+        // Sets default cache and compile dirs
+        $compileDir = Tx_Smarty_Service_Compatibility::getFileAbsFileName(
+            \Tx_Smarty_Core_Configuration::DEFAULT_COMPILE_DIR
+        );
+        $smartyInstance->setCompileDir($compileDir);
+        $cacheDir = Tx_Smarty_Service_Compatibility::getFileAbsFileName(
+            \Tx_Smarty_Core_Configuration::DEFAULT_CACHE_DIR
+        );
+        $smartyInstance->setCacheDir($cacheDir);
+
         // Sets plugin dirs
         $smartyInstance->addPluginsDir(self::$pluginDirs);
 

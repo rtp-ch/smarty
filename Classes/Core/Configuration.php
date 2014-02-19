@@ -13,6 +13,16 @@ class Tx_Smarty_Core_Configuration
     private $smartyInstance;
 
     /**
+     * @var string Default cache directory
+     */
+    const DEFAULT_CACHE_DIR = 'typo3temp/smarty_cache/';
+
+    /**
+     * @var string Default compile directory
+     */
+    const DEFAULT_COMPILE_DIR = 'typo3temp/smarty_compile/';
+
+    /**
      *
      * @param Tx_Smarty_Core_Wrapper $smartyInstance
      * @throws Tx_Smarty_Exception_CoreException
