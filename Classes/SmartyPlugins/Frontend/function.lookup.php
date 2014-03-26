@@ -84,7 +84,7 @@ function executeQuery($lookupValue, $lookupField, $returnFields, $table)
 {
     $lookupResult = false;
 
-    $where = mysql_real_escape_string($lookupField) . ' = :lookupValue';
+    $where = mysqli_real_escape_string($lookupField) . ' = :lookupValue';
     if (isset($GLOBALS['TCA'][$table]['ctrl'])) {
         $where .= $GLOBALS['TSFE']->sys_page->enableFields($table);
     }
