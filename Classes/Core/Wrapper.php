@@ -309,15 +309,29 @@ class Tx_Smarty_Core_Wrapper extends SmartyBC
      * returns a rendered Smarty template: Modifies the display method to fetch the rendered
      * template instead of displaying it.
      *
-     * @param string $template   the resource handle of the template file or template object
-     * @param mixed  $cacheId   cache id to be used with this template
-     * @param mixed  $compileId compile id to be used with this template
-     * @param object $parent     next higher level of Smarty variables
+     * @param  string $template         the resource handle of the template file or template object
+     * @param  null   $cacheId
+     * @param  null   $compileId
+     * @param  object $parent           next higher level of Smarty variables
+     * @param  bool   $display          true: display, false: fetch
+     * @param  bool   $merge_tpl_vars   if true parent template variables merged in to local scope
+     * @param  bool   $no_output_filter if true do not run output filter
+     *
+     * @internal param mixed $cache_id cache id to be used with this template
+     * @internal param mixed $compile_id compile id to be used with this template
+     *
      * @return string|void       rendered template
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function display($template = null, $cacheId = null, $compileId = null, $parent = null)
-    {
+    public function display(
+        $template = null,
+        $cacheId = null,
+        $compileId = null,
+        $parent = null,
+        $display = false,
+        $merge_tpl_vars = true,
+        $no_output_filter = false
+    ) {
         // Disables caching if it is globally disabled or has been pegged to TSFE->no_cache
         if (($this->respectNoCache === true && isset($GLOBALS['TSFE']->no_cache) && $GLOBALS['TSFE']->no_cache)
             || (boolean) Tx_Smarty_Utility_ExtConf::getExtConfValue('disable_caching')) {
@@ -325,7 +339,18 @@ class Tx_Smarty_Core_Wrapper extends SmartyBC
             $this->set('caching', false);
         }
 
-        return $this->fetch($template, $cacheId, $compileId, $parent, false);
+        $this->set('caching', true);
+
+        $cacheTags = is_array($cacheId) ? $cacheId : Tx_Smarty_Utility_Array::trimExplode($cacheId, '|');
+        $defaultCacheTags = array(
+            Tx_Smarty_Caching_Tags::PAGE_PREFIX . $GLOBALS['TSFE']->id,
+            Tx_Smarty_Caching_Tags::TYPE_PREFIX . $GLOBALS['TSFE']->type,
+            Tx_Smarty_Caching_Tags::LANG_PREFIX . $GLOBALS['TSFE']->lang,
+        );
+        $cacheTags = array_merge($defaultCacheTags, $cacheTags);
+        $cacheId = implode('|', $cacheTags);
+
+        return $this->fetch($template, $cacheId, $compileId, $parent, false, $merge_tpl_vars, $no_output_filter);
     }
 
     /**

@@ -35,8 +35,8 @@ function smarty_function_data($params, Smarty_Internal_Template $template)
         throw new Tx_Smarty_Exception_PluginException($msg, 1324020249);
     }
 
-    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
-    $data = $cObj->getData($params['source'], null);
+    $frontend = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_FrontendProxy');
+    $data = $frontend->cObj->getData($params['source'], null);
 
     // Returns or assigns the result
     if (isset($params['assign'])) {

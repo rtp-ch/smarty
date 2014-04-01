@@ -14,8 +14,8 @@ class Tx_Smarty_SysPlugins_PathResource extends Smarty_Resource_Custom
      */
     protected function fetch($name, &$source, &$mtime)
     {
-        $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
-        $file = $cObj->getData('path:' . $name, null);
+        $frontend = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_FrontendProxy');
+        $file = $frontend->cObj->getData('path:' . $name, null);
 
         if (is_file($file) && is_readable($file)) {
             $mtime  = filemtime($file);

@@ -38,9 +38,9 @@ function smarty_function_multimedia($params, Smarty_Internal_Template $template)
 {
 //@codingStandardsIgnoreEnd
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
-    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
+    $frontend = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_FrontendProxy');
 
-    $multimedia = $cObj->cObjGetSingle('MULTIMEDIA', $setup);
+    $multimedia = $frontend->cObj->cObjGetSingle('MULTIMEDIA', $setup);
 
     // Returns or assigns the result
     if (isset($params['assign'])) {

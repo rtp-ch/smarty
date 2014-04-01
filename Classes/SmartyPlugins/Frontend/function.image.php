@@ -36,11 +36,11 @@ function smarty_function_image($params, Smarty_Internal_Template $template)
 {
 //@codingStandardsIgnoreEnd
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
-    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
+    $frontend = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_FrontendProxy');
 
     // Apply htmlspecialchars to any altText
     if ($setup['altText'] || $setup['altText.']) {
-        $setup['altText'] = $cObj->stdWrap($setup['altText'], $setup['altText.']);
+        $setup['altText'] = $frontend->cObj->stdWrap($setup['altText'], $setup['altText.']);
         $setup['title'] = htmlspecialchars(
             trim($setup['altText']),
             ENT_COMPAT | ENT_HTML401,
@@ -52,7 +52,7 @@ function smarty_function_image($params, Smarty_Internal_Template $template)
 
     // Apply htmlspecialchars to any titleText
     if ($setup['titleText'] || $setup['titleText.']) {
-        $setup['titleText'] = $cObj->stdWrap($setup['titleText'], $setup['titleText.']);
+        $setup['titleText'] = $frontend->cObj->stdWrap($setup['titleText'], $setup['titleText.']);
         $setup['titleText'] = htmlspecialchars(
             trim($setup['titleText']),
             ENT_COMPAT | ENT_HTML401,
@@ -62,7 +62,7 @@ function smarty_function_image($params, Smarty_Internal_Template $template)
         unset($setup['titleText.']);
     }
 
-    $image = $cObj->cObjGetSingle('IMAGE', $setup);
+    $image = $frontend->cObj->cObjGetSingle('IMAGE', $setup);
 
     // Returns or assigns the result
     if (isset($params['assign'])) {

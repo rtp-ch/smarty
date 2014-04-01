@@ -35,9 +35,9 @@ function smarty_function_img_resource($params, Smarty_Internal_Template $templat
 {
 //@codingStandardsIgnoreEnd
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
-    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
+    $frontend = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_FrontendProxy');
 
-    $imgResource = $cObj->cObjGetSingle('IMG_RESOURCE', $setup);
+    $imgResource = $frontend->cObj->cObjGetSingle('IMG_RESOURCE', $setup);
 
     // Returns or assigns the result
     if (isset($params['assign'])) {

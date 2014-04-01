@@ -44,7 +44,7 @@ function smarty_block_typolink($params, $content, Smarty_Internal_Template $temp
     if (!$repeat) {
 
         // Gets an instance of tslib_cobj
-        $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
+        $frontend = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_FrontendProxy');
 
         // Catch the keyword _self to create a link to the current page
         $params['parameter'] = getLinkParameter($params['parameter']);
@@ -63,13 +63,13 @@ function smarty_block_typolink($params, $content, Smarty_Internal_Template $temp
 
         // Apply htmlspecialchars to any alt/title text
         if ($setup['title'] || $setup['title.']) {
-            $setup['title'] = $cObj->stdWrap($setup['title'], $setup['title.']);
+            $setup['title'] = $frontend->cObj->stdWrap($setup['title'], $setup['title.']);
             $setup['title'] = sanitizeString($setup['title']);
             unset($setup['title.']);
         }
 
         // Generate the link
-        $link = $cObj->typolink($content, $setup);
+        $link = $frontend->cObj->typolink($content, $setup);
 
         // Deprecated means of forcing an absolute URL
         if (isset($params['absRefPrefix'])) {

@@ -162,6 +162,14 @@ class Factory
         // referenced as EXT:path/to/my/template.html
         $smartyInstance->registerResource('EXT', new Tx_Smarty_SysPlugins_ExtResource());
 
+        $smartyCacheResourcesMysql = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_CacheResources_Mysql');
+        $smartyInstance->registerCacheResource('cache_mysql_smarty', $smartyCacheResourcesMysql);
+        $smartyCacheResourcesMemcache = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_CacheResources_Memcache');
+        $smartyInstance->registerCacheResource('cache_memcache_smarty', $smartyCacheResourcesMemcache);
+        $smartyCacheResourcesMemcache = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_CacheResources_Redis');
+        $smartyInstance->registerCacheResource('cache_redis_smarty', $smartyCacheResourcesMemcache);
+        $smartyInstance->caching_type = 'cache_redis_smarty';
+
         // Register "path" as a resource, mainly for backwards compatibility. Can retrieve a file
         // from the resource-list. @see t3lib_TStemplate::getFileName()
         $smartyInstance->registerResource('path', new Tx_Smarty_SysPlugins_PathResource());

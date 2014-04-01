@@ -31,8 +31,8 @@ function smarty_block_typoscript($params, $content, Smarty_Internal_Template $te
         $tsParser = Tx_Smarty_Service_Compatibility::makeInstance('t3lib_TSparser');
         $tsParser->parse($content);
 
-        $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
-        $tsObject = $cObj->cObjGet($tsParser->setup);
+        $frontend = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_FrontendProxy');
+        $tsObject = $frontend->cObj->cObjGet($tsParser->setup);
 
         // Returns or assigns the result
         if (isset($params['assign'])) {

@@ -11,7 +11,7 @@
  * - Tx_Phpunit_Framework
  * - and possibly others...
  */
-class Tx_Smarty_Core_CobjectProxy
+class Tx_Smarty_Core_FrontendProxy
 {
     /**
      * Contains a backup of $GLOBALS['TSFE']
@@ -28,17 +28,17 @@ class Tx_Smarty_Core_CobjectProxy
     private $workingDirBackup;
 
     /**
-     * Constructor creates a simulated frontend environment when
+     * Constructor creates a simulated frontend environment when no instance of tslib_fe is available
      *
      * @param int $pageId
      * @param bool $noCache
      * @param array $data
      * @param string $table
      */
-    public function __construct($pageId = 0, $noCache = false, array $data = array(), $table = '')
+    public function __construct($pageId = 0, $noCache = false, $data = array(), $table = 'pages')
     {
         if (!Tx_Smarty_Utility_Typo3::isFeInstance()) {
-            $this->simulateFrontendEnvironment($pageId, $noCache, $data, $table);
+            $this->simulateFrontendEnvironment($pageId, (boolean) $noCache, (array) $data, $table);
         }
     }
 
@@ -61,27 +61,6 @@ class Tx_Smarty_Core_CobjectProxy
     }
 
     /**
-     * Reroutes cObj method calls to the tslib_cObj instance
-     *
-     * @param $method
-     * @param array $args
-     * @return mixed
-     * @throws BadMethodCallException|RuntimeException
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function __call($method, array $args = array())
-    {
-        if (!($GLOBALS['TSFE']->cObj instanceof tslib_cObj)) {
-            throw new RuntimeException('Unable to access "tslib_cObj"!', 1355689602);
-
-        } elseif (!method_exists($GLOBALS['TSFE']->cObj, $method)) {
-            throw new BadMethodCallException('No such method "' . $method . '" in class "tslib_cObj"!', 1329912359);
-        }
-
-        return call_user_func_array(array($GLOBALS['TSFE']->cObj, $method), $args);
-    }
-
-    /**
      * Simulates a frontend environment.
      *
      * @param int $pageId
@@ -89,15 +68,15 @@ class Tx_Smarty_Core_CobjectProxy
      * @param array $data
      * @param string $table
      */
-    protected function simulateFrontendEnvironment($pageId = 0, $noCache = false, array $data = array(), $table = '')
+    protected function simulateFrontendEnvironment($pageId = 0, $noCache = false, $data = array(), $table = 'pages')
     {
         $this->setTimeTracker();
-        $this->setTsfe($pageId, $noCache);
+        $this->setTsfe($pageId, (boolean) $noCache);
         $this->setWorkingDir();
         $this->setCharSet();
         $this->setPageSelect();
         $this->setTypoScript();
-        $this->setContentObject($data, $table);
+        $this->setContentObject((array) $data, $table);
     }
 
     /**
@@ -116,11 +95,10 @@ class Tx_Smarty_Core_CobjectProxy
      * @param string $table
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function setContentObject(array $data = array(), $table = '')
+    private function setContentObject($data = array(), $table = '')
     {
-
         $GLOBALS['TSFE']->cObj = Tx_Smarty_Service_Compatibility::makeInstance('tslib_cObj');
-        $GLOBALS['TSFE']->cObj->start($data, $table);
+        $GLOBALS['TSFE']->cObj->start((array) $data, $table);
     }
 
     /**
@@ -213,5 +191,65 @@ class Tx_Smarty_Core_CobjectProxy
         $GLOBALS['TSFE']->config = array();
         $GLOBALS['TSFE']->tmpl->getFileName_backPath = PATH_SITE;
         $GLOBALS['TSFE']->baseUrl = Tx_Smarty_Service_Compatibility::getIndpEnv('TYPO3_SITE_URL');
+    }
+
+    /**
+     * Reroutes method calls to the (simulated) frontend environment
+     *
+     * @param $method
+     * @param array $args
+     * @return mixed
+     * @throws BadMethodCallException|RuntimeException
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function __call($method, array $args = array())
+    {
+        if (!($GLOBALS['TSFE'] instanceof tslib_fe)) {
+            throw new RuntimeException('Unable to access "tslib_fe"!', 1395851138);
+
+        } elseif (!method_exists($GLOBALS['TSFE'], $method)) {
+            throw new BadMethodCallException('No such method "' . $method . '" in class "tslib_fe"!', 1395851147);
+        }
+
+        return call_user_func_array(array($GLOBALS['TSFE'], $method), $args);
+    }
+
+    /**
+     * Gets properties from the (simulated) frontend environment
+     *
+     * @param $property
+     * @throws RuntimeException
+     *
+     * @return mixed
+     * @throws BadMethodCallException
+     */
+    public function __get($property)
+    {
+        if (!($GLOBALS['TSFE'] instanceof tslib_fe)) {
+            throw new RuntimeException('Unable to access "tslib_fe"!', 1395851138);
+
+        } elseif (!property_exists($GLOBALS['TSFE'], $property)) {
+            throw new BadMethodCallException('No such property "' . $property . '" in class "tslib_fe"!', 1395851147);
+        }
+
+        return $GLOBALS['TSFE']->{$property};
+    }
+
+    /**
+     * Sets properties of the (simulated) frontend environment
+     *
+     * @param $property
+     * @param $value
+     *
+     * @return void
+     * @throws RuntimeException
+     */
+    public function __set($property, $value)
+    {
+        if (!($GLOBALS['TSFE'] instanceof tslib_fe)) {
+            throw new RuntimeException('Unable to access "tslib_fe"!', 1395851691);
+        }
+
+        $GLOBALS['TSFE']->{$property} = $value;
     }
 }

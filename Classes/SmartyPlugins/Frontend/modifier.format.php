@@ -34,7 +34,7 @@ function smarty_modifier_format($content, $setup = false)
     }
 
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($parameters);
-    $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
+    $frontend = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_FrontendProxy');
 
-    return $cObj->parseFunc($content, $setup);
+    return $frontend->cObj->parseFunc($content, $setup);
 }
