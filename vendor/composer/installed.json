@@ -90,17 +90,17 @@
     },
     {
         "name": "smarty/smarty",
-        "version": "v3.1.16",
-        "version_normalized": "3.1.16.0",
+        "version": "v3.1.17",
+        "version_normalized": "3.1.17.0",
         "source": {
             "type": "svn",
             "url": "http://smarty-php.googlecode.com/svn",
-            "reference": "/tags/v3.1.16/@4802"
+            "reference": "/tags/v3.1.17/@4818"
         },
         "require": {
             "php": ">=5.2"
         },
-        "time": "2013-12-17 16:56:58",
+        "time": "2014-03-12 20:51:46",
         "type": "library",
         "installation-source": "source",
         "autoload": {
