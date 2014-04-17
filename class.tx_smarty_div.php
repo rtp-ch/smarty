@@ -31,7 +31,12 @@
  **/
 
 // Include TypoScript parser class
-require_once(PATH_t3lib.'class.t3lib_tsparser.php');
+if (isset($TYPO3_CONF_VARS['SYS']['compat_version'])
+	&& t3lib_div::int_from_ver($TYPO3_CONF_VARS['SYS']['compat_version']) < 6002000
+) {
+	// Include TypoScript parser class
+	require_once(PATH_t3lib.'class.t3lib_tsparser.php');
+}
 
 class tx_smarty_div {
 
