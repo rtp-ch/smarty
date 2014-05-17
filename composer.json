@@ -23,7 +23,6 @@
         "smarty/smarty": "3.1.18",
         "michelf/php-markdown" : "*",
         "php": ">=5.3.2",
-        "nickcernis/html-to-markdown": "dev-master",
-        "digitalnature/php-ref": "dev-master"
+        "nickcernis/html-to-markdown": "dev-master"
     }
 }
