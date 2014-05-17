@@ -9,5 +9,5 @@
         $smarty->addPluginsDir('path/to/my/plugins');
         $smarty->assign('data', $myData);
 
-        return $smarty->display('myTemplate.tpl')
+        return $smarty->display('myTemplate.tpl');
 
