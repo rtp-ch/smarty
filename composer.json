@@ -13,6 +13,10 @@
             "email": "stu@rtp.ch"
         }
     ],
+    "repositories": {
+        "type": "git",
+        "url": "https://github.com/rtp-ch/smarty.git"
+    },
     "config": {
         "vendor-dir": "Packages/Libraries"
     },
@@ -25,7 +29,6 @@
     },
     "replace": {
         "smarty": "self.version",
-        "rtp/smarty": "self.version",
         "michelf/php-markdown" : "self.version",
         "nickcernis/html-to-markdown": "self.version",
         "digitalnature/php-ref": "self.version",
