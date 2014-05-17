@@ -3,16 +3,6 @@
     "description": "Smarty Templating Engine for TYPO3",
     "type": "typo3-cms-extension",
     "homepage": "https://github.com/rtp-ch/smarty",
-    "extra": {
-        "installer-name": "smarty",
-        "typo3/cms": {
-            "Package": {
-                "protected": true,
-                "partOfFactoryDefault": false,
-                "partOfMinimalUsableSystem": false
-            }
-        }
-    },
     "keywords": ["templating"],
     "version": "2.0.0",
     "license": "LGPL-3.0+",
@@ -23,14 +13,21 @@
         }
     ],
     "config": {
-        "vendor-dir": "Packages/Libraries",
-        "bin-dir": "bin"
+        "vendor-dir": "Packages/Libraries"
     },
     "require": {
-        "smarty/smarty": "3.1.18",
-        "michelf/php-markdown" : "*",
-        "php": ">=5.3.2",
+        "michelf/php-markdown" : "dev-lib",
         "nickcernis/html-to-markdown": "dev-master",
-        "digitalnature/php-ref": "dev-master"
+        "digitalnature/php-ref": "dev-master",
+        "smarty/smarty": "3.1.18",
+        "php": ">=5.3.2"
+    },
+    "replace": {
+        "smarty": "self.version",
+        "rtp/smarty": "self.version",
+        "michelf/php-markdown" : "self.version",
+        "nickcernis/html-to-markdown": "self.version",
+        "digitalnature/php-ref": "self.version",
+        "smarty/smarty": "self.version"
     }
 }

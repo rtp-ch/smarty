@@ -1,51 +1,5 @@
 [
     {
-        "name": "smarty/smarty",
-        "version": "v3.1.18",
-        "version_normalized": "3.1.18.0",
-        "source": {
-            "type": "svn",
-            "url": "http://smarty-php.googlecode.com/svn",
-            "reference": "/tags/v3.1.18/@4839"
-        },
-        "require": {
-            "php": ">=5.2"
-        },
-        "time": "2014-05-08 18:38:30",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "classmap": [
-                "distribution/libs/Smarty.class.php",
-                "distribution/libs/SmartyBC.class.php",
-                "distribution/libs/sysplugins/smarty_security.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-3.0"
-        ],
-        "authors": [
-            {
-                "name": "Monte Ohrt",
-                "email": "monte@ohrt.com"
-            },
-            {
-                "name": "Uwe Tews",
-                "email": "uwe.tews@googlemail.com"
-            },
-            {
-                "name": "Rodney Rehm",
-                "email": "rodney.rehm@medialize.de"
-            }
-        ],
-        "description": "Smarty - the compiling PHP template engine",
-        "homepage": "http://www.smarty.net",
-        "keywords": [
-            "templating"
-        ]
-    },
-    {
         "name": "nickcernis/html-to-markdown",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -131,31 +85,77 @@
         ]
     },
     {
+        "name": "smarty/smarty",
+        "version": "v3.1.18",
+        "version_normalized": "3.1.18.0",
+        "source": {
+            "type": "svn",
+            "url": "http://smarty-php.googlecode.com/svn",
+            "reference": "/tags/v3.1.18/@4839"
+        },
+        "require": {
+            "php": ">=5.2"
+        },
+        "time": "2014-05-08 18:38:30",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "distribution/libs/Smarty.class.php",
+                "distribution/libs/SmartyBC.class.php",
+                "distribution/libs/sysplugins/smarty_security.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "Monte Ohrt",
+                "email": "monte@ohrt.com"
+            },
+            {
+                "name": "Uwe Tews",
+                "email": "uwe.tews@googlemail.com"
+            },
+            {
+                "name": "Rodney Rehm",
+                "email": "rodney.rehm@medialize.de"
+            }
+        ],
+        "description": "Smarty - the compiling PHP template engine",
+        "homepage": "http://www.smarty.net",
+        "keywords": [
+            "templating"
+        ]
+    },
+    {
         "name": "michelf/php-markdown",
-        "version": "1.4.1",
-        "version_normalized": "1.4.1.0",
+        "version": "dev-lib",
+        "version_normalized": "dev-lib",
         "source": {
             "type": "git",
             "url": "https://github.com/michelf/php-markdown.git",
-            "reference": "de9a19c7bf352d41cc99ed86c3c0ef17e87394b6"
+            "reference": "123c43a65c783e7535384cfbec640d9702204c22"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/michelf/php-markdown/zipball/de9a19c7bf352d41cc99ed86c3c0ef17e87394b6",
-            "reference": "de9a19c7bf352d41cc99ed86c3c0ef17e87394b6",
+            "url": "https://api.github.com/repos/michelf/php-markdown/zipball/123c43a65c783e7535384cfbec640d9702204c22",
+            "reference": "123c43a65c783e7535384cfbec640d9702204c22",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2014-05-05 02:43:50",
+        "time": "2014-05-15 19:49:30",
         "type": "library",
         "extra": {
             "branch-alias": {
                 "dev-lib": "1.4.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-0": {
                 "Michelf": ""
