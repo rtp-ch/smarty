@@ -13,10 +13,12 @@
             "email": "stu@rtp.ch"
         }
     ],
-    "repositories": {
-        "type": "git",
-        "url": "https://github.com/rtp-ch/smarty.git"
-    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/rtp-ch/smarty.git"
+        }
+    ],
     "config": {
         "vendor-dir": "Packages/Libraries"
     },
