@@ -4,7 +4,14 @@
     "type": "typo3-cms-extension",
     "homepage": "https://github.com/rtp-ch/smarty",
     "extra": {
-        "installer-name": "smarty"
+        "installer-name": "smarty",
+        "typo3/cms": {
+            "Package": {
+                "protected": true,
+                "partOfFactoryDefault": false,
+                "partOfMinimalUsableSystem": false
+            }
+        }
     },
     "keywords": ["templating"],
     "version": "2.0.0",
@@ -23,6 +30,7 @@
         "smarty/smarty": "3.1.18",
         "michelf/php-markdown" : "*",
         "php": ">=5.3.2",
-        "nickcernis/html-to-markdown": "dev-master"
+        "nickcernis/html-to-markdown": "dev-master",
+        "digitalnature/php-ref": "dev-master"
     }
 }
