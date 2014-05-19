@@ -4,7 +4,7 @@
     "type": "typo3-cms-extension",
     "homepage": "https://github.com/rtp-ch/smarty",
     "keywords": ["templating"],
-    "version": "2.1.0",
+    "version": "2.1.2",
     "license": "LGPL-3.0+",
     "prefer-stable": true,
     "authors": [
