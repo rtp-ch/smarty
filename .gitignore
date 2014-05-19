@@ -1,2 +1,5 @@
 composer.lock
 composer.phar
+### Avoids git submodule issues with composer installed dependencies
+/Packages/Libraries/digitalnature/php-ref/.git
+/Packages/Libraries/nickcernis/html-to-markdown/.git
