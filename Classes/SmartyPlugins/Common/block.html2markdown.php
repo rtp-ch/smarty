@@ -30,7 +30,7 @@ function smarty_block_html2markdown($params, $content, Smarty_Internal_Template 
     if (!$repeat) {
 
         // Converts the content to markdown
-        $markdown = html2markdown($content);
+        $markdown = new HTML_To_Markdown($content);
 
         // Returns or assigns the result
         if (isset($params['assign'])) {
