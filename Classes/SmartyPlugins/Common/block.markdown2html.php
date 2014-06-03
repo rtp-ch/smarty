@@ -30,7 +30,7 @@ function smarty_block_markdown2html($params, $content, Smarty_Internal_Template 
     if (!$repeat) {
 
         // Converts the markdown to html
-        $html =  \Michelf\Markdown::defaultTransform($content);
+        $html = \Michelf\Markdown::defaultTransform($content);
 
         // Returns or assigns the result
         if (isset($params['assign'])) {

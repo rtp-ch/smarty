@@ -20,5 +20,5 @@
 function smarty_modifier_html2markdown($content)
 {
 //@codingStandardsIgnoreEnd
-    return html2markdown($content);
+    return new HTML_To_Markdown($content);
 }
