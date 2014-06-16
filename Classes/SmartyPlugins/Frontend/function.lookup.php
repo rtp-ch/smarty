@@ -84,7 +84,7 @@ function executeQuery($lookupValue, $lookupField, $returnFields, $table)
 {
     $lookupResult = false;
 
-    $where = mysqli_real_escape_string($lookupField) . ' = :lookupValue';
+    $where = mysql_real_escape_string($lookupField) . ' = :lookupValue';
     if (isset($GLOBALS['TCA'][$table]['ctrl'])) {
         $where .= $GLOBALS['TSFE']->sys_page->enableFields($table);
     }
@@ -127,7 +127,7 @@ function getLookupTable($params)
  */
 function getLookupField($params)
 {
-    $field = !isset($params['field']) ? 'uid' : $params['table'];
+    $field = !isset($params['field']) ? 'uid' : $params['field'];
 
     if (!fieldExists($field, $params['table'])) {
         $msg = 'Unknown field "' . $field . '" in table "' . $params['table'] . '"!';
