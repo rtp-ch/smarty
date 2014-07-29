@@ -29,18 +29,6 @@ class Tx_Smarty_Hooks_ClearCache
      */
     private static function clearDir($dir)
     {
-        $filesInPath = Tx_Smarty_Service_Compatibility::getAllFilesAndFoldersInPath(array(), $dir);
-        if (Tx_Smarty_Utility_Array::notEmpty($filesInPath)) {
-            while ($fileInPath = array_shift($filesInPath)) {
-                @unlink($fileInPath);
-            }
-        }
-
-        $dirsInPath = Tx_Smarty_Service_Compatibility::getDirs($dir);
-        if (Tx_Smarty_Utility_Array::notEmpty($filesInPath)) {
-            while ($dirInPath = array_shift($dirsInPath)) {
-                Tx_Smarty_Service_Compatibility::rmdir($dir . $dirInPath, true);
-            }
-        }
+        Tx_Smarty_Service_Compatibility::rmdir($dir, true);
     }
 }
