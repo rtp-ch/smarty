@@ -29,6 +29,6 @@ class Tx_Smarty_Hooks_ClearCache
      */
     private static function clearDir($dir)
     {
-        Tx_Smarty_Service_Compatibility::rmdir($dir, true);
+        Tx_Smarty_Service_Compatibility::flushDirectory($dir);
     }
 }

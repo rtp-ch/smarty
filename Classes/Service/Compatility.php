@@ -248,19 +248,21 @@ class Tx_Smarty_Service_Compatibility
     }
 
     /**
-     * Wrapper function for rmdir, allowing recursive deletion of folders and files
+     * Flushes a directory by first moving to a temporary resource, and then
+     * triggering the remove process. This way directories can be flushed faster
+     * to prevent race conditions on concurrent processes accessing the same directory.
      *
-     * @param string $path Absolute path to folder, see PHP rmdir() function. Removes trailing slash internally.
-     * @param boolean $removeNonEmpty Allow deletion of non-empty directories
-     * @return boolean true if @rmdir went well!
+     * @param string $directory The directory to be renamed and flushed
+     *
+     * @return boolean Whether the action was successful
      */
-    public static function rmDir($path, $removeNonEmpty = false)
+    public static function flushDirectory($directory)
     {
         if (class_exists('\TYPO3\CMS\Core\Utility\GeneralUtility')) {
-            return call_user_func(array('\TYPO3\CMS\Core\Utility\GeneralUtility', 'rmdir'), $path, $removeNonEmpty);
+            return call_user_func(array('\TYPO3\CMS\Core\Utility\GeneralUtility', 'flushDirectory'), $directory, true);
 
         } else {
-            return call_user_func(array('t3lib_div', 'rmdir'), $path, $removeNonEmpty);
+            return call_user_func(array('t3lib_div', 'rmdir'), $directory, true);
         }
     }
 
