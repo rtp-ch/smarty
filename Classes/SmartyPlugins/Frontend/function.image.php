@@ -62,6 +62,13 @@ function smarty_function_image($params, Smarty_Internal_Template $template)
         unset($setup['titleText.']);
     }
 
+    // Handle FAL images when "treatIdAsReference" is set
+    // TODO: What's the general TypoScript way of handling this...?
+    if (Tx_Smarty_Utility_Scalar::booleanize($params['treatIdAsReference'])) {
+        $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+        $setup['file'] = $resourceFactory->getFileReferenceObject($setup['file']);
+    }
+
     $image = $cObj->cObjGetSingle('IMAGE', $setup);
 
     // Returns or assigns the result
