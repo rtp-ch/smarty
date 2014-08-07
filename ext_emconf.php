@@ -10,7 +10,7 @@
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF['smarty'] = array(
 	'title' => 'smarty',
 	'description' => 'Smarty Templating Engine for TYPO3',
 	'category' => 'misc',
@@ -28,8 +28,8 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearcacheonload' => 0,
 	'lockType' => '',
 	'author' => 'Simon Tuck',
-	'author_email' => 'stu@rtp.ch',
-	'author_company' => 'www.rtp.ch',
+	'author_email' => 'info@rtp.ch',
+	'author_company' => 'RTP',
 	'CGLcompliance' => '',
 	'CGLcompliance_note' => '',
 	'constraints' => array(

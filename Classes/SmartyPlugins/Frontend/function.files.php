@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Smarty plugin "image"
+ * Smarty plugin "files"
  * -------------------------------------------------------------
  * File:    function.image.php
  * Type:    function
@@ -32,43 +32,19 @@
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 //@codingStandardsIgnoreStart
-function smarty_function_image($params, Smarty_Internal_Template $template)
+function smarty_function_files($params, Smarty_Internal_Template $template)
 {
 //@codingStandardsIgnoreEnd
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
     $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
 
-    // Apply htmlspecialchars to any altText
-    if ($setup['altText'] || $setup['altText.']) {
-        $setup['altText'] = $cObj->stdWrap($setup['altText'], $setup['altText.']);
-        $setup['title'] = htmlspecialchars(
-            trim($setup['altText']),
-            ENT_COMPAT | ENT_HTML401,
-            SMARTY_RESOURCE_CHAR_SET,
-            false
-        );
-        unset($setup['altText.']);
-    }
-
-    // Apply htmlspecialchars to any titleText
-    if ($setup['titleText'] || $setup['titleText.']) {
-        $setup['titleText'] = $cObj->stdWrap($setup['titleText'], $setup['titleText.']);
-        $setup['titleText'] = htmlspecialchars(
-            trim($setup['titleText']),
-            ENT_COMPAT | ENT_HTML401,
-            SMARTY_RESOURCE_CHAR_SET,
-            false
-        );
-        unset($setup['titleText.']);
-    }
-
-    $image = $cObj->cObjGetSingle('IMAGE', $setup);
+    $files = $cObj->cObjGetSingle('FILES', $setup);
 
     // Returns or assigns the result
     if (isset($params['assign'])) {
-        $template->assign($params['assign'], $image);
+        $template->assign($params['assign'], $files);
 
     } else {
-        return $image;
+        return $files;
     }
 }
