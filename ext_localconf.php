@@ -25,11 +25,11 @@ if (defined('TYPO3_cliMode') && !defined('TYPO3_CLI_MODE')) {
 
 // Include the the smarty library if it hasn't already been loaded
 if (!defined('SMARTY_DIR')) {
-    require_once Tx_Smarty_Service_Compatibility::extPath('smarty') . 'Packages/Libraries/autoload.php';
+    require_once t3lib_extMgm::extPath('smarty') . 'Packages/Libraries/autoload.php';
 }
 
 // Include the smarty extension's factory class
-require_once Tx_Smarty_Service_Compatibility::extPath('smarty') . 'Classes/Factory.php';
+require_once t3lib_extMgm::extPath('smarty') . 'Classes/Factory.php';
 
 // Hook for clearing smarty cache
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][]
