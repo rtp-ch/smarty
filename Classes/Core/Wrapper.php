@@ -318,6 +318,9 @@ class Tx_Smarty_Core_Wrapper extends SmartyBC
      */
     public function display($template = null, $cacheId = null, $compileId = null, $parent = null)
     {
+        // set error reporting to the value defined in typo3
+        $this->error_reporting = $GLOBALS['TYPO3_CONF_VARS']['SYS']['errorHandlerErrors'];
+
         // Disables caching if it is globally disabled or has been pegged to TSFE->no_cache
         if (($this->respectNoCache === true && isset($GLOBALS['TSFE']->no_cache) && $GLOBALS['TSFE']->no_cache)
             || (boolean) Tx_Smarty_Utility_ExtConf::getExtConfValue('disable_caching')) {
