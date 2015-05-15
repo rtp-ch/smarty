@@ -29,6 +29,7 @@ function smarty_function_resource($params, Smarty_Internal_Template $template)
     $fileReference = isset($params['reference']) ? $params['reference'] : false;
     $requestedProperty = isset($params['property']) ? $params['property'] : false;
 
+    // If the params table and field set, use the new way to get the fal data
     $isSysFileReference = isset($params['table']) && isset($params['field']);
 
     if ($isSysFileReference) {
@@ -36,6 +37,7 @@ function smarty_function_resource($params, Smarty_Internal_Template $template)
         $referencesFieldName = $params['field'];
         $forceArray = isset($params['forceArray']);
 
+        // Get db record
         /** @var \TYPO3\CMS\Frontend\Page\PageRepository $pageRepository */
         $pageRepository = $GLOBALS['TSFE']->sys_page;
         $element = $pageRepository->getRawRecord(
@@ -43,7 +45,10 @@ function smarty_function_resource($params, Smarty_Internal_Template $template)
                 $fileReference
         );
 
+        // When the element is not valid
         if ($element) {
+
+            // Get file reference
             /** @var TYPO3\CMS\Core\Resource\FileReference[] $resourceObjects */
             $resourceObjects = $pageRepository->getFileReferences(
                 $referencesForeignTable,
@@ -51,6 +56,7 @@ function smarty_function_resource($params, Smarty_Internal_Template $template)
                 $element
             );
 
+            // If there is only one picture remove the array arround the image
             if (count($resourceObjects) === 1 && !$forceArray) {
                 $resourceObjects = reset($resourceObjects);
             }
