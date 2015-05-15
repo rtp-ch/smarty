@@ -43,22 +43,27 @@ function smarty_function_resource($params, Smarty_Internal_Template $template)
                 $fileReference
         );
 
-        /** @var TYPO3\CMS\Core\Resource\FileReference[] $resourceObjects */
-        $resourceObjects = $pageRepository->getFileReferences(
-            $referencesForeignTable,
-            $referencesFieldName,
-            $element
-        );
+        if ($element) {
+            /** @var TYPO3\CMS\Core\Resource\FileReference[] $resourceObjects */
+            $resourceObjects = $pageRepository->getFileReferences(
+                $referencesForeignTable,
+                $referencesFieldName,
+                $element
+            );
 
-        if (count($resourceObjects) === 1 && !$forceArray) {
-            $resourceObjects = reset($resourceObjects);
+            if (count($resourceObjects) === 1 && !$forceArray) {
+                $resourceObjects = reset($resourceObjects);
+            }
+
+            // Returns or assigns the result
+            if (isset($params['assign'])) {
+                $template->assign($params['assign'], $resourceObjects);
+            } else {
+                return $resourceObjects;
+            }
         }
-
-        // Returns or assigns the result
-        if (isset($params['assign'])) {
-            $template->assign($params['assign'], $resourceObjects);
-        } else {
-            return $resourceObjects;
+        else {
+            return null;
         }
     } else {
 
