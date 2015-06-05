@@ -35,7 +35,7 @@ function smarty_function_resource($params, Smarty_Internal_Template $template)
     if ($isSysFileReference) {
         $referencesForeignTable = $params['table'];
         $referencesFieldName = $params['field'];
-        $forceArray = isset($params['forceArray']);
+        $forceArray = isset($params['forcearray']);
 
         // Get db record
         /** @var \TYPO3\CMS\Frontend\Page\PageRepository $pageRepository */
