@@ -38,6 +38,11 @@ function smarty_function_image($params, Smarty_Internal_Template $template)
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
     $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
 
+    if (array_key_exists('file', $setup)) {
+        // fix for umlaut in filename
+        $setup['file'] = rawurldecode($setup['file']);
+    }
+
     // Apply htmlspecialchars to any altText
     if ($setup['altText'] || $setup['altText.']) {
         $setup['altText'] = $cObj->stdWrap($setup['altText'], $setup['altText.']);
