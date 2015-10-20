@@ -137,8 +137,12 @@ class Factory
      */
     private static function initializeWithDefaults()
     {
+        /** @var \Tx_Smarty_Core_Wrapper $smartyInstance */
         // Creates an instance of smarty
         $smartyInstance = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_Wrapper');
+
+        // Sets default directory permissions.
+        $smartyInstance->_dir_perms = 0775;
 
         // Sets default cache and compile dirs
         $compileDir = Tx_Smarty_Service_Compatibility::getFileAbsFileName(
