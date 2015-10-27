@@ -6,7 +6,7 @@ class tx_smarty
      * @param array $options
      * @return Tx_Smarty_Core_Wrapper
      */
-    public function smarty($options = array())
+    public static function smarty($options = array())
     {
         Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
         return self::backportSmarty((array) $options);
@@ -16,7 +16,7 @@ class tx_smarty
      * @param array $options
      * @return Tx_Smarty_Core_Wrapper
      */
-    public function newSmarty($options = array())
+    public static function newSmarty($options = array())
     {
         Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
         return self::backportSmarty((array) $options);
@@ -26,7 +26,7 @@ class tx_smarty
      * @param array $options
      * @return Tx_Smarty_Core_Wrapper
      */
-    public function newSmartyTemplate($options = array())
+    public static function newSmartyTemplate($options = array())
     {
         Tx_Smarty_Service_Compatibility::logDeprecatedFunction();
         return self::backportSmarty((array) $options);
@@ -36,7 +36,7 @@ class tx_smarty
      * @param array $options
      * @return Tx_Smarty_Core_Wrapper
      */
-    private function backportSmarty($options = array())
+    private static function backportSmarty($options = array())
     {
         $callingInstance = self::getCallingInstance();
 
