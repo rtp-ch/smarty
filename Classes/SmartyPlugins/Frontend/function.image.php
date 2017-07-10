@@ -26,8 +26,9 @@
  *          will use the TypoScript configuration from lib.myImage, but set the property 'file.width' to 150c
  * -------------------------------------------------------------
  *
- * @param array $params The TypoScript settings passed to the image function
+ * @param array                    $params   The TypoScript settings passed to the image function
  * @param Smarty_Internal_Template $template Current instance of smarty
+ *
  * @return string
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
@@ -38,15 +39,10 @@ function smarty_function_image($params, Smarty_Internal_Template $template)
     list($setup) = Tx_Smarty_Utility_TypoScript::getSetupFromParameters($params);
     $cObj = Tx_Smarty_Service_Compatibility::makeInstance('Tx_Smarty_Core_CobjectProxy');
 
-    if (array_key_exists('file', $setup)) {
-        // fix for umlaut in filename
-        $setup['file'] = rawurldecode($setup['file']);
-    }
-
     // Apply htmlspecialchars to any altText
     if ($setup['altText'] || $setup['altText.']) {
         $setup['altText'] = $cObj->stdWrap($setup['altText'], $setup['altText.']);
-        $setup['title'] = htmlspecialchars(
+        $setup['title']   = htmlspecialchars(
             trim($setup['altText']),
             ENT_COMPAT | ENT_HTML401,
             SMARTY_RESOURCE_CHAR_SET,
@@ -67,13 +63,45 @@ function smarty_function_image($params, Smarty_Internal_Template $template)
         unset($setup['titleText.']);
     }
 
-    $image = $cObj->cObjGetSingle('IMAGE', $setup);
+    if (array_key_exists('file', $setup)) {
+        // fix for umlaut in filename
+        $setup['file'] = rawurldecode($setup['file']);
 
-    // Returns or assigns the result
-    if (isset($params['assign'])) {
-        $template->assign($params['assign'], $image);
+        $fileExtension = pathinfo($setup['file'], PATHINFO_EXTENSION);
 
+        if ($fileExtension == 'svg') {
+
+            $config['value'] = '<img src="' . $setup['file'] . '" alt"' . $setup['altText'] . '" title="' . $setup['titleText'] . '" />';
+
+            $image = $cObj->cObjGetSingle('TEXT', $config);
+
+            // Returns or assigns the result
+            if (isset($params['assign'])) {
+                $template->assign($params['assign'], $image);
+
+            } else {
+                return $image;
+            }
+        } else {
+            $image = $cObj->cObjGetSingle('IMAGE', $setup);
+
+            // Returns or assigns the result
+            if (isset($params['assign'])) {
+                $template->assign($params['assign'], $image);
+
+            } else {
+                return $image;
+            }
+        }
     } else {
-        return $image;
+        $image = $cObj->cObjGetSingle('IMAGE', $setup);
+
+        // Returns or assigns the result
+        if (isset($params['assign'])) {
+            $template->assign($params['assign'], $image);
+
+        } else {
+            return $image;
+        }
     }
 }
