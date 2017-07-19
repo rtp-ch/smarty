@@ -71,7 +71,7 @@ function smarty_function_image($params, Smarty_Internal_Template $template)
 
         if ($fileExtension == 'svg') {
 
-            $config['value'] = '<img src="' . $setup['file'] . '" alt"' . $setup['altText'] . '" title="' . $setup['titleText'] . '" />';
+            $config['value'] = '<img src="' . $setup['file'] . '" alt="' . $setup['altText'] . '" title="' . $setup['titleText'] . '" />';
 
             $image = $cObj->cObjGetSingle('TEXT', $config);
 
