@@ -65,9 +65,30 @@ class tx_smarty
      * @return object|stdClass
      * @deprecated
      */
+    /*
     private function getCallingInstance()
     {
         return is_object($this) ? $this : new stdClass();
+    }
+    */
+
+    /**
+     * This old glitch function is not compatible with PHP 7.x that's why here is a clean version.
+     *
+     * !!!STOP GLITCH PROGRAMMING!!!
+     *
+     * @return stdClass
+     */
+    protected static function getCallingInstance()
+    {
+        $traces = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 5);
+        foreach ($traces as $trace) {
+            if (isset($trace["object"])) {
+                return $trace["object"];
+            }
+        }
+
+        return new stdClass();
     }
 
     /**
